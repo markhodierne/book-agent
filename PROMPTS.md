@@ -4,7 +4,7 @@
 
 We're going to discuss the specification for a software project. The project details are contained in `BRIEF.md`.
 
-First start by confirming, and improving where possible, he functional specification so that it is clear, detailed and complete. There should be no ambiguity about what the application should do. Where appropriate, you should also confirm HOW the AI agent application should work. In this respect, we should leverage the full capabilities of the AI orchestration framework that we are using so that code is as simple and abstracted as possible.
+First start by confirming, and improving where possible, the functional specification so that it is clear, detailed and complete. There should be no ambiguity about what the application should do. Where appropriate, you should also confirm HOW the AI agent application should work. In this respect, we should leverage the full capabilities of the AI orchestration framework that we are using so that code is as simple and abstracted as possible.
 
 Then, ask me one question at a time so we can develop thorough, step-by-step technical specifications. Each question should build on my previous answers, and our end goal is to have a detailed specification I can hand off to a developer. This will be built in only a few hours with Claude Code so try and keep the conversation short, apply KISS principles and use logical inference based on previous answers when possible.
 
