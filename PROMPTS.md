@@ -52,7 +52,7 @@ Each to-do task should be numbered sequentially, and include:
 **Important**: Order to-do tasks by dependency, ensuring you can work efficiently and logically through them in order.
 
 
-## Implementation
+## IMPLEMENTATION
 
 > [!NOTE]
 > Implement one task at a time. 
@@ -63,7 +63,7 @@ Each to-do task should be numbered sequentially, and include:
 
 Then refresh your memory by checking `HISTORY.md`. Review the `ARCHITECTURE.md` and `FUNCTIONAL.md` to understand what we are building.
 
-We are working through `TO-DO.md` and are on task 1.
+We are working through `TO-DO.md` and are on task 3.
 
 **Before implementing anything:**
 
@@ -79,7 +79,14 @@ As you implement, explain:
 
 Now, here is the next task to complete:
 
-Insert Task 1
+### 3. Environment Configuration
+**Description**: Set up environment variable validation and configuration
+**Deliverables**:
+- Create `.env.local.example` with required variables
+- Implement environment validation utility in `lib/config/`
+- Add startup environment check
+**Dependencies**: Task 2
+**Definition of Done**: Environment validation works, missing variables throw clear errors
 
 ```
 
