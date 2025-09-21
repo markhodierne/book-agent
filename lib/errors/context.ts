@@ -170,9 +170,16 @@ export class WorkflowErrorContext {
   ) {
     errorContextStore.setContext(sessionId, {
       sessionId,
-      userId,
+      userId: this.userId,
       requestId: sessionId, // Use sessionId as requestId for workflows
     });
+  }
+
+  /**
+   * Get the user ID associated with this workflow
+   */
+  getUserId(): string | undefined {
+    return this.userId;
   }
 
   /**

@@ -521,15 +521,70 @@ describe('Book Creation Workflow', () => {
 
 ## Monitoring & Observability
 
-### Metrics Collection
+### Performance Metrics System (`/lib/monitoring/metrics.ts`)
 ```typescript
-// Performance monitoring
-export const metrics = {
-  workflowDuration: new Histogram('workflow_duration_seconds'),
-  chapterGenerationTime: new Histogram('chapter_generation_seconds'),
-  errorRate: new Counter('workflow_errors_total'),
-  activeWorkflows: new Gauge('active_workflows_count')
+// Comprehensive metrics collection with Prometheus compatibility
+export const applicationMetrics = {
+  // Workflow performance
+  workflowDuration: metricsRegistry.createHistogram('workflow_duration_seconds'),
+  chapterGenerationTime: metricsRegistry.createHistogram('chapter_generation_seconds'),
+
+  // Error tracking
+  workflowErrors: metricsRegistry.createCounter('workflow_errors_total'),
+  toolErrors: metricsRegistry.createCounter('tool_errors_total'),
+
+  // Resource monitoring
+  activeWorkflows: metricsRegistry.createGauge('active_workflows_count'),
+  databaseConnections: metricsRegistry.createGauge('database_connections_count'),
+
+  // Tool performance
+  toolExecutionTime: metricsRegistry.createHistogram('tool_execution_seconds'),
+  apiRequests: metricsRegistry.createCounter('api_requests_total')
 };
+
+// Automatic timing with decorators
+@timed(applicationMetrics.chapterGenerationTime)
+async function generateChapter(config: ChapterConfig): Promise<ChapterResult> {
+  // Method automatically timed
+}
+
+// Prometheus export for external monitoring
+const prometheusMetrics = metricsRegistry.exportPrometheusFormat();
+```
+
+### Analytics & Event Tracking (`/lib/monitoring/analytics.ts`)
+```typescript
+// Structured event tracking with context enrichment
+export async function trackEvent(eventType: string, context: Record<string, unknown>) {
+  const event: AnalyticsEvent = {
+    eventType,
+    timestamp: new Date().toISOString(),
+    sessionId: getCurrentSessionId(),
+    userId: getCurrentUserId(),
+    context: {
+      ...context,
+      userAgent: getBrowserInfo(),
+      environment: process.env.NODE_ENV
+    }
+  };
+
+  await processEvent(event);
+}
+
+// User journey tracking
+export async function trackUserJourney(step: string, context: Record<string, unknown>) {
+  await trackEvent('user_journey', { step, ...context });
+}
+
+// Error tracking with full context
+export async function trackError(error: Error, context: Record<string, unknown>) {
+  await trackEvent('error_occurred', {
+    errorType: error.constructor.name,
+    errorMessage: error.message,
+    stack: error.stack,
+    ...context
+  });
+}
 
 // Usage tracking
 export function trackWorkflowEvent(event: string, metadata: object) {

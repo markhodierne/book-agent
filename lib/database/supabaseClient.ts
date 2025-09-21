@@ -303,8 +303,8 @@ export async function testRlsPolicies(): Promise<{
       throw error;
     }
 
-    const tests = data || [];
-    const success = tests.every((test: { passed: boolean }) => test.passed);
+    const tests = (data || []) as Array<{ passed: boolean; name: string; details: string }>;
+    const success = tests.every((test) => test.passed);
 
     return { success, tests };
   } catch (error) {

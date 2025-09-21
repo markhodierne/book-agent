@@ -48,7 +48,7 @@ async function testDatabaseOnly() {
     console.log('Testing connection...');
     const startTime = Date.now();
 
-    const { data, error } = await supabase
+    const { data: _data, error } = await supabase
       .from('book_sessions')
       .select('id')
       .limit(1);

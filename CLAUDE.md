@@ -236,6 +236,110 @@ const dbResult = await retryDatabase(() => supabase.from('books').insert(data));
 const chapter = await retryChapterGeneration(() => generateChapterContent(config));
 ```
 
+## Monitoring & Performance Standards
+
+### Metrics Collection
+```typescript
+import { applicationMetrics, timeOperation, timed } from '@/lib/monitoring/metrics';
+
+// ✅ Time operations automatically
+const result = await timeOperation(
+  applicationMetrics.workflowDuration,
+  () => executeWorkflow(config)
+);
+
+// ✅ Use decorator for method timing
+class WorkflowManager {
+  @timed(applicationMetrics.chapterGenerationTime)
+  async generateChapter(config: ChapterConfig): Promise<ChapterResult> {
+    // implementation
+  }
+}
+
+// ✅ Track counters and gauges
+applicationMetrics.workflowSuccess.inc();
+applicationMetrics.activeWorkflows.inc();
+```
+
+### Analytics & Event Tracking
+```typescript
+import { trackEvent, trackUserJourney, trackError } from '@/lib/monitoring/analytics';
+
+// ✅ Track user actions
+await trackEvent('workflow_started', {
+  sessionId,
+  wordCount: requirements.wordCountTarget,
+  chapterCount: outline.chapters.length
+});
+
+// ✅ Track user journey through wizard
+await trackUserJourney('wizard_step_completed', {
+  step: 'requirements',
+  completionTime: Date.now() - stepStartTime
+});
+
+// ✅ Track errors with context
+await trackError(error, {
+  operation: 'chapter_generation',
+  sessionId,
+  retryAttempt: attempt
+});
+```
+
+### Monitoring Best Practices
+
+**Performance Metrics**:
+```typescript
+// ✅ Use appropriate metric types
+const responseTime = metricsRegistry.createHistogram('api_response_time', 'API response time');
+const errorCount = metricsRegistry.createCounter('api_errors_total', 'Total API errors');
+const activeUsers = metricsRegistry.createGauge('active_users_count', 'Current active users');
+
+// ✅ Export for external monitoring
+const prometheusMetrics = metricsRegistry.exportPrometheusFormat();
+```
+
+**Event Analytics**:
+```typescript
+// ✅ Structure events consistently
+interface BaseEvent {
+  eventType: string;
+  timestamp: string;
+  sessionId?: string;
+  userId?: string;
+  context: Record<string, unknown>;
+}
+
+// ✅ Environment-aware configuration
+const analyticsConfig = {
+  enableConsoleLogging: process.env.NODE_ENV === 'development',
+  batchSize: process.env.NODE_ENV === 'production' ? 100 : 10,
+  flushInterval: process.env.NODE_ENV === 'production' ? 30000 : 5000
+};
+```
+
+**Type Safety for Monitoring**:
+```typescript
+// ✅ Proper array bounds checking
+const bucket = this.metric.buckets[i];
+if (bucket !== undefined && value <= bucket) {
+  const currentCount = this.metric.observations[i];
+  if (currentCount !== undefined) {
+    this.metric.observations[i] = currentCount + 1;
+  }
+}
+
+// ✅ Decorator typing with proper context
+const decoratedMethod = async function (this: unknown, ...args: Parameters<T>) {
+  const endTimer = histogram.startTimer();
+  try {
+    return await originalMethod.call(this, ...args);
+  } finally {
+    endTimer();
+  }
+};
+```
+
 ## Database Conventions
 
 ### Table Naming

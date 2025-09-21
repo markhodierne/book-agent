@@ -36,9 +36,11 @@ async function runMigrations() {
         // Execute each statement
         for (const statement of statements) {
           if (statement.trim()) {
-            const { error } = await serviceClient.rpc('exec_sql', {
+            // Execute SQL statement using RPC
+            // Note: exec_sql is a custom function that may not be in our type definitions
+            const { error } = await serviceClient.rpc('exec_sql' as any, {
               sql: statement + ';'
-            });
+            } as any);
 
             if (error) {
               // Try direct query execution as fallback

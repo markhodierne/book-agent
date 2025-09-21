@@ -63,7 +63,7 @@ Each to-do task should be numbered sequentially, and include:
 
 Then refresh your memory by checking `HISTORY.md`. Review the `ARCHITECTURE.md` and `FUNCTIONAL.md` to understand what we are building.
 
-We are working through `TO-DO.md` and are on task 7.
+We are working through `TO-DO.md` and are on task 9.
 
 **Before implementing anything:**
 
@@ -79,15 +79,14 @@ As you implement, explain:
 
 Now, here is the next task to complete:
 
-### 7. Testing Infrastructure Setup
-**Description**: Configure testing framework and establish testing patterns
+### 9. Tool Framework for Subagents (base class/interfaces for tools)
+**Description**: Implement the generic tool creation framework
 **Deliverables**:
-- Vitest configuration for unit tests
-- Playwright setup for E2E tests
-- Test utilities and fixtures directory structure
-- Sample test files for each layer
-**Dependencies**: Task 1, 2
-**Definition of Done**: `pnpm test` and `pnpm test:e2e` commands work, sample tests pass
+- `lib/tools/createTool.ts` with generic tool interface
+- Tool registry and management system
+- Base tool error handling and retry logic
+**Dependencies**: Task 4, 8
+**Definition of Done**: Tool framework allows creating typed, retryable tools with consistent interface
 
 ```
 

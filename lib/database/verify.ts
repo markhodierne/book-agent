@@ -80,14 +80,15 @@ export async function verifyDatabaseSetup(): Promise<{
     };
 
     // This should compile without errors if types are correct
-    const query = supabase
+    // Type check query compilation without storing
+    supabase
       .from('book_sessions')
       .select('id, status, current_stage')
       .eq('status', 'active')
       .limit(1);
 
     // We don't execute the query, just verify it compiles
-    if (query && testSession) {
+    if (testSession) {
       tests.push({
         name: 'Type safety verification',
         passed: true,

@@ -336,7 +336,7 @@ export class Logger {
 
     // Clean up old error stats (older than 1 hour)
     const oneHourAgo = Date.now() - 60 * 60 * 1000;
-    for (const [key, timestamp] of this.lastErrors.entries()) {
+    for (const [key, timestamp] of Array.from(this.lastErrors.entries())) {
       if (timestamp < oneHourAgo) {
         this.errorCounts.delete(key);
         this.lastErrors.delete(key);
@@ -411,7 +411,7 @@ export class Logger {
    */
   getErrorStats(): { errorKey: string; count: number; lastOccurrence: number }[] {
     const result: { errorKey: string; count: number; lastOccurrence: number }[] = [];
-    for (const [errorKey, count] of this.errorCounts.entries()) {
+    for (const [errorKey, count] of Array.from(this.errorCounts.entries())) {
       result.push({
         errorKey,
         count,
@@ -458,12 +458,13 @@ export function logPerformance(operationName?: string) {
     const originalMethod = descriptor.value;
     if (!originalMethod) return descriptor;
 
-    descriptor.value = async function (...args: Parameters<T>): Promise<Awaited<ReturnType<T>>> {
+    const decoratedMethod = async function (this: unknown, ...args: Parameters<T>): Promise<Awaited<ReturnType<T>>> {
       const operation = operationName || `${target.constructor.name}.${propertyKey}`;
       const endTimer = logger.operationStart(operation);
 
       try {
-        const result = await originalMethod.apply(this, args);
+        // Preserve the original method's context
+        const result = await originalMethod.call(this, ...args);
         endTimer();
         return result;
       } catch (error) {
@@ -471,8 +472,9 @@ export function logPerformance(operationName?: string) {
         logger.error(`Operation failed: ${operation}`, error instanceof Error ? error : new Error(String(error)));
         throw error;
       }
-    } as T;
+    };
 
+    descriptor.value = decoratedMethod as T;
     return descriptor;
   };
 }

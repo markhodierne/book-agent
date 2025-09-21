@@ -1,8 +1,8 @@
-import { vi } from 'vitest';
+import { vi, beforeEach, afterEach } from 'vitest';
 import '@testing-library/jest-dom';
 
 // Mock Next.js environment variables
-process.env.NODE_ENV = 'test';
+(process.env as any).NODE_ENV = 'test';
 
 // Mock environment variables for testing
 process.env.OPENAI_API_KEY = 'test-key';

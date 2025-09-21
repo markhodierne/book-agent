@@ -28,7 +28,10 @@ import {
   checkDatabaseConnection,
   createBookSession,
   getCurrentUser,
-  supabase
+  supabase,
+  type BookInsert,
+  type ChapterInsert,
+  type WorkflowStateInsert
 } from '../lib/database';
 
 async function testAppIntegration() {
@@ -72,13 +75,16 @@ async function testAppIntegration() {
     }
 
     console.log('\n5️⃣ Testing book creation...');
-    const { data: bookData, error: bookError } = await supabase
+    const bookInsert: BookInsert = {
+      session_id: sessionResult.sessionId,
+      title: 'AI Development Guide',
+      author: 'Book Agent'
+    };
+
+    // Note: Using type assertion for script - the interface is correct but Supabase client types may be incomplete
+    const { data: bookData, error: bookError } = await (supabase as any)
       .from('books')
-      .insert({
-        session_id: sessionResult.sessionId,
-        title: 'AI Development Guide',
-        author: 'Book Agent'
-      })
+      .insert(bookInsert)
       .select('id, title, author')
       .single();
 
@@ -90,14 +96,17 @@ async function testAppIntegration() {
 
     console.log('\n6️⃣ Testing chapter creation...');
     if (bookData) {
-      const { data: chapterData, error: chapterError } = await supabase
+      const chapterInsert: ChapterInsert = {
+        book_id: bookData.id,
+        chapter_number: 1,
+        title: 'Introduction to AI Development',
+        status: 'pending'
+      };
+
+      // Note: Using type assertion for script - the interface is correct but Supabase client types may be incomplete
+      const { data: chapterData, error: chapterError } = await (supabase as any)
         .from('chapters')
-        .insert({
-          book_id: bookData.id,
-          chapter_number: 1,
-          title: 'Introduction to AI Development',
-          status: 'pending'
-        })
+        .insert(chapterInsert)
         .select('id, title, chapter_number, status')
         .single();
 
@@ -109,17 +118,30 @@ async function testAppIntegration() {
     }
 
     console.log('\n7️⃣ Testing workflow state persistence...');
-    const { data: stateData, error: stateError } = await supabase
+    const workflowStateInsert: WorkflowStateInsert = {
+      session_id: sessionResult.sessionId,
+      node_name: 'conversation_complete',
+      state_data: {
+        sessionId: sessionResult.sessionId,
+        currentStage: 'outline',
+        status: 'active',
+        userPrompt: 'Test book about AI development',
+        chapters: [],
+        progress: {
+          currentStageProgress: 100,
+          overallProgress: 15,
+          chaptersCompleted: 0,
+          totalChapters: 12
+        },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      }
+    };
+
+    // Note: Using type assertion for script - the interface is correct but Supabase client types may be incomplete
+    const { data: stateData, error: stateError } = await (supabase as any)
       .from('workflow_states')
-      .insert({
-        session_id: sessionResult.sessionId,
-        node_name: 'conversation_complete',
-        state_data: {
-          sessionId: sessionResult.sessionId,
-          currentStage: 'outline',
-          progress: { currentStageProgress: 100, overallProgress: 15 }
-        }
-      })
+      .insert(workflowStateInsert)
       .select('id, node_name')
       .single();
 
