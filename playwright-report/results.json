@@ -1,0 +1,878 @@
+{
+  "config": {
+    "configFile": "/Users/markhodierne/projects-2/book-agent/playwright.config.ts",
+    "rootDir": "/Users/markhodierne/projects-2/book-agent/playwright-tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": "/Users/markhodierne/projects-2/book-agent/playwright-tests/global.setup.ts",
+    "globalTeardown": "/Users/markhodierne/projects-2/book-agent/playwright-tests/global.teardown.ts",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {},
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "playwright-report/results.json"
+        }
+      ],
+      [
+        "list",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/markhodierne/projects-2/book-agent/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/markhodierne/projects-2/book-agent/playwright-tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/markhodierne/projects-2/book-agent/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/markhodierne/projects-2/book-agent/playwright-tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/markhodierne/projects-2/book-agent/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/markhodierne/projects-2/book-agent/playwright-tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/markhodierne/projects-2/book-agent/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "/Users/markhodierne/projects-2/book-agent/playwright-tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/markhodierne/projects-2/book-agent/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "/Users/markhodierne/projects-2/book-agent/playwright-tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/markhodierne/projects-2/book-agent/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "Microsoft Edge",
+        "name": "Microsoft Edge",
+        "testDir": "/Users/markhodierne/projects-2/book-agent/playwright-tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/markhodierne/projects-2/book-agent/playwright-test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "Google Chrome",
+        "name": "Google Chrome",
+        "testDir": "/Users/markhodierne/projects-2/book-agent/playwright-tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.0",
+    "workers": 4,
+    "webServer": {
+      "command": "pnpm dev",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "book-creation.spec.ts",
+      "file": "book-creation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Book Creation Flow",
+          "file": "book-creation.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should complete book creation wizard",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-fa030a0206fa4152970b",
+              "file": "book-creation.spec.ts",
+              "line": 12,
+              "column": 7
+            },
+            {
+              "title": "should handle workflow progress updates",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-587b10519e47dbe32378",
+              "file": "book-creation.spec.ts",
+              "line": 42,
+              "column": 7
+            },
+            {
+              "title": "should allow book download when complete",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-eaa8376afababf5a45c0",
+              "file": "book-creation.spec.ts",
+              "line": 50,
+              "column": 7
+            },
+            {
+              "title": "should handle errors gracefully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-748ce62bc52fad0f9d30",
+              "file": "book-creation.spec.ts",
+              "line": 71,
+              "column": 7
+            },
+            {
+              "title": "should support mobile devices",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-35ccc9d43bd51818c8d8",
+              "file": "book-creation.spec.ts",
+              "line": 91,
+              "column": 7
+            },
+            {
+              "title": "should complete book creation wizard",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-62d48c764d1942014e7a",
+              "file": "book-creation.spec.ts",
+              "line": 12,
+              "column": 7
+            },
+            {
+              "title": "should handle workflow progress updates",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-33a5ffaf077818047ee0",
+              "file": "book-creation.spec.ts",
+              "line": 42,
+              "column": 7
+            },
+            {
+              "title": "should allow book download when complete",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-0e0d91fcfc482d66585b",
+              "file": "book-creation.spec.ts",
+              "line": 50,
+              "column": 7
+            },
+            {
+              "title": "should handle errors gracefully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-867b404428cab37de865",
+              "file": "book-creation.spec.ts",
+              "line": 71,
+              "column": 7
+            },
+            {
+              "title": "should support mobile devices",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-084c1fc5edca5b7388bc",
+              "file": "book-creation.spec.ts",
+              "line": 91,
+              "column": 7
+            },
+            {
+              "title": "should complete book creation wizard",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-504e31fb27ed353a815f",
+              "file": "book-creation.spec.ts",
+              "line": 12,
+              "column": 7
+            },
+            {
+              "title": "should handle workflow progress updates",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-76888e590cc6943b1bc9",
+              "file": "book-creation.spec.ts",
+              "line": 42,
+              "column": 7
+            },
+            {
+              "title": "should allow book download when complete",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-bb792e5424be5d53d67e",
+              "file": "book-creation.spec.ts",
+              "line": 50,
+              "column": 7
+            },
+            {
+              "title": "should handle errors gracefully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-b0f76a6a5e08df3d7d31",
+              "file": "book-creation.spec.ts",
+              "line": 71,
+              "column": 7
+            },
+            {
+              "title": "should support mobile devices",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-a9882a61e4a8a99168c4",
+              "file": "book-creation.spec.ts",
+              "line": 91,
+              "column": 7
+            },
+            {
+              "title": "should complete book creation wizard",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-4d3c19f9d987107cde23",
+              "file": "book-creation.spec.ts",
+              "line": 12,
+              "column": 7
+            },
+            {
+              "title": "should handle workflow progress updates",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-5c237b4283bca49a8b34",
+              "file": "book-creation.spec.ts",
+              "line": 42,
+              "column": 7
+            },
+            {
+              "title": "should allow book download when complete",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-e578e9075cb2d4add042",
+              "file": "book-creation.spec.ts",
+              "line": 50,
+              "column": 7
+            },
+            {
+              "title": "should handle errors gracefully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-5ace6b35c4ac2674f569",
+              "file": "book-creation.spec.ts",
+              "line": 71,
+              "column": 7
+            },
+            {
+              "title": "should support mobile devices",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-dba698dada1fb0d4c28e",
+              "file": "book-creation.spec.ts",
+              "line": 91,
+              "column": 7
+            },
+            {
+              "title": "should complete book creation wizard",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-4d5ff64aae73efbc9425",
+              "file": "book-creation.spec.ts",
+              "line": 12,
+              "column": 7
+            },
+            {
+              "title": "should handle workflow progress updates",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-44da4c0304603ca0864c",
+              "file": "book-creation.spec.ts",
+              "line": 42,
+              "column": 7
+            },
+            {
+              "title": "should allow book download when complete",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-d37dc2d83f9235b937da",
+              "file": "book-creation.spec.ts",
+              "line": 50,
+              "column": 7
+            },
+            {
+              "title": "should handle errors gracefully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-778b0fc59f911b966535",
+              "file": "book-creation.spec.ts",
+              "line": 71,
+              "column": 7
+            },
+            {
+              "title": "should support mobile devices",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-1800b5f3d2605ba8ba50",
+              "file": "book-creation.spec.ts",
+              "line": 91,
+              "column": 7
+            },
+            {
+              "title": "should complete book creation wizard",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Microsoft Edge",
+                  "projectName": "Microsoft Edge",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-3a950d2cefa4327d3cf4",
+              "file": "book-creation.spec.ts",
+              "line": 12,
+              "column": 7
+            },
+            {
+              "title": "should handle workflow progress updates",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Microsoft Edge",
+                  "projectName": "Microsoft Edge",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-4e40216857e1759fb100",
+              "file": "book-creation.spec.ts",
+              "line": 42,
+              "column": 7
+            },
+            {
+              "title": "should allow book download when complete",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Microsoft Edge",
+                  "projectName": "Microsoft Edge",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-d4c3f2bdb8c26f5315aa",
+              "file": "book-creation.spec.ts",
+              "line": 50,
+              "column": 7
+            },
+            {
+              "title": "should handle errors gracefully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Microsoft Edge",
+                  "projectName": "Microsoft Edge",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-811830e6d0513a215bc5",
+              "file": "book-creation.spec.ts",
+              "line": 71,
+              "column": 7
+            },
+            {
+              "title": "should support mobile devices",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Microsoft Edge",
+                  "projectName": "Microsoft Edge",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-436ac836a1cac189bec1",
+              "file": "book-creation.spec.ts",
+              "line": 91,
+              "column": 7
+            },
+            {
+              "title": "should complete book creation wizard",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Google Chrome",
+                  "projectName": "Google Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-fbc1699f7f6dfc120947",
+              "file": "book-creation.spec.ts",
+              "line": 12,
+              "column": 7
+            },
+            {
+              "title": "should handle workflow progress updates",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Google Chrome",
+                  "projectName": "Google Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-4b491462504bb5a9b658",
+              "file": "book-creation.spec.ts",
+              "line": 42,
+              "column": 7
+            },
+            {
+              "title": "should allow book download when complete",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Google Chrome",
+                  "projectName": "Google Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-6d60132f31fafee5e6e5",
+              "file": "book-creation.spec.ts",
+              "line": 50,
+              "column": 7
+            },
+            {
+              "title": "should handle errors gracefully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Google Chrome",
+                  "projectName": "Google Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-35c661b5d4ec6274758d",
+              "file": "book-creation.spec.ts",
+              "line": 71,
+              "column": 7
+            },
+            {
+              "title": "should support mobile devices",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Google Chrome",
+                  "projectName": "Google Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "0695786e05ba6c0ff295-fba79eb2fef50d0d02a2",
+              "file": "book-creation.spec.ts",
+              "line": 91,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-09-21T18:33:36.379Z",
+    "duration": 70.375,
+    "expected": 0,
+    "skipped": 35,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
