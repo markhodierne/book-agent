@@ -63,7 +63,7 @@ Each to-do task should be numbered sequentially, and include:
 
 Then refresh your memory by checking `HISTORY.md`. Review the `ARCHITECTURE.md` and `FUNCTIONAL.md` to understand what we are building.
 
-We are working through `TO-DO.md` and are on task 15.
+We are working through `TO-DO.md` and are on task 17.
 
 **Before implementing anything:**
 
@@ -79,14 +79,14 @@ As you implement, explain:
 
 Now, here is the next task to complete:
 
-### 15. Chapter Spawning Node (spin up chapter agents)
-**Description**: Create dynamic parallel chapter node generation
+### 17. Formatting Node (combine chapters → minimal PDF export)
+**Description**: Implement PDF generation and formatting node
 **Deliverables**:
-- Dynamic node creation based on outline
-- Parallel execution coordination
-- Chapter dependency resolution
-**Dependencies**: Task 14
-**Definition of Done**: Node creates N parallel chapter nodes, manages dependencies correctly
+- React-PDF integration for book layout
+- Professional typography and styling
+- Table of contents and page numbering
+**Dependencies**: Task 16
+**Definition of Done**: Node generates professional PDF with correct formatting and structure
 
 ```
 
@@ -113,7 +113,8 @@ Only proceed when dependencies are satisfied and coordination is clear.
     5. Save current state of key variables/configurations
     6. If applicable, update `CLAUDE.md` with any learned standards picked up from the review process
     7. If there have been significant changes, update `FUNCTIONAL.md` or `ARCHITECTURE.md` as required
-    8. **IMPORTANT**: Be concise, don't repeat yourself, double check and remove duplication/reduce where possible
+    8. Update TO-DO.md with any changes to what has been completed and show completed items with ticks
+    9. **IMPORTANT**: Be concise, don't repeat yourself, double check and remove duplication/reduce where possible
 
     DO NOT CREATE ANY NEW .md FILES FOR DOCUMENTATION - UPDATE THE EXISTING .md FILES.
     After creating/updating these files, I'll reset the context window and we'll continue with a fresh session.

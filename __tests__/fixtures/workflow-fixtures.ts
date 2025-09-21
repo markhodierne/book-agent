@@ -1,12 +1,13 @@
 // Workflow Test Fixtures
 // Mock data for workflow and chapter spawning tests
 
-import { WorkflowState, BookOutline, ChapterOutline, ChapterConfig, BookRequirements, StyleGuide, AudienceProfile } from '@/types';
+import { WorkflowState, BookOutline, ChapterOutline, ChapterConfig, BookRequirements, StyleGuide, AudienceProfile, ChapterResult, ChapterStatus, ExpertiseLevel, ReadingContext, BookPurpose, BookApproach, CoverageDepth, EngagementStrategy, WritingTone, WritingVoice, WritingPerspective, FormalityLevel, TechnicalLevel, AuthorInfo } from '@/types';
+import { ChapterNodeConfig } from '@/lib/agents/nodes/chapter';
 
 /**
  * Create mock workflow state for testing
  */
-export function createMockWorkflowState(): WorkflowState {
+export function createMockWorkflowState(overrides: Partial<WorkflowState> = {}): WorkflowState {
   return {
     sessionId: 'test-session-123',
     userId: 'test-user-456',
@@ -24,6 +25,8 @@ export function createMockWorkflowState(): WorkflowState {
     updatedAt: '2025-01-20T10:30:00.000Z',
     requirements: createMockBookRequirements(),
     styleGuide: createMockStyleGuide(),
+    outline: createMockBookOutline(),
+    ...overrides,
   };
 }
 
@@ -32,22 +35,22 @@ export function createMockWorkflowState(): WorkflowState {
  */
 export function createMockBookRequirements(): BookRequirements {
   return {
-    topic: 'Artificial Intelligence for Beginners',
+    topic: 'Test Topic',
     audience: createMockAudienceProfile(),
     author: {
       name: 'John Doe',
-      bio: 'AI researcher and educator',
       credentials: 'PhD in Computer Science',
+      background: 'AI researcher and educator',
     },
     scope: {
-      breadth: 'comprehensive',
-      depth: 'intermediate',
-      approach: 'practical',
+      purpose: 'educational' as BookPurpose,
+      approach: 'practical' as BookApproach,
+      coverageDepth: 'detailed' as CoverageDepth,
     },
     contentOrientation: {
-      focus: 'educational',
-      perspective: 'balanced',
-      examples: 'real-world',
+      primaryAngle: 'Educational focus on practical applications',
+      secondaryAngles: ['Real-world examples', 'Case studies'],
+      engagementStrategy: 'practical_examples' as EngagementStrategy,
     },
     wordCountTarget: 35000,
   };
@@ -59,14 +62,10 @@ export function createMockBookRequirements(): BookRequirements {
 export function createMockAudienceProfile(): AudienceProfile {
   return {
     demographics: 'Students and professionals aged 22-45',
-    expertiseLevel: 'beginner',
-    priorKnowledge: 'Basic understanding of programming concepts',
-    readingContext: 'Self-paced learning and reference',
-    goals: [
-      'Understand AI fundamentals',
-      'Learn practical AI applications',
-      'Prepare for AI career transition',
-    ],
+    expertiseLevel: 'beginner' as ExpertiseLevel,
+    ageRange: '22-45',
+    priorKnowledge: ['Basic understanding of programming concepts'],
+    readingContext: 'professional' as ReadingContext,
   };
 }
 
@@ -75,13 +74,12 @@ export function createMockAudienceProfile(): AudienceProfile {
  */
 export function createMockStyleGuide(): StyleGuide {
   return {
-    tone: 'professional',
-    voice: 'authoritative',
-    perspective: 'second-person',
-    formality: 'semi-formal',
-    technicalLevel: 'intermediate',
-    exampleStyle: 'practical',
-    sampleText: 'Artificial intelligence represents one of the most transformative technologies of our time. In this comprehensive guide, you will discover how AI systems work and learn to apply these powerful tools in real-world scenarios.',
+    tone: 'professional' as WritingTone,
+    voice: 'active' as WritingVoice,
+    perspective: 'second_person' as WritingPerspective,
+    formality: 'semi_formal' as FormalityLevel,
+    technicalLevel: 'semi_technical' as TechnicalLevel,
+    exampleUsage: 'Artificial intelligence represents one of the most transformative technologies of our time. In this comprehensive guide, you will discover how AI systems work and learn to apply these powerful tools in real-world scenarios.',
   };
 }
 
@@ -242,38 +240,42 @@ export function createMinimalValidWorkflowState(): WorkflowState {
       totalWordCount: 30000, // Meets minimum requirement
       estimatedPages: 120,
     },
-    requirements: {
-      topic: 'Test Topic',
-      audience: {
-        demographics: 'Test audience',
-        expertiseLevel: 'beginner',
-        priorKnowledge: 'None required',
-        readingContext: 'Test context',
-        goals: ['Learn testing'],
-      },
-      author: {
-        name: 'Test Author',
-      },
-      scope: {
-        breadth: 'focused',
-        depth: 'surface',
-        approach: 'theoretical',
-      },
-      contentOrientation: {
-        focus: 'educational',
-        perspective: 'neutral',
-        examples: 'hypothetical',
-      },
-      wordCountTarget: 30000,
-    },
-    styleGuide: {
-      tone: 'neutral',
-      voice: 'third-person',
-      perspective: 'objective',
-      formality: 'formal',
-      technicalLevel: 'basic',
-      exampleStyle: 'simple',
-      sampleText: 'This is a test style guide example.',
-    },
+    requirements: createMockBookRequirements(),
+    styleGuide: createMockStyleGuide(),
+  };
+}
+
+/**
+ * Create mock chapter configuration
+ */
+export function createMockChapterConfig(overrides: Partial<ChapterNodeConfig> = {}): ChapterNodeConfig {
+  return {
+    chapterNumber: 1,
+    title: 'Introduction to AI',
+    outline: createMockChapterOutline(1, 'Introduction to AI', 1500),
+    wordTarget: 1500,
+    dependencies: [],
+    style: createMockStyleGuide(),
+    researchTopics: ['AI history', 'Current applications', 'Future trends'],
+    sessionId: 'test-session-123',
+    researchRequirements: ['AI history', 'Current applications'],
+    objectives: ['Understand AI concepts', 'Learn applications'],
+    ...overrides,
+  };
+}
+
+/**
+ * Create mock chapter result
+ */
+export function createMockChapterResult(overrides: Partial<ChapterResult> = {}): ChapterResult {
+  return {
+    chapterNumber: 1,
+    title: 'Introduction to AI',
+    content: 'This is a comprehensive introduction to artificial intelligence...',
+    wordCount: 1500,
+    status: 'completed' as ChapterStatus,
+    generatedAt: new Date().toISOString(),
+    researchSources: ['Web research', 'PDF content'],
+    ...overrides,
   };
 }

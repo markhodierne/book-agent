@@ -620,9 +620,16 @@ async recover(state: WorkflowState, error: WorkflowError): Promise<WorkflowState
   const retryState = { ...state, retryCount: (state.retryCount || 0) + 1 };
 
   if (retryState.retryCount > 2) {
-    throw new WorkflowError('max_retries_exceeded', 'Maximum retries exceeded', {
-      recoverable: false,
-    });
+    throw new WorkflowError(
+      state.sessionId,
+      state.currentStage,
+      `Maximum retries exceeded for ${this.name}`,
+      {
+        code: 'max_retries_exceeded',
+        recoverable: false,
+        context: { nodeName: this.name },
+      }
+    );
   }
 
   // Reduce complexity for retry
@@ -633,6 +640,27 @@ async recover(state: WorkflowState, error: WorkflowError): Promise<WorkflowState
 
   return this.executeWithReducedComplexity(retryState, recoveryConfig);
 }
+```
+
+### WorkflowError Constructor Pattern
+```typescript
+// ✅ Use proper WorkflowError constructor parameters: sessionId, stage, message, options
+throw new WorkflowError(
+  state.sessionId,
+  state.currentStage,
+  'Description of what went wrong',
+  {
+    code: 'error_type',
+    recoverable: true,
+    context: {
+      nodeName: this.name,
+      additionalContext: value,
+    },
+  }
+);
+
+// ❌ Avoid incorrect parameter order
+throw new WorkflowError('error_code', 'message', { context });
 ```
 
 ### Content Validation and Adjustment

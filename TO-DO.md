@@ -4,16 +4,16 @@
 
 This project follows an MVP-first approach to deliver a working demonstration early, then progressively enhance functionality while maintaining a working application. The roadmap is split into two main sections:
 
-1. **🚀 Slim MVP Foundation (Tasks 1-24)** - Core functionality for prompt → outline → chapters → PDF [15/24 Complete + GPT-5 Integration]
-2. **🔄 Extended Roadmap (Tasks 25-45)** - Advanced features, persistence, polish, and production readiness
+1. **🚀 Slim MVP Foundation (Tasks 1-25)** - Core functionality for prompt → outline → chapters → PDF [16/25 Complete + GPT-5 Integration]
+2. **🔄 Extended Roadmap (Tasks 26-46)** - Advanced features, persistence, polish, and production readiness
 
-## 🚀 Slim MVP Foundation (Tasks 1-24) [15/24 Complete + GPT-5 Integration]
+## 🚀 Slim MVP Foundation (Tasks 1-25) [16/25 Complete + GPT-5 Integration]
 
-**Current Status: 63% Complete (15/24 tasks) + Critical GPT-5 Integration**
-- ✅ **Tasks 1-15 Complete**: Environment through Chapter Spawning
+**Current Status: 64% Complete (16/25 tasks) + Critical GPT-5 Integration**
+- ✅ **Tasks 1-16 Complete**: Environment through Chapter Generation
 - ✅ **GPT-5 Mini Integration**: Critical correction and upgrade completed
-- 🔄 **Next Task**: Task 16 - Chapter Generation Node (Connect to Chapter Write Tool)
-- 🎯 **Milestone**: Dynamic parallel chapter orchestration ready for content generation
+- 🔄 **Next Task**: Task 17 - Consistency Review Node
+- 🎯 **Milestone**: Complete parallel chapter generation system operational
 
 ### 1. Environment Setup (Node.js, TypeScript, Next.js, project structure) ✅ **COMPLETED**
 **Description**: Install and configure core dependencies for the application
@@ -170,27 +170,37 @@ This project follows an MVP-first approach to deliver a working demonstration ea
 **Dependencies**: Task 14 ✅
 **Definition of Done**: ✅ Node creates N parallel chapter nodes with comprehensive dependency management and execution coordination
 
-### 16. Chapter Generation Node (connect to Chapter write tool)
+### 16. Chapter Generation Node (connect to Chapter write tool) ✅ **COMPLETED**
 **Description**: Implement the chapter generation node template
-**Deliverables**:
-- Chapter node factory function
-- Research integration and content generation
-- Progress tracking and error handling
-**Dependencies**: Task 15
-**Definition of Done**: Chapter nodes generate content in parallel, maintain consistency
+**Deliverables**: ✅ All completed
+- ✅ Chapter node factory function - Enhanced ChapterNode class with 5-phase execution pipeline
+- ✅ Research integration and content generation - Web research integration with GPT-5 mini via chapter write tool
+- ✅ Progress tracking and error handling - Real-time Supabase status updates with comprehensive error recovery
+- ✅ **Bonus**: 20 comprehensive tests, dependency processing, reduced complexity recovery
+**Dependencies**: Task 15 ✅
+**Definition of Done**: ✅ Chapter nodes generate content in parallel (20 tests pass), research integration, progress tracking operational
 
-### 17. Formatting Node (combine chapters → minimal PDF export)
+### 17. Consistency Review Node (review chapters for consistency and quality)
+**Description**: Implement consistency and quality review node
+**Deliverables**:
+- Chapter consistency analysis
+- Style and terminology validation
+- Content quality scoring
+**Dependencies**: Task 16
+**Definition of Done**: Node identifies inconsistencies, provides actionable feedback
+
+### 18. Formatting Node (combine chapters → minimal PDF export)
 **Description**: Implement PDF generation and formatting node
 **Deliverables**:
 - React-PDF integration for book layout
 - Professional typography and styling
 - Table of contents and page numbering
-**Dependencies**: Task 16
+**Dependencies**: Task 17
 **Definition of Done**: Node generates professional PDF with correct formatting and structure
 
 >>  ** THIS POINT IS THE MINIMAL FULL PIPELINE (PDF output, backend only) **
 
-### 18. Set Up UI Library (shadcn/ui, or fallback components if faster)
+### 19. Set Up UI Library (shadcn/ui, or fallback components if faster)
 **Description**: Install and configure shadcn/ui component library
 **Deliverables**:
 - shadcn/ui installation and configuration
@@ -205,39 +215,39 @@ This project follows an MVP-first approach to deliver a working demonstration ea
 - Wizard container component
 - Step navigation and validation
 - Progress indicator and step management
-**Dependencies**: Task 18, Task 4
+**Dependencies**: Task 20, Task 4
 **Definition of Done**: Wizard navigates between steps correctly, validates inputs appropriately
 
-### 20. Requirements Gathering UI (author name, audience, style)
+### 21. Requirements Gathering UI (author name, audience, style)
 **Description**: Build the conversation interface for Stage 1
 **Deliverables**:
 - Chat interface for AI conversation
 - File upload component for PDFs
 - Requirements review and confirmation
-**Dependencies**: Task 19
+**Dependencies**: Task 20
 **Definition of Done**: Users can have natural conversations, upload files, review requirements
 
-### 21. Outline Review UI (simple approve/reject outline step)
+### 22. Outline Review UI (simple approve/reject outline step)
 **Description**: Create UI for outline review and approval
 **Deliverables**:
 - Outline display and editing interface
 - Chapter structure visualization
 - Title selection and finalization
-**Dependencies**: Task 20
+**Dependencies**: Task 21
 **Definition of Done**: Users can review, modify, and approve book outlines intuitively
 
-### 22. PDF Download UI (link/button to fetch completed PDF, skip preview)
+### 23. PDF Download UI (link/button to fetch completed PDF, skip preview)
 **Description**: Implement PDF download functionality
 **Deliverables**:
 - Download functionality
 - Basic completion notification
 - Error handling for failed generations
-**Dependencies**: Task 21
+**Dependencies**: Task 22
 **Definition of Done**: Users can download generated PDFs reliably
 
 >>  ** THIS POINT IS THE FIRST USER-FACING WORKING APP **
 
-### 23. API Route Implementation (Next.js route to run the agent workflow)
+### 24. API Route Implementation (Next.js route to run the agent workflow)
 **Description**: Create Next.js API routes for workflow execution
 **Deliverables**:
 - `/api/workflow` routes for LangGraph execution
@@ -246,7 +256,7 @@ This project follows an MVP-first approach to deliver a working demonstration ea
 **Dependencies**: Task 12, Task 6
 **Definition of Done**: API routes handle all workflow operations securely and efficiently
 
-### 24. End-to-End Workflow Test (smoke test: prompt → outline → chapters → PDF)
+### 25. End-to-End Workflow Test (smoke test: prompt → outline → chapters → PDF)
 **Description**: Test complete book generation workflow from start to finish
 **Deliverables**:
 - E2E test suites for all user journeys
@@ -255,11 +265,11 @@ This project follows an MVP-first approach to deliver a working demonstration ea
 **Dependencies**: All previous MVP tasks
 **Definition of Done**: Complete workflows execute successfully, meet basic performance requirements
 
-## 🔄 Extended Roadmap (Post-MVP) (Tasks 25-45)
+## 🔄 Extended Roadmap (Post-MVP) (Tasks 26-46)
 
-### Advanced Tools (Tasks 25-29)
+### Advanced Tools (Tasks 26-30)
 
-### 25. Web Research Tool (Firecrawl integration for chapter research)
+### 26. Web Research Tool (Firecrawl integration for chapter research)
 **Description**: Implement Firecrawl integration for web research
 **Deliverables**:
 - `webResearchTool` with Firecrawl API integration
@@ -463,34 +473,34 @@ This project follows an MVP-first approach to deliver a working demonstration ea
 
 ## ⚡ How to Use This Roadmap
 
-**Tasks 1–24 = MVP** → you'll have a working system that can take a prompt, gather requirements, generate an outline, write chapters, and export a PDF with a simple UI.
+**Tasks 1–25 = MVP** → you'll have a working system that can take a prompt, gather requirements, generate an outline, write chapters, and export a PDF with a simple UI.
 
-**Tasks 25–45 = Extended** → progressively add depth, persistence, UI polish, and production readiness.
+**Tasks 26–46 = Extended** → progressively add depth, persistence, UI polish, and production readiness.
 
 ## Quick Reference: MVP Task Dependencies
 
 ```
-MVP Foundation (1-24):
+MVP Foundation (1-25):
 ├── 1 → 2 → 3,4
 ├── 2,3 → 4 → 5 → 6
 ├── 1,2 → 7
 ├── 4 → 8 → 9 → 10,11
-├── 4,11 → 12 → 13 → 14 → 15 → 16 → 17
-├── 1 → 18 → 19 → 20 → 21 → 22
-├── 12,6 → 23
-└── All MVP → 24
+├── 4,11 → 12 → 13 → 14 → 15 → 16 → 17 → 18
+├── 1 → 19 → 20 → 21 → 22 → 23
+├── 12,6 → 24
+└── All MVP → 25
 
-Extended Roadmap (25-45):
-├── Tools: 9 → 25,26,27,28 → 29
-├── Workflow: 16,17 → 30,31; 4 → 32
-├── State: 5 → 33 → 34 → 35 → 36 → 37 → 38
-├── UI: 38,22 → 39 → 40 → 41
-└── Production: 23 → 42 → 43 → 44 → 45
+Extended Roadmap (26-46):
+├── Tools: 9 → 26,27,28,29 → 30
+├── Workflow: 17,18 → 31,32; 4 → 33
+├── State: 5 → 34 → 35 → 36 → 37 → 38 → 39
+├── UI: 39,23 → 40 → 41 → 42
+└── Production: 24 → 43 → 44 → 45 → 46
 ```
 
 ## Development Guidelines
 
-1. **MVP First**: Complete tasks 1-24 to get a working demonstration
+1. **MVP First**: Complete tasks 1-25 to get a working demonstration
 2. **Work Sequentially**: Complete tasks in numerical order to maintain dependencies
 3. **Test Early**: Run tests after completing each task to catch issues early
 4. **Commit Often**: Commit after each completed task with descriptive messages
@@ -499,24 +509,24 @@ Extended Roadmap (25-45):
 
 ## Estimated Timeline
 
-### MVP Timeline (Tasks 1-24)
+### MVP Timeline (Tasks 1-25)
 - **Environment & Setup (1-8)**: 3-4 hours
 - **Core Tools (9-11)**: 2-3 hours
-- **LangGraph Workflow (12-17)**: 4-6 hours
-- **UI Foundation (18-22)**: 3-4 hours
-- **API & Testing (23-24)**: 2-3 hours
+- **LangGraph Workflow (12-18)**: 5-7 hours
+- **UI Foundation (19-23)**: 3-4 hours
+- **API & Testing (24-25)**: 2-3 hours
 
-**Total MVP Time**: 14-20 hours
+**Total MVP Time**: 15-21 hours
 
-### Extended Features (Tasks 25-45)
-- **Advanced Tools (25-29)**: 4-6 hours
-- **Workflow Enhancements (30-32)**: 3-4 hours
-- **State & Persistence (33-38)**: 6-8 hours
-- **UI Enhancements (39-41)**: 3-4 hours
-- **Production & Ops (42-45)**: 4-6 hours
+### Extended Features (Tasks 26-46)
+- **Advanced Tools (26-30)**: 4-6 hours
+- **Workflow Enhancements (31-33)**: 3-4 hours
+- **State & Persistence (34-39)**: 6-8 hours
+- **UI Enhancements (40-42)**: 3-4 hours
+- **Production & Ops (43-46)**: 4-6 hours
 
 **Total Extended Time**: 20-28 hours
 
-**Complete Application**: 34-48 hours
+**Complete Application**: 35-49 hours
 
 This MVP-first approach ensures you can demonstrate a working book generation system early, then systematically enhance it while maintaining functionality throughout development.
