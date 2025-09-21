@@ -37,6 +37,14 @@ export {
   sanitizeExtractedText,
 } from './pdfExtractTool';
 
+export {
+  chapterWriteTool,
+  generateChapterContent,
+  validateChapter,
+  createStylePrompt,
+  type ChapterWriteParams,
+} from './chapterWriteTool';
+
 // Tool initialization
 export {
   initializeTools,

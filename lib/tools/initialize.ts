@@ -1,5 +1,6 @@
 import { toolRegistry } from './registry';
 import { pdfExtractTool } from './pdfExtractTool';
+import { chapterWriteTool } from './chapterWriteTool';
 import { logger } from '@/lib/errors/exports';
 
 /**
@@ -18,9 +19,11 @@ export function initializeTools(): void {
   // Register PDF extraction tool
   toolRegistry.register(pdfExtractTool);
 
+  // Register chapter writing tool
+  toolRegistry.register(chapterWriteTool);
+
   // TODO: Register additional tools as they're implemented
   // - webResearchTool (Task 25)
-  // - chapterWriteTool (Task 11)
   // - supabaseStateTool (Task 26)
   // - styleGeneratorTool (Task 27)
   // - coverDesignTool (Task 28)

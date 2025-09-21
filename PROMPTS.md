@@ -63,7 +63,7 @@ Each to-do task should be numbered sequentially, and include:
 
 Then refresh your memory by checking `HISTORY.md`. Review the `ARCHITECTURE.md` and `FUNCTIONAL.md` to understand what we are building.
 
-We are working through `TO-DO.md` and are on task 9.
+We are working through `TO-DO.md` and are on task 12.
 
 **Before implementing anything:**
 
@@ -79,14 +79,14 @@ As you implement, explain:
 
 Now, here is the next task to complete:
 
-### 9. Tool Framework for Subagents (base class/interfaces for tools)
-**Description**: Implement the generic tool creation framework
+### 12. Implement Base LangGraph Structure (workflow orchestration)
+**Description**: Set up LangGraph workflow foundation
 **Deliverables**:
-- `lib/tools/createTool.ts` with generic tool interface
-- Tool registry and management system
-- Base tool error handling and retry logic
-**Dependencies**: Task 4, 8
-**Definition of Done**: Tool framework allows creating typed, retryable tools with consistent interface
+- LangGraph StateGraph configuration
+- Workflow state management
+- Node execution framework
+**Dependencies**: Task 4, 11
+**Definition of Done**: Basic LangGraph workflow executes, state passes between nodes correctly
 
 ```
 

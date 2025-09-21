@@ -516,160 +516,97 @@ __tests__/
 **Date**: 2025-09-21
 
 #### Key Implementations:
+- **PDF Extraction Tool**: Uses `pdf-parse` library with security validation, LLM-optimized processing
+- **Security**: File format verification, 50MB limits, malware detection, content sanitization
+- **Performance**: 538ms extraction (42.93MB PDF → 5,313 words), 2min timeout, retry logic
+- **Integration**: Registered with tool registry, 26 comprehensive tests passing
+- **Testing Scripts**: `test-pdf-extract.ts` and interactive `pdf-repl.ts` for validation
 
-**PDF Extraction Tool (`lib/tools/pdfExtractTool.ts`):**
-- **Core Library**: Uses `pdf-parse` library for text extraction
-- **Security Validation**: File format verification, size limits (100 bytes - 50MB), malware detection
-- **Content Processing**: LLM-optimized text extraction with configurable options
-- **Performance**: Built with `ToolFactory.createFileProcessingTool()` (2min timeout, retry logic)
-- **Integration**: Registered with tool registry, follows tool-centric architecture
+### Task 11: Chapter Write Tool ✅
+**Status**: Complete
+**Date**: 2025-09-21
 
-**Security Features:**
-- **PDF Signature Validation**: Verifies `%PDF-` header and rejects invalid files
-- **Malware Scanning**: Detects suspicious patterns (executables, JavaScript injection)
-- **Content Sanitization**: Removes control characters, normalizes whitespace
-- **Size Constraints**: Enforces FUNCTIONAL.md 50MB limit with minimum file validation
+#### Key Implementations:
 
-**Text Processing Modes:**
-- **Default Mode**: LLM-optimized compact text (replaces all line breaks with spaces)
-- **Line Breaks Preserved**: Maintains original document structure
-- **Page Limiting**: Extract specific page ranges for large documents
+**Chapter Generation Tool (`lib/tools/chapterWriteTool.ts`):**
+- **OpenAI Integration**: Uses `gpt-4o-mini` model with configurable parameters (temp: 0.7, top_p: 0.9)
+- **Dynamic Prompting**: Two-part prompt system (system + user) with style guide enforcement
+- **Content Integration**: Supports PDF base content, research data, dependent chapter context
+- **Quality Validation**: 100-point scoring system with structure, word count, and completeness checks
+- **Performance**: 5min timeout, 1 retry max (expensive operations), extensive error handling
 
-**Testing & Quality (`__tests__/tools/pdf-extract.test.ts` - 26 tests):**
-- **Validation Tests**: Buffer validation, security checks, malware detection
-- **Extraction Tests**: Various PDF formats, option handling, error scenarios
-- **Integration Tests**: Full tool lifecycle, metrics collection, retry logic
-- **Real-world Verification**: Successfully tested with 42.93MB astronomy PDF (5,313 words extracted in 538ms)
+**Style Guide System:**
+- **System Prompt**: Establishes AI role as expert book writer with style requirements
+- **User Prompt**: Provides chapter-specific outline, objectives, context, and constraints
+- **Style Enforcement**: Tone, voice, perspective, formality, technical level consistency
+- **Word Count Targeting**: ±15% tolerance with validation and quality scoring
 
-#### PDF Testing Scripts:
+**Advanced Features:**
+- **Multi-source Integration**: PDF content, research data, previous chapter context
+- **Content Validation**: Paragraph structure, placeholder detection, sentence flow analysis
+- **Error Recovery**: OpenAI API errors, network failures, content quality validation
+- **Monitoring Integration**: Execution metrics, retry tracking, performance measurement
 
-**Quick Test Script (`scripts/test-pdf-extract.ts`):**
+**Testing & Quality (`__tests__/tools/chapter-write.test.ts` - 18 tests):**
+- **Generation Tests**: Style adherence, content integration, research incorporation
+- **Validation Tests**: Word count accuracy, structure requirements, quality scoring
+- **Error Handling**: API failures, validation failures, network issues
+- **Integration Tests**: Tool configuration, registry integration, metrics tracking
+
+**Testing Script (`scripts/test-chapter-write.ts`):**
 ```bash
-npx tsx scripts/test-pdf-extract.ts /path/to/your/file.pdf
+npx tsx scripts/test-chapter-write.ts --chapter ai-intro --style professional
 ```
-- Shows extraction results, performance metrics, word counts
-- Automatically saves full extracted text to `extracted-text.txt`
-- Tests all extraction modes (default, line breaks, page limits)
-
-**Interactive REPL (`scripts/pdf-repl.ts`):**
-```bash
-npx tsx scripts/pdf-repl.ts
-```
-Commands: `load <path>`, `extract`, `extract-lines`, `preview [length]`, `search <term>`, `save <path>`, `help`, `exit`
+- Multiple chapter templates (AI, web development, data science)
+- Style options (professional, casual, academic, friendly)
+- Real OpenAI API integration testing with performance metrics
 
 #### Important Decisions:
 
-1. **LLM-Optimized Processing**: Default mode creates compact text by removing all line breaks for efficient LLM input
-2. **Security-First Approach**: Comprehensive validation prevents malicious file processing
-3. **Real-world Testing**: Verified with actual large PDF (42.93MB astronomy document)
-4. **Tool Framework Integration**: Uses established patterns and registry system
+1. **Two-Part Prompting**: System prompt for role/style, user prompt for specific requirements
+2. **Quality-First Validation**: 15% word count tolerance, structure requirements, placeholder detection
+3. **Comprehensive Error Handling**: API-specific errors, validation failures, retry logic
+4. **Performance Optimization**: 5min timeout for expensive generation, minimal retries
 
 #### Architecture Compliance:
-- **Tool-Centric Design**: Discrete, reusable tool orchestrated by LangGraph nodes
-- **FUNCTIONAL.md Integration**: Supports Stage 1 PDF upload requirements (50MB limit)
-- **ARCHITECTURE.md Security**: Implements file upload security and validation standards
-- **Error Handling**: Uses established error framework with retry logic and monitoring
+- **Tool-Centric Design**: Discrete tool using `ToolFactory.createChapterGenerationTool()`
+- **FUNCTIONAL.md Integration**: Supports Stage 3 parallel chapter generation requirements
+- **Style Consistency**: Enforces user-selected style guide across all chapters
+- **Content Quality**: Publication-ready output with validation and quality scoring
 
 #### Verification Results:
-- ✅ **26 tests passing** - Comprehensive test coverage for all functionality
-- ✅ **Real PDF tested** - Successfully processed 42.93MB astronomy PDF
-- ✅ **Performance verified** - 538ms extraction time, no retries needed
-- ✅ **Security validated** - All malware detection and validation working
-- ✅ **Integration complete** - Tool registered and ready for LangGraph workflow
+- ✅ **18 tests passing** - Complete test coverage including real generation scenarios
+- ✅ **Tool registered** - Integrated with tool registry and initialization system
+- ✅ **OpenAI integration** - Tested with real API calls, proper error handling
+- ✅ **Style validation** - Dynamic prompt generation with style guide enforcement
+- ✅ **Ready for LangGraph** - Tool available for orchestration in chapter generation workflows
 
-#### Text Processing Results:
-**Test File**: ITA_01.pdf (42.93MB) → 35,110 characters / 5,313 words extracted
-- **Default mode**: Compact flowing text ideal for LLM input
-- **Line breaks preserved**: Structured document format
-- **Performance**: 538ms full extraction, 174ms with line breaks, 45ms for 3 pages
+### Next Task: **Task 12** - Base LangGraph Structure
 
-### Next Task: **Task 11** - Chapter Write Tool Implementation
+## Context Reset Summary (After Task 11)
 
-## Context Reset Summary (After Task 10)
-
-### Ready for Task 11: Chapter Write Tool
-- **Dependencies Met**: Tool framework (Task 9), PDF extraction (Task 10), OpenAI integration needed
-- **Implementation Path**: Use `ToolFactory.createChapterGenerationTool()`, integrate OpenAI GPT-5 mini, add content generation logic
-- **Test Patterns**: 86 comprehensive test examples available in `__tests__/tools/` (26 new PDF tests)
+### Project Status: 11/24 MVP Tasks Complete
+- **Latest**: Task 11 (Chapter Write Tool) - OpenAI-powered chapter generation with style enforcement
+- **Next**: Task 12 (Base LangGraph Structure) - Workflow orchestration foundation
+- **Progress**: Core tool foundation established, ready for workflow implementation
 
 ### Critical Project State
-- **Build Status**: Production build passes, ESLint warnings in infrastructure acceptable for MVP
-- **Environment**: Live Supabase project operational, PDF extraction verified with real files
-- **Tool Framework**: Complete with PDF extraction tool registered and tested
-- **Quality Standards**: All new tool code meets TypeScript strict mode, follows CLAUDE.md standards
+- **Tools Complete**: PDF extraction + Chapter generation registered and tested
+- **Build Status**: Production build functional, infrastructure warnings acceptable per CLAUDE.md
+- **Environment**: Live Supabase project operational with RLS policies
+- **Testing**: 44 tests (26 PDF + 18 Chapter) with real API integration verified
 
-### Development Context
-- **Current Phase**: MVP Foundation (Tasks 1-24) - prioritize working functionality
-- **Architecture**: Tool-centric design proven with PDF extraction implementation
-- **Standards**: Use createTool() framework, registry pattern, established testing patterns
-- **PDF Integration**: Ready for conversation node (Task 13) to use extracted content as `baseContent`
+### Development Standards Established
 
-### Key Configuration State
-- **Environment**: Live Supabase project `mttoxdzdcimuplzbyzti.supabase.co` with RLS policies
-- **Error Handling**: Complete infrastructure in `lib/errors/` with tool-specific extensions
-- **Testing**: Vitest + Playwright configured with comprehensive tool test patterns
-- **Monitoring**: Performance metrics and analytics system with tool-specific metrics
-- **Tool Framework**: Complete foundation ready for specific tool implementations
-- **Type System**: 725-line comprehensive type definitions in `types/index.ts`
-- **Package Manager**: pnpm strictly enforced
-- **Build System**: Next.js 15 with Turbopack
-- **Code Quality**: ESLint + Prettier + TypeScript strict mode (existing warnings documented as acceptable)
+**Tool Framework Patterns:**
+- **Type-Safe Creation**: Generic `Tool<P,R>` interface with specialized factories
+- **Registry Pattern**: Centralized tool management with automatic registration
+- **Error Recovery**: Circuit breaker pattern, comprehensive retry logic, monitoring integration
+- **Quality Validation**: Parameter/result validation, performance tracking
 
-### Directory Structure Established
-```
-lib/
-├── tools/             # Tool framework (NEW - Task 9)
-│   ├── createTool.ts  # Core tool creation framework
-│   ├── registry.ts    # Tool management and discovery
-│   ├── errorHandling.ts # Advanced error patterns
-│   ├── index.ts       # Barrel exports
-│   └── README.md      # Complete documentation
-├── errors/            # Error handling infrastructure (enhanced for tools)
-├── monitoring/        # Metrics and analytics system
-├── database/          # Supabase client and migrations
-├── config/            # Environment validation
-__tests__/
-├── tools/             # Tool unit tests (60 tests)
-├── agents/            # LangGraph workflow tests
-├── components/        # React component tests
-├── fixtures/          # Test data and mock utilities
-└── utils.ts           # Test setup and helper functions
-playwright-tests/      # E2E tests directory
-```
-
-## Development Standards Established
-
-### Error Handling Patterns:
-- Custom error classes with context enrichment and static factory methods
-- Exponential backoff retry with operation-specific configurations
-- Request-scoped context management with automatic cleanup
-- Structured logging with security-focused sensitive data redaction
-- Type-safe error handling with proper inheritance and type guards
-
-### Testing Approach:
-- **Unit Tests**: Vitest with jsdom for React components, Node.js for backend logic
-- **E2E Tests**: Playwright with multi-browser support and automatic dev server startup
-- **Mock Strategy**: Comprehensive mocking of external services (OpenAI, Supabase, LangGraph)
-- **Test Organization**: Layered test structure matching application architecture
-- **Fixtures**: Reusable mock data and test utilities for consistent testing
-
-### Database Conventions:
-- Singular table names with snake_case columns following PostgreSQL best practices
-- JSONB for complex nested data with application-level type safety
-- RLS policies for multi-user security with anonymous user support
-- Comprehensive indexes optimized for both performance and security policies
-
-### TypeScript Standards:
-- Interface over type aliases for object shapes
-- Generic constraints with proper type parameters
-- Strict union types for state management
-- Comprehensive error type hierarchy with proper inheritance
-- Export barrel pattern for clean imports and module boundaries
-
-### Tool Framework Patterns:
-- **Type-Safe Tool Creation**: Generic `Tool<P,R>` interface with parameter/result typing
-- **Factory Pattern**: Specialized tool factories (API, FileProcessing, Database, ChapterGeneration)
-- **Registry-Based Discovery**: Centralized tool management with usage tracking and validation
-- **Circuit Breaker Pattern**: Fault tolerance for unreliable external services
-- **Comprehensive Validation**: Parameter and result validation with common validator patterns
-- **Monitoring Integration**: Automatic metrics collection for tool execution and performance
+**Code Quality Standards:**
+- **TypeScript**: Strict mode with interface-first design, proper error inheritance
+- **Testing**: Vitest unit tests + Playwright E2E with 44 comprehensive tests
+- **Database**: PostgreSQL with RLS, JSONB for complex data, optimized indexes
+- **Error Handling**: Custom error classes, exponential backoff, structured logging
+- **Performance**: Request-scoped context, automatic cleanup, metrics collection

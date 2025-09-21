@@ -416,6 +416,32 @@ const apiTool = ToolFactory.createApiTool(
 toolRegistry.register(pdfExtractTool);
 ```
 
+### OpenAI Integration Patterns
+```typescript
+// ✅ Two-part prompting for consistent quality
+const systemPrompt = generateSystemPrompt(style, wordTarget);
+const userPrompt = generateUserPrompt(requirements);
+
+const completion = await openai.chat.completions.create({
+  model: 'gpt-4o-mini',
+  messages: [
+    { role: 'system', content: systemPrompt },
+    { role: 'user', content: userPrompt }
+  ],
+  max_tokens: Math.floor(wordTarget * 1.5),
+  temperature: 0.7,
+  top_p: 0.9,
+  frequency_penalty: 0.1,
+  presence_penalty: 0.1
+});
+
+// ✅ Content validation after generation
+const validation = validateContent(content, requirements);
+if (!validation.isValid) {
+  throw new ToolError('content_quality', validation.issues.join(', '));
+}
+```
+
 ### React Components
 ```typescript
 // ✅ Consistent component interface

@@ -324,11 +324,8 @@ class RegistryEventEmitter {
       try {
         listener(event);
       } catch (error) {
-        logger.error('Registry event listener error', {
-          errorMessage: error instanceof Error ? error.message : String(error),
-          eventType: event.type,
-          toolName: event.toolName,
-        });
+        const message = error instanceof Error ? error.message : String(error);
+        logger.error(`Registry event listener error for ${event.toolName} (${event.type}): ${message}`);
       }
     });
   }

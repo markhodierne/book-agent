@@ -127,11 +127,7 @@ export function createTool<P = unknown, R = unknown>(
 
                 // Log retry attempts for monitoring
                 if (retryCount > 1) {
-                  logger.warn('Tool execution retry', {
-                    toolName: name,
-                    retryCount: retryCount - 1,
-                    error: error instanceof Error ? error.message : String(error),
-                  });
+                  logger.warn(`Tool execution retry: ${name} (attempt ${retryCount})`);
                 }
 
                 throw error;
@@ -145,11 +141,7 @@ export function createTool<P = unknown, R = unknown>(
       const executionTime = Date.now() - startTime;
 
       // Log successful execution
-      logger.debug('Tool execution completed', {
-        toolName: name,
-        executionTime,
-        retryCount,
-      });
+      logger.debug(`Tool execution completed: ${name} (${executionTime}ms, ${retryCount} retries)`);
 
       // Track successful execution
       applicationMetrics.toolExecutionSuccessCount.inc();
@@ -170,13 +162,7 @@ export function createTool<P = unknown, R = unknown>(
         : ToolError.forExecution(name, error instanceof Error ? error.message : String(error));
 
       // Log error with context
-      logger.error('Tool execution failed', {
-        toolName: name,
-        executionTime,
-        retryCount,
-        error: toolError.message,
-        cause: toolError.cause?.message,
-      });
+      logger.error(`Tool execution failed: ${name} (${executionTime}ms, ${retryCount} retries) - ${toolError.message}`);
 
       // Track failed execution
       applicationMetrics.toolExecutionErrorCount.inc();

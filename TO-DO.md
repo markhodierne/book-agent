@@ -101,14 +101,15 @@ This project follows an MVP-first approach to deliver a working demonstration ea
 **Dependencies**: Task 9 ✅
 **Definition of Done**: ✅ Tool extracts text (5,313 words in 538ms), handles errors gracefully, 26 tests pass
 
-### 11. Chapter Write Tool (generate chapter text from outline)
+### 11. Chapter Write Tool (generate chapter text from outline) ✅ **COMPLETED**
 **Description**: Implement AI-powered chapter generation tool
-**Deliverables**:
-- `chapterWriteTool` with OpenAI GPT-5 integration
-- Style guide and word count adherence
-- Content validation and quality checks
-**Dependencies**: Task 9
-**Definition of Done**: Tool generates chapters matching specifications, follows style consistently
+**Deliverables**: ✅ All completed
+- ✅ `chapterWriteTool` with OpenAI GPT-4o-mini integration - Two-part prompting system
+- ✅ Style guide and word count adherence - Dynamic prompt generation, ±15% tolerance
+- ✅ Content validation and quality checks - 100-point scoring, structure validation
+- ✅ **Bonus**: Testing script (`scripts/test-chapter-write.ts`) with multiple templates and styles
+**Dependencies**: Task 9 ✅
+**Definition of Done**: ✅ Tool generates chapters (18 tests pass), follows style consistently, integrated with registry
 
 ### 12. Implement Base LangGraph Structure (workflow orchestration)
 **Description**: Set up LangGraph workflow foundation

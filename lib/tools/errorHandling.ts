@@ -99,14 +99,7 @@ export async function executeToolSafely<P, R>(
         );
 
     // Log error with full context
-    logger.error('Tool execution failed permanently', {
-      toolName,
-      executionTime,
-      retryCount: retryCount - 1,
-      error: toolError.message,
-      cause: toolError.cause?.message,
-      stack: toolError.stack,
-    });
+    logger.error(`Tool execution failed permanently: ${toolName} (${executionTime}ms, ${retryCount - 1} retries) - ${toolError.message}`);
 
     // Update error metrics
     applicationMetrics.toolExecutionErrorCount.inc();
@@ -407,11 +400,7 @@ export class ToolCircuitBreaker {
 
     if (this.failureCount >= this.config.failureThreshold) {
       this.state = 'OPEN';
-      logger.error('Circuit breaker opened due to failures', {
-        toolName: this.toolName,
-        failureCount: this.failureCount,
-        threshold: this.config.failureThreshold,
-      });
+      logger.error(`Circuit breaker opened for ${this.toolName}: ${this.failureCount}/${this.config.failureThreshold} failures`);
     }
   }
 }
