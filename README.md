@@ -109,11 +109,11 @@ playwright-tests/      # E2E tests (Playwright)
 7. **Testing Infrastructure** - Vitest + Playwright with sample tests
 
 ### 🚧 Next Phase (Tasks 8-12)
-8. **AI Service Integration** - OpenAI GPT-4 mini + DALL-E 3 clients
-9. **Tool Framework** - PDF extraction, web research, content generation
-10. **LangGraph Workflows** - Book generation orchestration
-11. **UI Components** - Wizard, chat interface, progress dashboard
-12. **API Integration** - Workflow endpoints and real-time updates
+8. **Logging & Monitoring** - Structured logging and basic performance metrics
+9. **Tool Framework** - Generic tool creation framework with retry logic
+10. **PDF Extract Tool** - PDF text extraction functionality (optional for MVP)
+11. **Chapter Write Tool** - AI-powered chapter generation with OpenAI GPT-4 mini
+12. **Base LangGraph Structure** - Workflow orchestration foundation
 
 ## Testing
 

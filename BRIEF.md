@@ -74,7 +74,7 @@ The book creation should follow a staged process, coordinated by the main orches
 
 This is a TypeScript AI agent application based on a cloned template repository.
 
-NOTE: The starter template that we are using for this project may need some modification for our chosen technology stack. For example: we are using OpenAI's Agents SDK NOT Vercel's AI SDK.
+NOTE: The starter template that we are using for this project may need some modification for our chosen technology stack. For example: we are using LangGraph for AI orchestration NOT Vercel's AI SDK.
 
 The app will use the following technologies:
 
@@ -83,10 +83,10 @@ The app will use the following technologies:
 | LLM for text generation   | OpenAI GPT-5 mini               | Default parameters: reasoning_effort='Low', verbosity='High'. Configurable per agent. [Docs](https://platform.openai.com/docs/guides/latest-model) |
 | Full-stack framework      | Next.js                          | React-based framework for frontend and backend. [Next.js](https://nextjs.org/) |
 | Deployment                | Vercel                           | Hosting and deployment. [Vercel](https://vercel.com/) |
-| Agent orchestration       | OpenAI Agents SDK (TypeScript)   | Orchestrates main agent and sub-agent workflows. [Docs](https://openai.github.io/openai-agents-js/) |
+| Agent orchestration       | LangGraph (TypeScript)           | Orchestrates main agent and sub-agent workflows with state management. [Docs](https://langchain-ai.github.io/langgraph/) |
 | UI components             | shadcn/ui                        | Pre-built, customizable UI components. [Docs](https://ui.shadcn.com/) |
 | Web scraping              | Firecrawl Scrape                 | Collect external research content. [Docs](https://docs.firecrawl.dev/features/scrape) |
 
 **Guidelines:**
-- Make full use of the OpenAI Agents SDK to design the workflow as simply as possible.
+- Make full use of LangGraph to design the workflow as simply as possible with state management.
 - Configure LLM parameters per agent as needed to match specific tasks.

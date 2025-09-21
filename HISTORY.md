@@ -508,7 +508,7 @@ __tests__/
 6. ✅ Error Handling Infrastructure
 7. ✅ **Testing Infrastructure** (Just Completed)
 
-### Next Task: **Task 8** - AI Service Integration (OpenAI GPT-5 mini + DALL-E 3)
+### Next Task: **Task 8** - Logging & Monitoring Basics (console.log + error traces)
 
 ### Key Configuration State
 - **Environment**: Live Supabase project `mttoxdzdcimuplzbyzti.supabase.co` with RLS policies
