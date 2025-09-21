@@ -36,6 +36,9 @@ export interface WorkflowState {
   needsRetry?: boolean;
   retryCount?: number;
 
+  // Chapter Spawning Metadata
+  chapterSpawning?: ChapterSpawningMetadata;
+
   // Timestamps
   createdAt: string;
   updatedAt: string;
@@ -272,6 +275,37 @@ export type ChapterStatus =
   | 'completed'
   | 'needs_revision'
   | 'failed';
+
+/**
+ * Chapter spawning metadata for parallel execution coordination
+ */
+export interface ChapterSpawningMetadata {
+  nodeIds: string[];
+  executionPlan: ExecutionPlan;
+  dependencyLayers: number;
+  totalNodes: number;
+  spawnedAt: string;
+}
+
+/**
+ * Execution plan for parallel chapter coordination
+ */
+export interface ExecutionPlan {
+  totalLayers: number;
+  executionLayers: ExecutionLayer[];
+  estimatedTotalDuration: number; // in seconds
+  parallelismFactor: number; // max parallel nodes in any layer
+}
+
+/**
+ * Individual execution layer in the plan
+ */
+export interface ExecutionLayer {
+  layerIndex: number;
+  nodeIds: string[];
+  dependencies: string[]; // Node IDs that must complete before this layer
+  estimatedDuration: number; // in seconds
+}
 
 // ============================================================================
 // TOOL SYSTEM TYPES

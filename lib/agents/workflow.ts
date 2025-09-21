@@ -13,6 +13,7 @@ import {
 } from '@/lib/errors/exports';
 import { saveCheckpoint, recoverWorkflow } from './state/persistence';
 import { createChapterNode } from './nodes/chapter';
+import { createChapterSpawningNode } from './nodes/chapterSpawning';
 
 // Validate environment on import
 validateEnvironment();
