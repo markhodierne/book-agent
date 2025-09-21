@@ -154,6 +154,34 @@ export class ToolError extends BaseError implements IToolError {
       parameters,
     });
   }
+
+  /**
+   * Create a ToolError for circuit breaker failures
+   */
+  static forCircuitBreaker(
+    toolName: string,
+    message: string,
+    parameters?: unknown
+  ): ToolError {
+    return new ToolError(toolName, message, {
+      code: 'TOOL_CIRCUIT_BREAKER_ERROR',
+      parameters,
+    });
+  }
+
+  /**
+   * Create a ToolError for execution failures
+   */
+  static forExecution(
+    toolName: string,
+    message: string,
+    parameters?: unknown
+  ): ToolError {
+    return new ToolError(toolName, message, {
+      code: 'TOOL_EXECUTION_ERROR',
+      parameters,
+    });
+  }
 }
 
 /**

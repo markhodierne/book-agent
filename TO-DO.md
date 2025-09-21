@@ -136,6 +136,8 @@ This project follows an MVP-first approach to deliver a working demonstration ea
 **Dependencies**: Task 13
 **Definition of Done**: Node generates complete, valid book outlines with proper chapter structure
 
+>>  ** THIS POINT IS THE EARLIEST THAT “SOMETHING WORKS” (backend only) **
+
 ### 15. Chapter Spawning Node (spin up chapter agents)
 **Description**: Create dynamic parallel chapter node generation
 **Deliverables**:
@@ -162,6 +164,8 @@ This project follows an MVP-first approach to deliver a working demonstration ea
 - Table of contents and page numbering
 **Dependencies**: Task 16
 **Definition of Done**: Node generates professional PDF with correct formatting and structure
+
+>>  ** THIS POINT IS THE MINIMAL FULL PIPELINE (PDF output, backend only) **
 
 ### 18. Set Up UI Library (shadcn/ui, or fallback components if faster)
 **Description**: Install and configure shadcn/ui component library
@@ -207,6 +211,8 @@ This project follows an MVP-first approach to deliver a working demonstration ea
 - Error handling for failed generations
 **Dependencies**: Task 21
 **Definition of Done**: Users can download generated PDFs reliably
+
+>>  ** THIS POINT IS THE FIRST USER-FACING WORKING APP **
 
 ### 23. API Route Implementation (Next.js route to run the agent workflow)
 **Description**: Create Next.js API routes for workflow execution

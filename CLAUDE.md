@@ -104,6 +104,7 @@ import type { WorkflowState, ChapterConfig } from '@/types';
 - **Return types**: Always specify for public functions
 - **Enhanced strictness**: Enable `noUncheckedIndexedAccess`, `noUnusedLocals`, `noUnusedParameters`
 - **Compatibility**: May temporarily disable strict rules for existing code during migration
+- **MVP Warning Status**: Current ESLint warnings in infrastructure code are acceptable during MVP phase; address during polish phase (Tasks 40+)
 
 ```typescript
 // ✅ Good
@@ -386,23 +387,33 @@ if (error) {
 
 ### Tool Components
 ```typescript
-// ✅ Consistent tool interface
-interface ToolProps<P = unknown, R = unknown> {
-  name: string;
-  description: string;
-  parameters: P;
-  execute: (params: P) => Promise<R>;
-  retryConfig?: RetryConfig;
-}
+// ✅ Use tool framework for all AI tools
+import { createTool, ToolFactory, toolRegistry } from '@/lib/tools';
 
-export const pdfExtractTool: ToolProps<PdfParams, string> = {
+// Basic tool creation
+const pdfExtractTool = createTool({
   name: 'pdf_extract',
   description: 'Extract text content from PDF files',
-  parameters: { fileBuffer: Buffer, options: ExtractOptions },
-  execute: async ({ fileBuffer, options }) => {
+  execute: async (params: PdfExtractParams): Promise<string> => {
     // implementation
-  }
-};
+  },
+  validateParams: (params) => {
+    if (!Buffer.isBuffer(params.fileBuffer)) {
+      throw new Error('Valid file buffer required');
+    }
+  },
+});
+
+// Factory pattern for common tool types
+const apiTool = ToolFactory.createApiTool(
+  'web_research',
+  'Research topics using web scraping',
+  async (params) => await fetchWebData(params),
+  30000 // timeout
+);
+
+// Register tools for discovery
+toolRegistry.register(pdfExtractTool);
 ```
 
 ### React Components

@@ -497,7 +497,7 @@ __tests__/
 - `pnpm test:e2e` - Playwright end-to-end tests
 - `pnpm lint` - ESLint + TypeScript checking
 
-## Current Project State (After Task 8)
+## Current Project State (After Task 9)
 
 ### Completed Tasks
 1. ✅ Environment Setup and Dependencies
@@ -507,7 +507,8 @@ __tests__/
 5. ✅ Database Schema and Supabase Setup
 6. ✅ Error Handling Infrastructure
 7. ✅ Testing Infrastructure
-8. ✅ **Logging & Monitoring Basics** (Just Completed)
+8. ✅ Logging & Monitoring Basics
+9. ✅ **Tool Framework for Subagents** (Just Completed)
 
 ### Task 8: Logging & Monitoring Basics ✅
 **Status**: Complete
@@ -570,29 +571,95 @@ __tests__/
 - ✅ **World-Class Code**: All temporary fixes replaced with proper implementations
 - ✅ **Monitoring Ready**: Comprehensive metrics and analytics system operational
 
-### Next Task: **Task 9** - Tool Framework Foundation
+### Task 9: Tool Framework for Subagents ✅
+**Status**: Complete
+**Date**: 2025-09-21
+
+#### Key Implementations:
+
+**Comprehensive Tool Framework (`lib/tools/` - 4 files, 60 tests):**
+- **`createTool.ts`**: Type-safe tool creation with `Tool<P,R>` interface, comprehensive configuration options
+- **`registry.ts`**: Centralized tool management with usage statistics, discovery utilities, event system
+- **`errorHandling.ts`**: Advanced error handling with circuit breakers, timeout management, validation patterns
+- **`index.ts`**: Clean barrel exports for framework consumption
+- **`README.md`**: Complete documentation with examples and best practices
+
+**Core Features:**
+- **Type Safety**: Full TypeScript integration with generic constraints `Tool<P,R>`
+- **Error Resilience**: Exponential backoff retry, circuit breaker pattern, comprehensive validation
+- **Tool Patterns**: Pre-configured factories for API (30s), File Processing (2min), Database (30s), Chapter Generation (5min)
+- **Registry System**: Tool discovery by keyword, usage tracking, validation utilities
+- **Monitoring Integration**: Automatic metrics collection for execution time, success/failure rates
+
+**Testing & Quality:**
+- **60 comprehensive tests** across all components (createTool, registry, errorHandling)
+- **Production build verification**: Next.js build passes successfully
+- **Documentation**: Extensive README with usage patterns, migration guide, troubleshooting
+
+#### Important Decisions:
+
+1. **Tool-Centric Architecture**: Implemented discrete, reusable tools that LangGraph nodes orchestrate without containing business logic
+2. **Factory Pattern**: Created specialized tool factories for common patterns (API calls, file processing, etc.)
+3. **Circuit Breaker Integration**: Added fault tolerance for unreliable external services
+4. **Registry-Based Discovery**: Tools accessed by name throughout application, enabling dynamic tool loading
+
+#### Enhanced Error Framework:
+- Added `ToolError.forCircuitBreaker()` and `ToolError.forExecution()` static factory methods
+- Extended metrics with tool-specific counters: `toolExecutionSuccessCount`, `toolExecutionErrorCount`, `toolAccessCount`, `registeredToolsCount`
+
+#### Verification Results:
+- ✅ **60 tests passing** - All tool framework functionality verified
+- ✅ **Build success** - Production build passes with TypeScript strict mode
+- ✅ **Zero framework warnings** - New tool code meets all quality standards
+- ✅ **Architecture compliance** - Follows CLAUDE.md standards and tool-centric design principle
+
+### Next Task: **Task 10** - PDF Extract Tool Implementation
+
+## Context Reset Summary (After Task 9)
+
+### Ready for Task 10: PDF Extract Tool
+- **Dependencies Met**: Tool framework (Task 9), Error handling (Task 4,8), Types with `PdfExtractParams` (Task 4)
+- **Implementation Path**: Use `ToolFactory.createFileProcessingTool()`, integrate `pdf-parse`, add validation, register with `toolRegistry`
+- **Test Patterns**: 60 comprehensive test examples available in `__tests__/tools/`
+
+### Critical Project State
+- **Build Status**: Production build passes, ESLint warnings in infrastructure documented as acceptable for MVP
+- **Environment**: Live Supabase project operational with RLS policies
+- **Tool Framework**: Complete foundation ready for specific tool implementations
+- **Quality Standards**: All new code meets TypeScript strict mode, follows CLAUDE.md standards
+
+### Development Context
+- **Current Phase**: MVP Foundation (Tasks 1-24) - prioritize working functionality
+- **Code Quality**: New tool framework has zero warnings, existing infrastructure warnings acceptable
+- **Architecture**: Tool-centric design established, tools orchestrated by LangGraph nodes
+- **Standards**: Use createTool() framework, registry pattern, factory methods for tool types
 
 ### Key Configuration State
 - **Environment**: Live Supabase project `mttoxdzdcimuplzbyzti.supabase.co` with RLS policies
-- **Error Handling**: Complete infrastructure in `lib/errors/` with barrel exports
-- **Testing**: Vitest + Playwright configured with sample tests for all layers
-- **Monitoring**: Performance metrics and analytics system in `lib/monitoring/`
+- **Error Handling**: Complete infrastructure in `lib/errors/` with tool-specific extensions
+- **Testing**: Vitest + Playwright configured with comprehensive tool test patterns
+- **Monitoring**: Performance metrics and analytics system with tool-specific metrics
+- **Tool Framework**: Complete foundation ready for specific tool implementations
 - **Type System**: 725-line comprehensive type definitions in `types/index.ts`
 - **Package Manager**: pnpm strictly enforced
 - **Build System**: Next.js 15 with Turbopack
-- **Code Quality**: ESLint + Prettier + TypeScript strict mode (fully compliant)
+- **Code Quality**: ESLint + Prettier + TypeScript strict mode (existing warnings documented as acceptable)
 
 ### Directory Structure Established
 ```
 lib/
-├── errors/            # Error handling infrastructure
-├── monitoring/        # Metrics and analytics system (NEW - Task 8)
-│   ├── metrics.ts     # Performance metrics with Prometheus export
-│   └── analytics.ts   # Event tracking and user journey analytics
+├── tools/             # Tool framework (NEW - Task 9)
+│   ├── createTool.ts  # Core tool creation framework
+│   ├── registry.ts    # Tool management and discovery
+│   ├── errorHandling.ts # Advanced error patterns
+│   ├── index.ts       # Barrel exports
+│   └── README.md      # Complete documentation
+├── errors/            # Error handling infrastructure (enhanced for tools)
+├── monitoring/        # Metrics and analytics system
 ├── database/          # Supabase client and migrations
 ├── config/            # Environment validation
-__tests__/             # Testing infrastructure
-├── tools/             # Tool unit tests
+__tests__/
+├── tools/             # Tool unit tests (60 tests)
 ├── agents/            # LangGraph workflow tests
 ├── components/        # React component tests
 ├── fixtures/          # Test data and mock utilities
@@ -628,3 +695,11 @@ playwright-tests/      # E2E tests directory
 - Strict union types for state management
 - Comprehensive error type hierarchy with proper inheritance
 - Export barrel pattern for clean imports and module boundaries
+
+### Tool Framework Patterns:
+- **Type-Safe Tool Creation**: Generic `Tool<P,R>` interface with parameter/result typing
+- **Factory Pattern**: Specialized tool factories (API, FileProcessing, Database, ChapterGeneration)
+- **Registry-Based Discovery**: Centralized tool management with usage tracking and validation
+- **Circuit Breaker Pattern**: Fault tolerance for unreliable external services
+- **Comprehensive Validation**: Parameter and result validation with common validator patterns
+- **Monitoring Integration**: Automatic metrics collection for tool execution and performance

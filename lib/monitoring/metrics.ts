@@ -461,6 +461,27 @@ export const applicationMetrics = {
     'database_connections_count',
     'Number of active database connections'
   ),
+
+  // Tool registry metrics
+  registeredToolsCount: metricsRegistry.createGauge(
+    'registered_tools_count',
+    'Number of tools registered in the tool registry'
+  ),
+
+  toolAccessCount: metricsRegistry.createCounter(
+    'tool_access_total',
+    'Total number of tool access requests'
+  ),
+
+  toolExecutionSuccessCount: metricsRegistry.createCounter(
+    'tool_execution_success_total',
+    'Total number of successful tool executions'
+  ),
+
+  toolExecutionErrorCount: metricsRegistry.createCounter(
+    'tool_execution_error_total',
+    'Total number of failed tool executions'
+  ),
 };
 
 /**
