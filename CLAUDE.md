@@ -483,8 +483,15 @@ class ConversationNode extends BaseWorkflowNode {
     // Perform node-specific work
     const requirements = await gatherRequirements(state.userPrompt);
 
+    // ✅ Add data to state before transition (transitionToStage only accepts 3 params)
+    const stateWithResults = {
+      ...progress,
+      requirements,
+      baseContent: extractedContent,
+    };
+
     // Transition to next stage
-    return this.transitionToStage(progress, 'outline');
+    return this.transitionToStage(stateWithResults, 'outline');
   }
 
   // Optional validation and recovery

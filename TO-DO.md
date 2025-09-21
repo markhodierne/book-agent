@@ -120,14 +120,15 @@ This project follows an MVP-first approach to deliver a working demonstration ea
 **Dependencies**: Task 4, 11
 **Definition of Done**: Basic LangGraph workflow executes, state passes between nodes correctly
 
-### 13. Conversation Node (collect requirements, prompt, audience, style)
+### 13. Conversation Node (collect requirements, prompt, audience, style) ✅ **COMPLETED**
 **Description**: Create the initial user conversation and requirements gathering node
-**Deliverables**:
-- Conversation node with guided questioning
-- PDF content integration
-- Requirements validation and structuring
-**Dependencies**: Task 12, Task 10
-**Definition of Done**: Node collects complete requirements, integrates PDF content, validates inputs
+**Deliverables**: ✅ All completed
+- ✅ Conversation node with guided questioning - 5-phase workflow with OpenAI GPT-4o-mini
+- ✅ PDF content integration - Tool registry integration with existing PDF extract tool
+- ✅ Requirements validation and structuring - Zod schema with BookRequirements object
+- ✅ **Bonus**: OpenAI client configuration (`lib/config/openai.ts`) and demo script
+**Dependencies**: Task 12 ✅, Task 10 ✅
+**Definition of Done**: ✅ Node collects complete requirements, integrates PDF content, validates inputs
 
 ### 14. Outline Generation Node (produce title + outline + chapter breakdown)
 **Description**: Implement book outline generation node

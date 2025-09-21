@@ -63,7 +63,7 @@ Each to-do task should be numbered sequentially, and include:
 
 Then refresh your memory by checking `HISTORY.md`. Review the `ARCHITECTURE.md` and `FUNCTIONAL.md` to understand what we are building.
 
-We are working through `TO-DO.md` and are on task 13.
+We are working through `TO-DO.md` and are on task 14.
 
 **Before implementing anything:**
 
@@ -79,14 +79,14 @@ As you implement, explain:
 
 Now, here is the next task to complete:
 
-### 13. Conversation Node (collect requirements, prompt, audience, style)
-**Description**: Create the initial user conversation and requirements gathering node
+### 14. Outline Generation Node (produce title + outline + chapter breakdown)
+**Description**: Implement book outline generation node
 **Deliverables**:
-- Conversation node with guided questioning
-- PDF content integration
-- Requirements validation and structuring
-**Dependencies**: Task 12, Task 10
-**Definition of Done**: Node collects complete requirements, integrates PDF content, validates inputs
+- Outline generation with chapter planning
+- Word count calculation and distribution
+- Chapter dependency mapping
+**Dependencies**: Task 13
+**Definition of Done**: Node generates complete, valid book outlines with proper chapter structure
 
 ```
 
@@ -115,4 +115,5 @@ Only proceed when dependencies are satisfied and coordination is clear.
     7. If there have been significant changes, update `FUNCTIONAL.md` or `ARCHITECTURE.md` as required
     8. **IMPORTANT**: Be concise, don't repeat yourself, double check and remove duplication/reduce where possible
 
+    DO NOT CREATE ANY NEW .md FILES FOR DOCUMENTATION - UPDATE THE EXISTING .md FILES.
     After creating/updating these files, I'll reset the context window and we'll continue with a fresh session.
