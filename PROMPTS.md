@@ -63,7 +63,7 @@ Each to-do task should be numbered sequentially, and include:
 
 Then refresh your memory by checking `HISTORY.md`. Review the `ARCHITECTURE.md` and `FUNCTIONAL.md` to understand what we are building.
 
-We are working through `TO-DO.md` and are on task 3.
+We are working through `TO-DO.md` and are on task 4.
 
 **Before implementing anything:**
 
@@ -79,14 +79,14 @@ As you implement, explain:
 
 Now, here is the next task to complete:
 
-### 3. Environment Configuration
-**Description**: Set up environment variable validation and configuration
+### 4. TypeScript Type Definitions
+**Description**: Create core TypeScript interfaces and types for the application
 **Deliverables**:
-- Create `.env.local.example` with required variables
-- Implement environment validation utility in `lib/config/`
-- Add startup environment check
-**Dependencies**: Task 2
-**Definition of Done**: Environment validation works, missing variables throw clear errors
+- `types/index.ts` with all core interfaces (WorkflowState, ChapterConfig, etc.)
+- Type definitions for tools, agents, and UI components
+- Export barrel from types directory
+**Dependencies**: Task 2, 3
+**Definition of Done**: All types compile without errors, types are properly exported and importable
 
 ```
 
@@ -104,15 +104,15 @@ Only proceed when dependencies are satisfied and coordination is clear.
 
 ### CONTEXT RESET
 
-Now we will reset the context window, before we do so:
+    Now we will reset the context window, before we do so:
 
-1. Create/update a `HISTORY.md` file summarizing our progress
-2. List completed tasks with key implementation details
-3. Note any important decisions or patterns established
-4. Mention any deviations from original specs and why
-5. Save current state of key variables/configurations
-6. If applicable, update `CLAUDE.md` with any learned standards picked up from the review process
-7. If there have been significant changes, update `FUNCTIONAL.md` or `ARCHITECTURE.md` as required
-8. **IMPORTANT**: Be concise, don't repeat yourself, double check and remove duplication/reduce where possible
+    1. Create/update a `HISTORY.md` file summarizing our progress
+    2. List completed tasks with key implementation details
+    3. Note any important decisions or patterns established
+    4. Mention any deviations from original specs and why
+    5. Save current state of key variables/configurations
+    6. If applicable, update `CLAUDE.md` with any learned standards picked up from the review process
+    7. If there have been significant changes, update `FUNCTIONAL.md` or `ARCHITECTURE.md` as required
+    8. **IMPORTANT**: Be concise, don't repeat yourself, double check and remove duplication/reduce where possible
 
-After creating/updating these files, I'll reset the context window and we'll continue with a fresh session.
+    After creating/updating these files, I'll reset the context window and we'll continue with a fresh session.
