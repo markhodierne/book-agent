@@ -223,7 +223,50 @@ async function conversationNode(state: WorkflowState): Promise<WorkflowState> {
 }
 ```
 
-#### 2. Chapter Spawner Node (Dynamic Parallel Creation)
+#### 2. Outline Generation Node
+```typescript
+async function outlineNode(state: WorkflowState): Promise<WorkflowState> {
+  const { requirements } = state;
+
+  // Phase 1: Generate title options
+  const titleOptions = await generateTitleOptions(requirements);
+  const selectedTitle = titleOptions[0]; // For MVP, auto-select first
+
+  // Phase 2: Plan chapter structure
+  const chapterStructure = await planChapterStructure(requirements, selectedTitle);
+
+  // Phase 3: Create detailed chapter outlines
+  const detailedOutlines = await Promise.all(
+    chapterStructure.chapterTitles.map(async (title, index) => {
+      return await createChapterOutline({
+        chapterNumber: index + 1,
+        title,
+        wordCount: chapterStructure.wordDistribution[index],
+        requirements
+      });
+    })
+  );
+
+  // Phase 4: Validate and finalize outline
+  const outline = {
+    title: selectedTitle,
+    chapters: detailedOutlines,
+    totalWordCount: detailedOutlines.reduce((sum, ch) => sum + ch.wordCount, 0),
+    estimatedPages: Math.ceil(totalWordCount / 250)
+  };
+
+  // Ensure minimum word count with automatic adjustment
+  const finalOutline = await validateAndAdjustOutline(outline);
+
+  return {
+    ...state,
+    outline: finalOutline,
+    currentStage: 'chapter_spawning'
+  };
+}
+```
+
+#### 3. Chapter Spawner Node (Dynamic Parallel Creation)
 ```typescript
 async function chapterSpawnerNode(state: WorkflowState): Promise<WorkflowState> {
   const { outline } = state;

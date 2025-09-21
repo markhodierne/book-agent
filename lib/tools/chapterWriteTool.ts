@@ -1,7 +1,6 @@
-import OpenAI from 'openai';
 import { ToolFactory } from './createTool';
 import { ToolError } from '@/lib/errors/exports';
-import { getEnvironmentConfig } from '@/lib/config/environment';
+import { BookGenerationAgents } from '@/lib/agents/gpt5-wrapper';
 import type { ChapterConfig, ChapterResult, StyleGuide } from '@/types';
 
 /**
@@ -24,15 +23,7 @@ interface ChapterValidation {
   qualityScore: number;
 }
 
-/**
- * Initialize OpenAI client
- */
-const getOpenAIClient = () => {
-  const config = getEnvironmentConfig();
-  return new OpenAI({
-    apiKey: config.OPENAI_API_KEY,
-  });
-};
+// Removed getOpenAIClient - using GPT-5 wrapper instead
 
 /**
  * Generate a comprehensive system prompt for chapter writing
@@ -183,10 +174,9 @@ function validateChapterContent(content: string, config: ChapterConfig): Chapter
 }
 
 /**
- * Generate chapter content using OpenAI GPT-5 mini
+ * Generate chapter content using GPT-5 mini via OpenAI Agents SDK
  */
 async function executeChapterGeneration(params: ChapterWriteParams): Promise<ChapterResult> {
-  const openai = getOpenAIClient();
   const { config } = params;
 
   // Generate prompts
@@ -194,30 +184,15 @@ async function executeChapterGeneration(params: ChapterWriteParams): Promise<Cha
   const userPrompt = generateUserPrompt(params);
 
   try {
-    // Call OpenAI API with GPT-5 mini
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini', // Using latest available model - will upgrade when GPT-5 mini is available
-      messages: [
-        {
-          role: 'system',
-          content: systemPrompt
-        },
-        {
-          role: 'user',
-          content: userPrompt
-        }
-      ],
-      max_tokens: Math.min(4000, Math.floor(config.wordTarget * 1.5)), // Estimate tokens for target words
-      temperature: 0.7, // Balance creativity with consistency
-      top_p: 0.9,
-      frequency_penalty: 0.1, // Reduce repetition
-      presence_penalty: 0.1, // Encourage topic variety
-    });
+    // Use GPT-5 chapter writer agent
+    const chapterAgent = BookGenerationAgents.chapterWriter();
+    const combinedPrompt = `${systemPrompt}\n\n${userPrompt}`;
 
-    const content = completion.choices[0]?.message?.content;
+    const response = await chapterAgent.execute(combinedPrompt);
+    const content = response.content;
 
-    if (!content) {
-      throw new Error('OpenAI API returned empty content');
+    if (!content || content.trim().length === 0) {
+      throw new Error('GPT-5 agent returned empty content');
     }
 
     // Validate the generated content
@@ -263,27 +238,23 @@ async function executeChapterGeneration(params: ChapterWriteParams): Promise<Cha
 
   } catch (error) {
     // Enhanced error handling for different failure types
-    if (error instanceof Error && 'status' in error) {
-      // Handle OpenAI API errors
-      throw ToolError.forExecution('chapter_write', `OpenAI API error: ${error.message}`);
-    }
-
     if (error instanceof ToolError) {
       throw error; // Re-throw tool errors as-is
     }
 
-    throw ToolError.forExecution('chapter_write', `Chapter generation failed: ${error instanceof Error ? error.message : String(error)}`);
+    throw ToolError.forExecution('chapter_write', `GPT-5 chapter generation failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
 /**
  * Chapter Write Tool - AI-powered chapter generation
  *
- * This tool generates high-quality book chapters using OpenAI GPT-5 mini.
+ * This tool generates high-quality book chapters using GPT-5 mini via OpenAI Agents SDK.
  * It follows the tool-centric design principle and integrates with the broader
  * book generation workflow.
  *
  * Features:
+ * - GPT-5 mini integration with specialized chapter writer agent
  * - Style guide adherence for consistency
  * - Word count targeting with validation
  * - Content quality checks and validation

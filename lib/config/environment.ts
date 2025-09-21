@@ -1,3 +1,8 @@
+import { config } from 'dotenv';
+
+// Load environment variables from .env files
+config({ path: '.env.local' });
+
 const requiredEnvVars = [
   'OPENAI_API_KEY',
   'SUPABASE_URL',

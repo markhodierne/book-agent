@@ -63,7 +63,7 @@ Each to-do task should be numbered sequentially, and include:
 
 Then refresh your memory by checking `HISTORY.md`. Review the `ARCHITECTURE.md` and `FUNCTIONAL.md` to understand what we are building.
 
-We are working through `TO-DO.md` and are on task 14.
+We are working through `TO-DO.md` and are on task 15.
 
 **Before implementing anything:**
 
@@ -79,14 +79,14 @@ As you implement, explain:
 
 Now, here is the next task to complete:
 
-### 14. Outline Generation Node (produce title + outline + chapter breakdown)
-**Description**: Implement book outline generation node
+### 15. Chapter Spawning Node (spin up chapter agents)
+**Description**: Create dynamic parallel chapter node generation
 **Deliverables**:
-- Outline generation with chapter planning
-- Word count calculation and distribution
-- Chapter dependency mapping
-**Dependencies**: Task 13
-**Definition of Done**: Node generates complete, valid book outlines with proper chapter structure
+- Dynamic node creation based on outline
+- Parallel execution coordination
+- Chapter dependency resolution
+**Dependencies**: Task 14
+**Definition of Done**: Node creates N parallel chapter nodes, manages dependencies correctly
 
 ```
 

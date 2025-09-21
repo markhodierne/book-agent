@@ -12,10 +12,10 @@ const config = getEnvironmentConfig();
 
 /**
  * Configured OpenAI client instance
- * Uses GPT-4o-mini as specified in CLAUDE.md for cost-effective high-quality generation
+ * Uses GPT-5 mini as specified in CLAUDE.md for cost-effective high-quality generation
  */
 export const openai = new OpenAI({
-  apiKey: config.openaiApiKey,
+  apiKey: config.OPENAI_API_KEY,
   timeout: 120000, // 2 minutes timeout
   maxRetries: 2,   // Limited retries for expensive operations
 });
@@ -25,7 +25,7 @@ export const openai = new OpenAI({
  * Optimized for consistent, high-quality content generation
  */
 export const defaultOpenAIParams = {
-  model: 'gpt-4o-mini' as const,
+  model: 'gpt-5-mini-2025-08-07' as const,
   temperature: 0.7,    // Balanced creativity and consistency
   top_p: 0.9,         // Focus on high-probability tokens
   frequency_penalty: 0.1,  // Slight penalty for repetition

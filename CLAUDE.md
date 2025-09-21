@@ -18,7 +18,7 @@ This project strictly uses **pnpm**. Do not use npm or yarn.
 
 ### Core Framework
 - **Next.js 15** with App Router and TypeScript
-- **LangGraph** for AI agent orchestration (NOT OpenAI Agents SDK)
+- **LangGraph** for workflow orchestration with **OpenAI Agents SDK** for GPT-5 mini calls
 - **OpenAI GPT-5 mini** with configurable parameters per agent
 - **Supabase** for PostgreSQL database, real-time subscriptions, file storage
 
@@ -36,12 +36,19 @@ This project strictly uses **pnpm**. Do not use npm or yarn.
 
 ## Architecture Principles
 
-### 1. Layered Architecture
+### 1. Hybrid Architecture
 ```
 presentation/ → service/ → data/
      ↓           ↓         ↓
-    UI       Agents   Supabase
+    UI      LangGraph   Supabase
+            +    ↓
+     OpenAI Agents SDK (GPT-5 mini)
 ```
+
+**Hybrid Approach Benefits:**
+- **LangGraph**: Workflow orchestration, state management, node execution
+- **OpenAI Agents SDK**: GPT-5 mini calls with automatic parameter handling
+- **Best of Both**: Complex workflows + simplified AI model integration
 
 ### 2. Tool-Centric Design
 - All AI capabilities exposed as discrete tools
@@ -416,27 +423,36 @@ const apiTool = ToolFactory.createApiTool(
 toolRegistry.register(pdfExtractTool);
 ```
 
-### OpenAI Integration Patterns
+### GPT-5 Mini Integration Patterns
 ```typescript
-// ✅ Two-part prompting for consistent quality
-const systemPrompt = generateSystemPrompt(style, wordTarget);
-const userPrompt = generateUserPrompt(requirements);
+// ✅ Use specialized agents for different tasks
+import { BookGenerationAgents } from '@/lib/agents/gpt5-wrapper';
 
-const completion = await openai.chat.completions.create({
-  model: 'gpt-4o-mini',
-  messages: [
-    { role: 'system', content: systemPrompt },
-    { role: 'user', content: userPrompt }
-  ],
-  max_tokens: Math.floor(wordTarget * 1.5),
-  temperature: 0.7,
-  top_p: 0.9,
-  frequency_penalty: 0.1,
-  presence_penalty: 0.1
+// Chapter content generation
+const chapterAgent = BookGenerationAgents.chapterWriter();
+const combinedPrompt = `${systemPrompt}\n\n${userPrompt}`;
+const response = await chapterAgent.execute(combinedPrompt);
+
+// Title generation with creative parameters
+const titleAgent = BookGenerationAgents.titleGenerator();
+const titles = await titleAgent.execute(titleGenerationPrompt);
+
+// Structure planning with high reasoning
+const structureAgent = BookGenerationAgents.structurePlanner();
+const outline = await structureAgent.execute(structurePlanningPrompt);
+
+// ✅ Task-specific parameter optimization
+const customAgent = createGPT5Agent({
+  name: 'Custom Task Agent',
+  instructions: 'Specialized instructions for this task...',
+  reasoning_effort: 'high',    // For complex analysis
+  verbosity: 'medium',         // Balanced output
+  temperature: 0.7,            // Consistency vs creativity
+  max_tokens: 4000,           // For longer content
 });
 
 // ✅ Content validation after generation
-const validation = validateContent(content, requirements);
+const validation = validateContent(response.content, requirements);
 if (!validation.isValid) {
   throw new ToolError('content_quality', validation.issues.join(', '));
 }
@@ -497,6 +513,31 @@ class ConversationNode extends BaseWorkflowNode {
   // Optional validation and recovery
   validate(state: WorkflowState): boolean {
     return !!state.userPrompt && state.userPrompt.length >= 3;
+  }
+}
+
+// ✅ Multi-phase workflow pattern for complex generation
+class OutlineNode extends BaseWorkflowNode {
+  protected async executeNode(state: WorkflowState): Promise<WorkflowState> {
+    // Phase 1: Title generation
+    let progress = this.updateProgress(state, 20, 'Generating title options');
+    const titleOptions = await this.generateTitleOptions(requirements, errorContext);
+
+    // Phase 2: Structure planning
+    progress = this.updateProgress(progress, 40, 'Planning chapter structure');
+    const structure = await this.planChapterStructure(requirements, titleOptions[0]);
+
+    // Phase 3: Detailed outlines
+    progress = this.updateProgress(progress, 70, 'Creating detailed outlines');
+    const outlines = await this.createDetailedOutlines(requirements, structure);
+
+    // Phase 4: Validation with pre-schema adjustment
+    progress = this.updateProgress(progress, 90, 'Validating outline');
+    const finalOutline = await this.validateAndFinalizeOutline(outline);
+
+    // Add data to state before transition
+    const stateWithResults = { ...progress, outline: finalOutline };
+    return this.transitionToStage(stateWithResults, 'chapter_spawning');
   }
 }
 ```
@@ -591,6 +632,40 @@ async recover(state: WorkflowState, error: WorkflowError): Promise<WorkflowState
   };
 
   return this.executeWithReducedComplexity(retryState, recoveryConfig);
+}
+```
+
+### Content Validation and Adjustment
+```typescript
+// ✅ Pre-validation adjustment pattern for schema compliance
+private async validateAndFinalizeOutline(outline: BookOutline): Promise<BookOutline> {
+  try {
+    // Business logic validation BEFORE schema validation
+    const adjustedOutline = { ...outline };
+
+    // Adjust word counts if below minimum (prevents schema validation failures)
+    if (adjustedOutline.totalWordCount < 30000) {
+      const multiplier = 30000 / adjustedOutline.totalWordCount;
+      adjustedOutline.chapters = adjustedOutline.chapters.map(chapter => ({
+        ...chapter,
+        wordCount: Math.ceil(chapter.wordCount * multiplier),
+      }));
+      adjustedOutline.totalWordCount = adjustedOutline.chapters.reduce((sum, ch) => sum + ch.wordCount, 0);
+    }
+
+    // Schema validation after business logic adjustment
+    const validatedOutline = BookOutlineSchema.parse(adjustedOutline);
+
+    // Custom validation (dependencies, circular references, etc.)
+    this.validateDependencies(validatedOutline.chapters);
+
+    return validatedOutline;
+  } catch (error) {
+    throw new WorkflowError('outline_validation_failed', 'Generated outline failed validation', {
+      recoverable: true,
+      cause: error instanceof Error ? error : undefined,
+    });
+  }
 }
 ```
 

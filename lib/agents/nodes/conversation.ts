@@ -11,7 +11,7 @@ import {
   logger,
   executeWithToolContext,
 } from '@/lib/errors/exports';
-import { openai } from '@/lib/config/openai';
+import { BookGenerationAgents } from '@/lib/agents/gpt5-wrapper';
 import { z } from 'zod';
 
 /**
@@ -463,31 +463,19 @@ Summarize the planned book approach for final confirmation.`;
   }
 
   /**
-   * Call OpenAI for conversation generation
+   * Call GPT-5 mini agent for conversation generation
    */
   private async callOpenAI(systemPrompt: string, userMessage: string): Promise<string> {
     try {
-      const completion = await openai.chat.completions.create({
-        model: 'gpt-4o-mini',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userMessage },
-        ],
-        max_tokens: 800,
-        temperature: 0.7,
-        top_p: 0.9,
-      });
+      const requirementsAgent = BookGenerationAgents.requirementsGatherer();
+      const combinedPrompt = `${systemPrompt}\n\nUser Message: ${userMessage}`;
 
-      const content = completion.choices[0]?.message?.content;
-      if (!content) {
-        throw new Error('No content in OpenAI response');
-      }
-
-      return content;
+      const response = await requirementsAgent.execute(combinedPrompt);
+      return response.content;
     } catch (error) {
       throw new WorkflowError(
         'conversation_generation_failed',
-        'Failed to generate conversation response',
+        'Failed to generate conversation response with GPT-5 agent',
         {
           recoverable: true,
           cause: error instanceof Error ? error : undefined,
