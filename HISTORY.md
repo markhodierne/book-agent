@@ -969,73 +969,85 @@ npx tsx scripts/test-chapter-write.ts --chapter ai-intro --style professional
 **Date**: 2025-09-22
 
 #### Key Implementations:
+- **Enhanced Chapter Node**: 5-phase execution (research → dependencies → content → persistence → completion)
+- **GPT-5 Mini Integration**: Direct connection to chapterWriteTool with proper parameter mapping
+- **Research Integration**: Automatic topic research with graceful fallback
+- **Progress Tracking**: Real-time Supabase status updates throughout generation
+- **Error Recovery**: Three-tier strategy with complexity reduction
 
-**Enhanced Chapter Node (`lib/agents/nodes/chapter.ts` - 634 lines):**
-- **5-Phase Execution**: Research → dependencies → content generation → persistence → completion
-- **Web Research Integration**: Automatic topic research using registry-based web research tools
-- **GPT-5 Mini Integration**: Direct connection to `chapterWriteTool` with proper parameter mapping
-- **Dependency Processing**: Context extraction from completed dependent chapters (500-word summaries)
-- **Progress Tracking**: Real-time status updates (`researching` → `writing` → `completed`) via Supabase
-- **Error Recovery**: Three-tier strategy (retry → reduce complexity → fail) with configuration adjustment
+#### Verification Results:
+- ✅ **20 unit tests passing** with comprehensive error scenario coverage
+- ✅ **Tool integration** seamless with research capabilities
+- ✅ **Real-time progress tracking** operational
+- ✅ **Parallel execution support** with dependency management
 
-**Research Capabilities:**
-- **Primary Research**: Chapter title + topic research (3 pages max for parallel efficiency)
-- **Additional Topics**: Up to 2 additional research topics per chapter (2 pages each)
-- **Graceful Fallback**: Continues without research if tools unavailable
-- **Research Integration**: All research data passed to chapter write tool for content enhancement
+### Task 17: Consistency Review Node ✅
+**Status**: Complete
+**Date**: 2025-09-22
 
-**Supabase Integration:**
-- **Chapter Persistence**: Automatic chapter result storage with retry logic
-- **Status Tracking**: Real-time chapter status updates with progress messages
-- **Error Handling**: Non-blocking persistence failures (logs warnings, continues execution)
-- **Data Structure**: Complete chapter metadata including word count, sources, timestamps
+#### Key Implementations:
 
-**Comprehensive Testing (`__tests__/agents/chapter-generation.test.ts` - 20 tests):**
-- **Full Coverage**: Node creation, content generation, research integration, error handling
-- **Mock Infrastructure**: Complete tool registry mocking with realistic responses
-- **Dependency Testing**: Chapter dependency resolution and context passing
-- **Error Scenarios**: Missing tools, generation failures, persistence failures, recovery testing
-- **Progress Validation**: Status updates, word count tracking, completion verification
+**ConsistencyReviewNode (`lib/agents/nodes/consistencyReview.ts` - 560 lines):**
+- **Multi-Phase Analysis**: Individual chapter analysis → global consistency analysis → report compilation
+- **GPT-5 Mini Integration**: Specialized consistency reviewer agent with high reasoning effort
+- **Analysis Categories**: Terminology, style, cross-references, tone, structure consistency
+- **Quality Scoring**: 0-100 consistency scores with severity-classified issues (low/medium/high)
+- **Error Recovery**: Three-tier recovery with fallback analysis when GPT-5 fails
 
-**Testing Scripts:**
-- **Interactive Testing**: `scripts/test-chapter-generation.ts` with multiple test scenarios
-- **Real Integration**: Basic generation, dependency testing, error recovery validation
-- **Performance Metrics**: Generation timing, word count accuracy, research integration
+**GPT-5 Consistency Agent (`lib/agents/gpt5-wrapper.ts`):**
+- **Specialized Parameters**: `reasoning_effort: 'high'`, `verbosity: 'medium'`, `temperature: 0.3`
+- **Analysis Focus**: Publication-quality consistency and terminology standardization
+- **JSON Response Parsing**: Structured output with issue categorization and recommendations
+
+**Type System Extensions (`types/index.ts`):**
+- **ChapterConsistencyResult**: Individual chapter analysis with issues and suggestions
+- **ConsistencyIssue**: Detailed issue classification with severity and suggestions
+- **ConsistencyReviewResult**: Complete review report with global analysis and terminology mapping
+
+**Comprehensive Testing (`__tests__/agents/consistency-review.test.ts` - 22 tests):**
+- **Full Coverage**: Node creation, analysis functionality, error handling, progress tracking
+- **Mock Integration**: Complete GPT-5 response mocking with realistic analysis scenarios
+- **Error Scenarios**: JSON parsing failures, API timeouts, missing requirements, recovery testing
+- **Analysis Quality**: Issue identification, scoring accuracy, actionable feedback validation
+
+**Interactive Testing (`scripts/test-consistency-review.ts`):**
+- **3 Test Scenarios**: Simple (good consistency), Inconsistent (mixed styles), Technical (complex)
+- **Real-time Analysis**: Detailed reporting with issue categorization and recommendations
+- **Terminology Mapping**: Automatic standardization suggestions across chapters
 
 #### Important Decisions:
 
-1. **Research Strategy**: Conservative limits (3/2 pages) for parallel execution efficiency
-2. **Error Handling**: Enhanced WorkflowError usage with proper constructor parameters (sessionId, stage, message)
-3. **Status Granularity**: Fine-grained status tracking for real-time user feedback
-4. **Dependency Context**: 500-word summaries to provide context without overwhelming prompts
-5. **Tool Integration**: Registry-based discovery allowing graceful degradation when tools unavailable
+1. **Multi-Phase Approach**: Sequential individual analysis followed by global cross-chapter analysis
+2. **Fallback Strategy**: Complete fallback analysis when GPT-5 API fails to ensure workflow completion
+3. **Issue Classification**: Five-category system (terminology, style, cross-reference, tone, structure)
+4. **JSON Response Parsing**: Robust parsing with graceful degradation for malformed responses
+5. **Progress Integration**: Seamless transition to quality_review stage with preserved workflow state
 
 #### Architecture Integration:
 
-**FUNCTIONAL.md Stage 3 Compliance:**
-- ✅ Parallel chapter generation with dependency resolution
-- ✅ Research integration for enhanced content quality
-- ✅ Real-time progress tracking and status updates
-- ✅ Error recovery ensuring workflow completion
-- ✅ Content quality validation and word count enforcement
+**FUNCTIONAL.md Stage 4 Compliance:**
+- ✅ **Consistency Analysis** - Terminology alignment and style verification across chapters
+- ✅ **Quality Assessment** - Content accuracy and audience appropriateness validation
+- ✅ **Cross-Reference Validation** - Logical flow and dependency accuracy checking
+- ✅ **Revision Generation** - Specific actionable feedback with severity classification
 
 **BaseWorkflowNode Pattern Extension:**
 - ✅ Proper `executeNode()`, `validate()`, `recover()` method implementation
-- ✅ Progress tracking with database persistence throughout execution phases
-- ✅ Error context management and comprehensive logging
-- ✅ Tool registry integration following established patterns
+- ✅ State transition to `quality_review` with complete consistency analysis results
+- ✅ Error context management with WorkflowError integration
+- ✅ Progress tracking with database persistence and real-time updates
 
 #### Verification Results:
-- ✅ **20 unit tests passing** - Complete test coverage including error scenarios
-- ✅ **Tool integration** - Seamless connection to chapter write tool and research capabilities
-- ✅ **Research functionality** - Automatic topic research with multiple sources
-- ✅ **Progress tracking** - Real-time Supabase status updates throughout generation
-- ✅ **Error recovery** - Comprehensive three-tier recovery with complexity reduction
-- ✅ **Ready for orchestration** - Full parallel execution support with dependency management
+- ✅ **22 unit tests passing** - Complete coverage including error scenarios and analysis quality
+- ✅ **GPT-5 agent integration** - Consistency reviewer operational with specialized parameters
+- ✅ **Interactive testing script** - Three scenarios with real-time analysis reporting
+- ✅ **Type system integration** - Complete consistency review types added to workflow state
+- ✅ **Error handling comprehensive** - Fallback analysis ensures workflow completion
+- ✅ **Ready for Task 18** - Formatting Node with complete consistency analysis available
 
-## Current Project State (After Task 16)
+## Current Project State (After Task 17)
 
-### Completed Tasks: 16/24 MVP Tasks Complete
+### Completed Tasks: 17/24 MVP Tasks Complete
 1. ✅ Environment Setup and Dependencies
 2. ✅ Project Structure Creation
 3. ✅ Environment Configuration
@@ -1051,14 +1063,15 @@ npx tsx scripts/test-chapter-write.ts --chapter ai-intro --style professional
 13. ✅ Conversation Node
 14. ✅ Outline Generation Node
 15. ✅ Chapter Spawning Node
-16. ✅ **Chapter Generation Node** (Just Completed)
+16. ✅ Chapter Generation Node
+17. ✅ **Consistency Review Node** (Just Completed)
 
-### Next Task: **Task 17** - Consistency Review Node
+### Next Task: **Task 18** - Formatting Node (PDF generation and layout)
 
 ### Key Project State:
-- **AI Integration**: Complete GPT-5 mini integration with specialized agents
+- **AI Integration**: Complete GPT-5 mini integration with 6 specialized agents
 - **Environment**: Live Supabase project `mttoxdzdcimuplzbyzti.supabase.co` with RLS policies
-- **Workflow Pipeline**: Conversation → Outline → Chapter Spawning → **Chapter Generation** → Consistency Review (ready for review)
-- **Parallel Execution**: Full chapter generation with research, dependencies, and progress tracking
-- **Testing**: 116+ tests passing across all implemented components
-- **Chapter System**: Complete parallel generation system with real-time tracking and error recovery
+- **Workflow Pipeline**: Conversation → Outline → Chapter Spawning → Chapter Generation → **Consistency Review** → Formatting (ready for PDF generation)
+- **Quality Assurance**: Complete consistency analysis with terminology standardization and actionable feedback
+- **Testing**: 138+ tests passing across all implemented components
+- **Error Handling**: Comprehensive three-tier recovery system with fallback strategies

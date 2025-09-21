@@ -39,6 +39,9 @@ export interface WorkflowState {
   // Chapter Spawning Metadata
   chapterSpawning?: ChapterSpawningMetadata;
 
+  // Consistency Review Results
+  consistencyReview?: ConsistencyReviewResult;
+
   // Timestamps
   createdAt: string;
   updatedAt: string;
@@ -305,6 +308,46 @@ export interface ExecutionLayer {
   nodeIds: string[];
   dependencies: string[]; // Node IDs that must complete before this layer
   estimatedDuration: number; // in seconds
+}
+
+// ============================================================================
+// CONSISTENCY REVIEW TYPES
+// ============================================================================
+
+/**
+ * Consistency analysis result for a single chapter
+ */
+export interface ChapterConsistencyResult {
+  chapterNumber: number;
+  title: string;
+  consistencyScore: number; // 0-100
+  issues: ConsistencyIssue[];
+  suggestions: string[];
+  wordCount: number;
+}
+
+/**
+ * Individual consistency issue found in content
+ */
+export interface ConsistencyIssue {
+  type: 'terminology' | 'style' | 'cross-reference' | 'tone' | 'structure';
+  severity: 'low' | 'medium' | 'high';
+  description: string;
+  chapterNumber: number;
+  suggestion?: string;
+  relatedChapters?: number[];
+}
+
+/**
+ * Overall consistency review result
+ */
+export interface ConsistencyReviewResult {
+  overallConsistencyScore: number; // 0-100
+  totalIssuesFound: number;
+  chapterResults: ChapterConsistencyResult[];
+  globalIssues: ConsistencyIssue[];
+  recommendedActions: string[];
+  terminologyMap: Record<string, string>; // Term standardization
 }
 
 // ============================================================================

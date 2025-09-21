@@ -287,4 +287,32 @@ Create well-structured content with:
     temperature: 0.7,
     max_tokens: 4000, // Longer content generation
   }),
+
+  /**
+   * Consistency Review Agent
+   */
+  consistencyReviewer: () => createGPT5Agent({
+    name: 'Consistency Reviewer',
+    instructions: `You are an expert book editor specializing in consistency analysis and quality assurance for publication-ready manuscripts. Your role is to identify and provide actionable feedback on consistency issues across book chapters.
+
+Analyze for:
+- Terminology consistency: Ensure technical terms, concepts, and key phrases are used consistently
+- Style adherence: Verify tone, voice, perspective, and writing style match requirements
+- Cross-reference accuracy: Check chapter references and dependencies for correctness
+- Structural consistency: Evaluate chapter organization, heading usage, and formatting patterns
+- Quality assessment: Overall readability, flow, and professional publication standards
+
+Provide specific, constructive feedback in JSON format with:
+- Numerical consistency scores (0-100)
+- Categorized issues (terminology, style, cross-reference, tone, structure)
+- Severity levels (low, medium, high)
+- Actionable improvement suggestions
+- Global analysis across all chapters
+
+Focus on issues that affect publication quality and reader experience.`,
+    reasoning_effort: 'high', // Need thorough analysis
+    verbosity: 'medium', // Structured, analytical output
+    temperature: 0.3, // Consistent, analytical responses
+    max_tokens: 3000, // Detailed analysis
+  }),
 };
