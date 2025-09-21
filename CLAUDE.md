@@ -129,13 +129,29 @@ const bookData: any = {};
 
 ### Tool Error Handling
 ```typescript
+import { executeWithToolContext, ToolError } from '@/lib/errors/exports';
+
 export async function createTool<P, R>(config: ToolConfig<P, R>) {
   return async (params: P): Promise<R> => {
+    return executeWithToolContext(
+      config.name,
+      params,
+      () => config.execute(params),
+      config.sessionId
+    );
+  };
+}
+
+// Alternative manual approach
+export async function manualToolExecution<P, R>(config: ToolConfig<P, R>) {
+  return async (params: P): Promise<R> => {
     try {
-      return await withRetry(() => config.execute(params), retryConfig);
+      return await withRetry(() => config.execute(params), config.retryConfig);
     } catch (error) {
-      await logError(error, { tool: config.name, params });
-      throw new ToolError(`${config.name} failed: ${error.message}`);
+      throw new ToolError(config.name, error.message, {
+        parameters: params,
+        cause: error instanceof Error ? error : undefined,
+      });
     }
   };
 }
@@ -143,20 +159,81 @@ export async function createTool<P, R>(config: ToolConfig<P, R>) {
 
 ### LangGraph Error Recovery
 ```typescript
-// Always implement node-level error handling
+import { WorkflowErrorContext, WorkflowError } from '@/lib/errors/exports';
+
+// Always implement node-level error handling with context
 async function chapterNode(state: WorkflowState): Promise<WorkflowState> {
+  const errorContext = new WorkflowErrorContext(state.sessionId, state.userId);
+
   try {
+    errorContext.updateStage(state.currentStage);
     const result = await generateChapter(state.currentChapter);
     await saveCheckpoint(state.sessionId, { ...state, currentChapter: result });
     return { ...state, chapters: [...state.chapters, result] };
   } catch (error) {
+    const workflowError = error instanceof WorkflowError
+      ? error
+      : errorContext.createError(WorkflowError, error.message, {
+          recoverable: true,
+          cause: error instanceof Error ? error : undefined,
+        });
+
     return {
       ...state,
-      error: error.message,
-      needsRetry: true
+      error: workflowError.message,
+      needsRetry: workflowError.recoverable,
+      lastError: workflowError,
     };
+  } finally {
+    errorContext.cleanup();
   }
 }
+```
+
+### Error Handling Best Practices
+
+**Import Pattern**:
+```typescript
+// ✅ Use barrel imports for error utilities
+import {
+  ToolError,
+  DatabaseError,
+  WorkflowError,
+  withRetry,
+  executeWithToolContext,
+  logger
+} from '@/lib/errors/exports';
+
+// ❌ Don't import individual files
+import { ToolError } from '@/lib/errors/index';
+```
+
+**Error Creation**:
+```typescript
+// ✅ Use static factory methods for common scenarios
+const timeoutError = ToolError.forTimeout('pdfExtract', 30000);
+const retryError = ToolError.forRetry('webResearch', 'Failed after retries', 3);
+
+// ✅ Include context for debugging
+throw new DatabaseError('insert', 'Constraint violation', {
+  table: 'chapters',
+  context: { bookId, chapterNumber },
+});
+```
+
+**Retry Configuration**:
+```typescript
+// ✅ Use operation-specific retry configs
+import { retryAPI, retryDatabase, retryChapterGeneration } from '@/lib/errors/exports';
+
+// API calls with network resilience
+const apiResult = await retryAPI(() => openai.createCompletion(params));
+
+// Database operations with connection handling
+const dbResult = await retryDatabase(() => supabase.from('books').insert(data));
+
+// Chapter generation with extended timeout
+const chapter = await retryChapterGeneration(() => generateChapterContent(config));
 ```
 
 ## Database Conventions

@@ -63,7 +63,7 @@ Each to-do task should be numbered sequentially, and include:
 
 Then refresh your memory by checking `HISTORY.md`. Review the `ARCHITECTURE.md` and `FUNCTIONAL.md` to understand what we are building.
 
-We are working through `TO-DO.md` and are on task 4.
+We are working through `TO-DO.md` and are on task 7.
 
 **Before implementing anything:**
 
@@ -79,14 +79,15 @@ As you implement, explain:
 
 Now, here is the next task to complete:
 
-### 4. TypeScript Type Definitions
-**Description**: Create core TypeScript interfaces and types for the application
+### 7. Testing Infrastructure Setup
+**Description**: Configure testing framework and establish testing patterns
 **Deliverables**:
-- `types/index.ts` with all core interfaces (WorkflowState, ChapterConfig, etc.)
-- Type definitions for tools, agents, and UI components
-- Export barrel from types directory
-**Dependencies**: Task 2, 3
-**Definition of Done**: All types compile without errors, types are properly exported and importable
+- Vitest configuration for unit tests
+- Playwright setup for E2E tests
+- Test utilities and fixtures directory structure
+- Sample test files for each layer
+**Dependencies**: Task 1, 2
+**Definition of Done**: `pnpm test` and `pnpm test:e2e` commands work, sample tests pass
 
 ```
 
