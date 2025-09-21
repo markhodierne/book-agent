@@ -3,6 +3,7 @@
  * Provides mock data and utilities for testing
  */
 
+import { vi } from 'vitest';
 import type { WorkflowState, ChapterConfig, BookRequirements } from '@/types';
 
 // Mock book requirements for testing

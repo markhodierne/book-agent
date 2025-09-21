@@ -91,14 +91,15 @@ This project follows an MVP-first approach to deliver a working demonstration ea
 **Dependencies**: Task 4, 8
 **Definition of Done**: Tool framework allows creating typed, retryable tools with consistent interface
 
-### 10. PDF Extract Tool (parse uploaded PDFs → text, optional for MVP)
+### 10. PDF Extract Tool (parse uploaded PDFs → text, optional for MVP) ✅ **COMPLETED**
 **Description**: Implement PDF text extraction functionality
-**Deliverables**:
-- `pdfExtractTool` using pdf-parse library
-- File validation and security checks
-- Unit tests for various PDF formats
-**Dependencies**: Task 9
-**Definition of Done**: Tool extracts text from PDFs, handles errors gracefully, tests pass
+**Deliverables**: ✅ All completed
+- ✅ `pdfExtractTool` using pdf-parse library - LLM-optimized text processing
+- ✅ File validation and security checks - 50MB limit, malware detection, format validation
+- ✅ Unit tests for various PDF formats - 26 tests, real 42.93MB PDF verified
+- ✅ **Bonus**: Testing scripts (`scripts/test-pdf-extract.ts`, `scripts/pdf-repl.ts`)
+**Dependencies**: Task 9 ✅
+**Definition of Done**: ✅ Tool extracts text (5,313 words in 538ms), handles errors gracefully, 26 tests pass
 
 ### 11. Chapter Write Tool (generate chapter text from outline)
 **Description**: Implement AI-powered chapter generation tool

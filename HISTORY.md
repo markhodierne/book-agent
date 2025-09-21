@@ -497,7 +497,7 @@ __tests__/
 - `pnpm test:e2e` - Playwright end-to-end tests
 - `pnpm lint` - ESLint + TypeScript checking
 
-## Current Project State (After Task 9)
+## Current Project State (After Task 10)
 
 ### Completed Tasks
 1. ✅ Environment Setup and Dependencies
@@ -508,131 +508,101 @@ __tests__/
 6. ✅ Error Handling Infrastructure
 7. ✅ Testing Infrastructure
 8. ✅ Logging & Monitoring Basics
-9. ✅ **Tool Framework for Subagents** (Just Completed)
+9. ✅ Tool Framework for Subagents
+10. ✅ **PDF Extract Tool** (Just Completed)
 
-### Task 8: Logging & Monitoring Basics ✅
+### Task 10: PDF Extract Tool ✅
 **Status**: Complete
 **Date**: 2025-09-21
 
 #### Key Implementations:
 
-**Performance Metrics System (`lib/monitoring/metrics.ts` - 505 lines):**
-- **Metric Types**: Histogram (distributions), Counter (cumulative), Gauge (point-in-time values)
-- **MetricsRegistry**: Central management with Prometheus-compatible export format
-- **Application Metrics**: Pre-configured metrics for workflow performance, errors, active resources
-- **Timing Utilities**: `timeOperation()` function and `@timed` decorator for method instrumentation
-- **Safety Features**: Array bounds checking, proper undefined handling, no non-null assertions
+**PDF Extraction Tool (`lib/tools/pdfExtractTool.ts`):**
+- **Core Library**: Uses `pdf-parse` library for text extraction
+- **Security Validation**: File format verification, size limits (100 bytes - 50MB), malware detection
+- **Content Processing**: LLM-optimized text extraction with configurable options
+- **Performance**: Built with `ToolFactory.createFileProcessingTool()` (2min timeout, retry logic)
+- **Integration**: Registered with tool registry, follows tool-centric architecture
 
-**Analytics & Event Tracking (`lib/monitoring/analytics.ts` - 398 lines):**
-- **Event System**: Structured event tracking with automatic context enrichment
-- **User Journey**: Track user flow through wizard steps and workflow stages
-- **Performance Events**: Automatic timing collection for critical operations
-- **Error Events**: Comprehensive error tracking with context and retry information
-- **Environment Awareness**: Development vs production configuration
-- **Batch Processing**: Efficient event batching with configurable size/timing
+**Security Features:**
+- **PDF Signature Validation**: Verifies `%PDF-` header and rejects invalid files
+- **Malware Scanning**: Detects suspicious patterns (executables, JavaScript injection)
+- **Content Sanitization**: Removes control characters, normalizes whitespace
+- **Size Constraints**: Enforces FUNCTIONAL.md 50MB limit with minimum file validation
 
-**Development Configuration:**
-- **Console Logging**: Rich console output with event details in development
-- **Metrics Display**: Local metrics endpoint for monitoring during development
-- **Debug Mode**: Detailed logging of all events and metrics collection
+**Text Processing Modes:**
+- **Default Mode**: LLM-optimized compact text (replaces all line breaks with spaces)
+- **Line Breaks Preserved**: Maintains original document structure
+- **Page Limiting**: Extract specific page ranges for large documents
 
-**Production Configuration:**
-- **External Analytics**: Ready for integration with analytics services
-- **Error Monitoring**: Structured error reporting with full context
-- **Performance Monitoring**: Metrics export in Prometheus format
-- **Privacy Compliance**: Configurable PII handling and data retention
+**Testing & Quality (`__tests__/tools/pdf-extract.test.ts` - 26 tests):**
+- **Validation Tests**: Buffer validation, security checks, malware detection
+- **Extraction Tests**: Various PDF formats, option handling, error scenarios
+- **Integration Tests**: Full tool lifecycle, metrics collection, retry logic
+- **Real-world Verification**: Successfully tested with 42.93MB astronomy PDF (5,313 words extracted in 538ms)
 
-#### Code Quality Achievements:
+#### PDF Testing Scripts:
 
-**TypeScript Strict Compliance:**
-- **Array Safety**: Replaced all `!` assertions with proper bounds checking
-- **Type Safety**: All decorators properly typed with `this: unknown`
-- **Undefined Handling**: Comprehensive undefined safety throughout codebase
-- **No Shortcuts**: Removed all temporary fixes and implemented world-class solutions
+**Quick Test Script (`scripts/test-pdf-extract.ts`):**
+```bash
+npx tsx scripts/test-pdf-extract.ts /path/to/your/file.pdf
+```
+- Shows extraction results, performance metrics, word counts
+- Automatically saves full extracted text to `extracted-text.txt`
+- Tests all extraction modes (default, line breaks, page limits)
 
-**Architecture Patterns:**
-- **Decorator Pattern**: Proper implementation with context preservation
-- **Registry Pattern**: Centralized metrics management with type safety
-- **Observer Pattern**: Event system with automatic context enrichment
-- **Factory Pattern**: Static factory methods for common metric configurations
-
-#### Important Decisions:
-
-1. **No External Dependencies**: Built metrics system from scratch for MVP simplicity
-2. **Prometheus Compatibility**: Export format ready for production monitoring stack
-3. **Development Experience**: Rich console output and local monitoring for debugging
-4. **Type Safety**: Full TypeScript strict mode compliance with proper error handling
-5. **Code Quality**: All temporary fixes replaced with production-ready implementations
-
-#### Verification Results:
-- ✅ **Build Success**: `pnpm build` passes with strict TypeScript configuration
-- ✅ **Lint Clean**: All ESLint rules pass including `noUnusedLocals` and `noUnusedParameters`
-- ✅ **Type Safety**: No array access assertions, proper undefined handling
-- ✅ **World-Class Code**: All temporary fixes replaced with proper implementations
-- ✅ **Monitoring Ready**: Comprehensive metrics and analytics system operational
-
-### Task 9: Tool Framework for Subagents ✅
-**Status**: Complete
-**Date**: 2025-09-21
-
-#### Key Implementations:
-
-**Comprehensive Tool Framework (`lib/tools/` - 4 files, 60 tests):**
-- **`createTool.ts`**: Type-safe tool creation with `Tool<P,R>` interface, comprehensive configuration options
-- **`registry.ts`**: Centralized tool management with usage statistics, discovery utilities, event system
-- **`errorHandling.ts`**: Advanced error handling with circuit breakers, timeout management, validation patterns
-- **`index.ts`**: Clean barrel exports for framework consumption
-- **`README.md`**: Complete documentation with examples and best practices
-
-**Core Features:**
-- **Type Safety**: Full TypeScript integration with generic constraints `Tool<P,R>`
-- **Error Resilience**: Exponential backoff retry, circuit breaker pattern, comprehensive validation
-- **Tool Patterns**: Pre-configured factories for API (30s), File Processing (2min), Database (30s), Chapter Generation (5min)
-- **Registry System**: Tool discovery by keyword, usage tracking, validation utilities
-- **Monitoring Integration**: Automatic metrics collection for execution time, success/failure rates
-
-**Testing & Quality:**
-- **60 comprehensive tests** across all components (createTool, registry, errorHandling)
-- **Production build verification**: Next.js build passes successfully
-- **Documentation**: Extensive README with usage patterns, migration guide, troubleshooting
+**Interactive REPL (`scripts/pdf-repl.ts`):**
+```bash
+npx tsx scripts/pdf-repl.ts
+```
+Commands: `load <path>`, `extract`, `extract-lines`, `preview [length]`, `search <term>`, `save <path>`, `help`, `exit`
 
 #### Important Decisions:
 
-1. **Tool-Centric Architecture**: Implemented discrete, reusable tools that LangGraph nodes orchestrate without containing business logic
-2. **Factory Pattern**: Created specialized tool factories for common patterns (API calls, file processing, etc.)
-3. **Circuit Breaker Integration**: Added fault tolerance for unreliable external services
-4. **Registry-Based Discovery**: Tools accessed by name throughout application, enabling dynamic tool loading
+1. **LLM-Optimized Processing**: Default mode creates compact text by removing all line breaks for efficient LLM input
+2. **Security-First Approach**: Comprehensive validation prevents malicious file processing
+3. **Real-world Testing**: Verified with actual large PDF (42.93MB astronomy document)
+4. **Tool Framework Integration**: Uses established patterns and registry system
 
-#### Enhanced Error Framework:
-- Added `ToolError.forCircuitBreaker()` and `ToolError.forExecution()` static factory methods
-- Extended metrics with tool-specific counters: `toolExecutionSuccessCount`, `toolExecutionErrorCount`, `toolAccessCount`, `registeredToolsCount`
+#### Architecture Compliance:
+- **Tool-Centric Design**: Discrete, reusable tool orchestrated by LangGraph nodes
+- **FUNCTIONAL.md Integration**: Supports Stage 1 PDF upload requirements (50MB limit)
+- **ARCHITECTURE.md Security**: Implements file upload security and validation standards
+- **Error Handling**: Uses established error framework with retry logic and monitoring
 
 #### Verification Results:
-- ✅ **60 tests passing** - All tool framework functionality verified
-- ✅ **Build success** - Production build passes with TypeScript strict mode
-- ✅ **Zero framework warnings** - New tool code meets all quality standards
-- ✅ **Architecture compliance** - Follows CLAUDE.md standards and tool-centric design principle
+- ✅ **26 tests passing** - Comprehensive test coverage for all functionality
+- ✅ **Real PDF tested** - Successfully processed 42.93MB astronomy PDF
+- ✅ **Performance verified** - 538ms extraction time, no retries needed
+- ✅ **Security validated** - All malware detection and validation working
+- ✅ **Integration complete** - Tool registered and ready for LangGraph workflow
 
-### Next Task: **Task 10** - PDF Extract Tool Implementation
+#### Text Processing Results:
+**Test File**: ITA_01.pdf (42.93MB) → 35,110 characters / 5,313 words extracted
+- **Default mode**: Compact flowing text ideal for LLM input
+- **Line breaks preserved**: Structured document format
+- **Performance**: 538ms full extraction, 174ms with line breaks, 45ms for 3 pages
 
-## Context Reset Summary (After Task 9)
+### Next Task: **Task 11** - Chapter Write Tool Implementation
 
-### Ready for Task 10: PDF Extract Tool
-- **Dependencies Met**: Tool framework (Task 9), Error handling (Task 4,8), Types with `PdfExtractParams` (Task 4)
-- **Implementation Path**: Use `ToolFactory.createFileProcessingTool()`, integrate `pdf-parse`, add validation, register with `toolRegistry`
-- **Test Patterns**: 60 comprehensive test examples available in `__tests__/tools/`
+## Context Reset Summary (After Task 10)
+
+### Ready for Task 11: Chapter Write Tool
+- **Dependencies Met**: Tool framework (Task 9), PDF extraction (Task 10), OpenAI integration needed
+- **Implementation Path**: Use `ToolFactory.createChapterGenerationTool()`, integrate OpenAI GPT-5 mini, add content generation logic
+- **Test Patterns**: 86 comprehensive test examples available in `__tests__/tools/` (26 new PDF tests)
 
 ### Critical Project State
-- **Build Status**: Production build passes, ESLint warnings in infrastructure documented as acceptable for MVP
-- **Environment**: Live Supabase project operational with RLS policies
-- **Tool Framework**: Complete foundation ready for specific tool implementations
-- **Quality Standards**: All new code meets TypeScript strict mode, follows CLAUDE.md standards
+- **Build Status**: Production build passes, ESLint warnings in infrastructure acceptable for MVP
+- **Environment**: Live Supabase project operational, PDF extraction verified with real files
+- **Tool Framework**: Complete with PDF extraction tool registered and tested
+- **Quality Standards**: All new tool code meets TypeScript strict mode, follows CLAUDE.md standards
 
 ### Development Context
 - **Current Phase**: MVP Foundation (Tasks 1-24) - prioritize working functionality
-- **Code Quality**: New tool framework has zero warnings, existing infrastructure warnings acceptable
-- **Architecture**: Tool-centric design established, tools orchestrated by LangGraph nodes
-- **Standards**: Use createTool() framework, registry pattern, factory methods for tool types
+- **Architecture**: Tool-centric design proven with PDF extraction implementation
+- **Standards**: Use createTool() framework, registry pattern, established testing patterns
+- **PDF Integration**: Ready for conversation node (Task 13) to use extracted content as `baseContent`
 
 ### Key Configuration State
 - **Environment**: Live Supabase project `mttoxdzdcimuplzbyzti.supabase.co` with RLS policies

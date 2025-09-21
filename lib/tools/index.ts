@@ -28,3 +28,17 @@ export {
   ToolTimeout,
   ToolCircuitBreaker,
 } from './errorHandling';
+
+// Specific tool implementations
+export {
+  pdfExtractTool,
+  extractPdfText,
+  validatePdfBuffer,
+  sanitizeExtractedText,
+} from './pdfExtractTool';
+
+// Tool initialization
+export {
+  initializeTools,
+  validateToolRegistry,
+} from './initialize';
