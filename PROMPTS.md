@@ -63,7 +63,7 @@ Each to-do task should be numbered sequentially, and include:
 
 Then refresh your memory by checking `HISTORY.md`. Review the `ARCHITECTURE.md` and `FUNCTIONAL.md` to understand what we are building.
 
-We are working through `TO-DO.md` and are on task 12.
+We are working through `TO-DO.md` and are on task 13.
 
 **Before implementing anything:**
 
@@ -79,14 +79,14 @@ As you implement, explain:
 
 Now, here is the next task to complete:
 
-### 12. Implement Base LangGraph Structure (workflow orchestration)
-**Description**: Set up LangGraph workflow foundation
+### 13. Conversation Node (collect requirements, prompt, audience, style)
+**Description**: Create the initial user conversation and requirements gathering node
 **Deliverables**:
-- LangGraph StateGraph configuration
-- Workflow state management
-- Node execution framework
-**Dependencies**: Task 4, 11
-**Definition of Done**: Basic LangGraph workflow executes, state passes between nodes correctly
+- Conversation node with guided questioning
+- PDF content integration
+- Requirements validation and structuring
+**Dependencies**: Task 12, Task 10
+**Definition of Done**: Node collects complete requirements, integrates PDF content, validates inputs
 
 ```
 

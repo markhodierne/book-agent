@@ -463,6 +463,130 @@ export function RequirementsStep({
 }
 ```
 
+## Workflow Orchestration Standards
+
+### LangGraph Node Implementation
+```typescript
+// ✅ Use BaseWorkflowNode pattern for all workflow nodes
+import { BaseWorkflowNode } from '@/lib/agents/nodes/base';
+import { WorkflowState } from '@/types';
+
+class ConversationNode extends BaseWorkflowNode {
+  constructor() {
+    super('conversation', 'Gather book requirements through guided conversation');
+  }
+
+  protected async executeNode(state: WorkflowState): Promise<WorkflowState> {
+    // Update progress during execution
+    let progress = this.updateProgress(state, 30, 'Analyzing user prompt');
+
+    // Perform node-specific work
+    const requirements = await gatherRequirements(state.userPrompt);
+
+    // Transition to next stage
+    return this.transitionToStage(progress, 'outline');
+  }
+
+  // Optional validation and recovery
+  validate(state: WorkflowState): boolean {
+    return !!state.userPrompt && state.userPrompt.length >= 3;
+  }
+}
+```
+
+### StateGraph Configuration
+```typescript
+// ✅ Use channel-based state management
+const stateGraphArgs: StateGraphArgs<BookWorkflowState> = {
+  channels: {
+    sessionId: {
+      value: (prev?: string, next?: string) => next ?? prev ?? '',
+      default: () => '',
+    },
+    currentStage: {
+      value: (prev?: WorkflowStage, next?: WorkflowStage) => next ?? prev ?? 'conversation',
+      default: () => 'conversation' as WorkflowStage,
+    },
+    // ... other channels
+  },
+};
+
+export const bookWorkflowGraph = new StateGraph<BookWorkflowState>(stateGraphArgs);
+```
+
+### Dynamic Parallel Execution
+```typescript
+// ✅ Create parallel nodes dynamically based on outline
+export async function createParallelChapterNodes(
+  graph: StateGraph<BookWorkflowState>,
+  chapterConfigs: ChapterConfig[]
+): Promise<string[]> {
+  const chapterNodeIds: string[] = [];
+
+  for (const config of chapterConfigs) {
+    const nodeId = `chapter_${config.chapterNumber}`;
+    const chapterNode = createChapterNode(config);
+
+    graph.addNode(nodeId, async (state: BookWorkflowState) => {
+      return await executeNodeWithContext(nodeId, state,
+        async (s: BookWorkflowState) => await chapterNode.execute(s)
+      ) as Partial<BookWorkflowState>;
+    });
+
+    chapterNodeIds.push(nodeId);
+  }
+
+  return chapterNodeIds;
+}
+```
+
+### Checkpoint and Recovery
+```typescript
+// ✅ Use automatic checkpointing for workflow recovery
+export async function executeNodeWithContext<T>(
+  nodeName: string,
+  state: BookWorkflowState,
+  nodeFunction: (state: BookWorkflowState) => Promise<T>
+): Promise<T> {
+  try {
+    const result = await nodeFunction(state);
+
+    // Save checkpoint after successful execution
+    await saveCheckpoint(state.sessionId, {
+      ...state,
+      updatedAt: new Date().toISOString(),
+    });
+
+    return result;
+  } catch (error) {
+    // Handle errors with context
+    throw workflowError;
+  }
+}
+```
+
+### Error Recovery Pattern
+```typescript
+// ✅ Implement three-tier recovery: retry → reduce complexity → fail
+async recover(state: WorkflowState, error: WorkflowError): Promise<WorkflowState> {
+  const retryState = { ...state, retryCount: (state.retryCount || 0) + 1 };
+
+  if (retryState.retryCount > 2) {
+    throw new WorkflowError('max_retries_exceeded', 'Maximum retries exceeded', {
+      recoverable: false,
+    });
+  }
+
+  // Reduce complexity for retry
+  const recoveryConfig = {
+    ...this.config,
+    wordTarget: Math.max(1000, this.config.wordTarget * 0.8),
+  };
+
+  return this.executeWithReducedComplexity(retryState, recoveryConfig);
+}
+```
+
 ## Testing Standards
 
 ### Test File Organization
