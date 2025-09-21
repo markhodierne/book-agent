@@ -54,7 +54,7 @@ export const ChainOfThought = memo(
     const [isOpen, setIsOpen] = useControllableState({
       prop: open,
       defaultProp: defaultOpen,
-      onChange: onOpenChange,
+      onChange: onOpenChange ?? undefined,
     });
 
     return (

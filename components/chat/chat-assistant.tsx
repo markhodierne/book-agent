@@ -25,7 +25,7 @@ export default function ChatAssistant() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (
-    message: { text?: string; files?: any[] },
+    message: { text?: string; files?: unknown[] },
     event: React.FormEvent
   ) => {
     if (!message.text?.trim() || isLoading) return;
@@ -57,7 +57,7 @@ export default function ChatAssistant() {
       } else {
         throw new Error(data.error || "Failed to get response");
       }
-    } catch (error) {
+    } catch (_error) {
       const errorMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
         role: "assistant",

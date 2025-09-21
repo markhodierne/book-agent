@@ -29,10 +29,10 @@ This project strictly uses **pnpm**. Do not use npm or yarn.
 - **Tailwind CSS v4** for styling
 
 ### Specialized Libraries
-- **React-PDF** for document generation
+- **React-PDF** (@react-pdf/renderer) for document generation
 - **pdf-parse** for PDF text extraction
-- **Firecrawl** for web research
-- **DALL-E 3** for cover image generation
+- **Firecrawl** (@mendable/firecrawl-js) for web research
+- **DALL-E 3** (via OpenAI) for cover image generation
 
 ## Architecture Principles
 
@@ -98,10 +98,12 @@ import type { WorkflowState, ChapterConfig } from '@/types';
 ```
 
 ### TypeScript Guidelines
-- **Strict mode**: All type checking enabled
+- **Strict mode**: All type checking enabled with enhanced rules
 - **Interface over type**: Use interfaces for object shapes
 - **Generic constraints**: Constrain type parameters appropriately
 - **Return types**: Always specify for public functions
+- **Enhanced strictness**: Enable `noUncheckedIndexedAccess`, `noUnusedLocals`, `noUnusedParameters`
+- **Compatibility**: May temporarily disable strict rules for existing code during migration
 
 ```typescript
 // ✅ Good
@@ -299,6 +301,40 @@ export function validateEnvironment(): void {
       throw new Error(`Missing required environment variable: ${envVar}`);
     }
   }
+}
+```
+
+## Code Quality Configuration
+
+### ESLint Setup
+```javascript
+// eslint.config.mjs - Modern flat config
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import { FlatCompat } from "@eslint/eslintrc";
+
+const eslintConfig = [
+  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    rules: {
+      "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/no-explicit-any": "warn",
+      "prefer-const": "error",
+      "no-var": "error"
+    }
+  }
+];
+```
+
+### Prettier Setup
+```json
+{
+  "semi": true,
+  "trailingComma": "es5",
+  "singleQuote": true,
+  "printWidth": 80,
+  "tabWidth": 2,
+  "useTabs": false
 }
 ```
 
