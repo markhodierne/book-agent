@@ -42,6 +42,9 @@ export interface WorkflowState {
   // Consistency Review Results
   consistencyReview?: ConsistencyReviewResult;
 
+  // Formatting Results
+  formattingResult?: FormattingResult;
+
   // Timestamps
   createdAt: string;
   updatedAt: string;
@@ -348,6 +351,31 @@ export interface ConsistencyReviewResult {
   globalIssues: ConsistencyIssue[];
   recommendedActions: string[];
   terminologyMap: Record<string, string>; // Term standardization
+}
+
+// ============================================================================
+// FORMATTING TYPES
+// ============================================================================
+
+/**
+ * PDF generation result with download information
+ */
+export interface FormattingResult {
+  pdfBuffer: Buffer;
+  pdfUrl?: string;
+  pageCount: number;
+  totalWordCount: number;
+  fileSize: number; // in bytes
+  generatedAt: string;
+}
+
+/**
+ * Table of contents entry for navigation
+ */
+export interface TableOfContentsEntry {
+  title: string;
+  pageNumber: number;
+  chapterNumber: number;
 }
 
 // ============================================================================

@@ -4,16 +4,16 @@
 
 This project follows an MVP-first approach to deliver a working demonstration early, then progressively enhance functionality while maintaining a working application. The roadmap is split into two main sections:
 
-1. **🚀 Slim MVP Foundation (Tasks 1-25)** - Core functionality for prompt → outline → chapters → PDF [17/25 Complete + GPT-5 Integration]
+1. **🚀 Slim MVP Foundation (Tasks 1-25)** - Core functionality for prompt → outline → chapters → PDF [18/25 Complete + GPT-5 Integration]
 2. **🔄 Extended Roadmap (Tasks 26-46)** - Advanced features, persistence, polish, and production readiness
 
-## 🚀 Slim MVP Foundation (Tasks 1-25) [17/25 Complete + GPT-5 Integration]
+## 🚀 Slim MVP Foundation (Tasks 1-25) [18/25 Complete + GPT-5 Integration]
 
-**Current Status: 68% Complete (17/25 tasks) + Critical GPT-5 Integration**
-- ✅ **Tasks 1-17 Complete**: Environment through Consistency Review
+**Current Status: 72% Complete (18/25 tasks) + Critical GPT-5 Integration**
+- ✅ **Tasks 1-18 Complete**: Environment through PDF Generation
 - ✅ **GPT-5 Mini Integration**: Critical correction with 6 specialized agents
-- 🔄 **Next Task**: Task 18 - Formatting Node (PDF generation)
-- 🎯 **Milestone**: Quality assurance and consistency analysis operational
+- 🔄 **Next Task**: Task 19 - UI Library Setup (shadcn/ui)
+- 🎯 **MILESTONE**: Complete backend workflow operational - can generate books from prompt to PDF
 
 ### 1. Environment Setup (Node.js, TypeScript, Next.js, project structure) ✅ **COMPLETED**
 **Description**: Install and configure core dependencies for the application
@@ -190,14 +190,14 @@ This project follows an MVP-first approach to deliver a working demonstration ea
 **Dependencies**: Task 16 ✅
 **Definition of Done**: ✅ Node identifies inconsistencies (5 categories), provides actionable feedback with terminology mapping
 
-### 18. Formatting Node (combine chapters → minimal PDF export)
+### 18. Formatting Node (combine chapters → minimal PDF export) ✅ **COMPLETED**
 **Description**: Implement PDF generation and formatting node
-**Deliverables**:
-- React-PDF integration for book layout
-- Professional typography and styling
-- Table of contents and page numbering
+**Deliverables**: ✅ All completed
+- ✅ React-PDF integration for book layout - Professional PDF generation with `@react-pdf/renderer`
+- ✅ Professional typography and styling - Configurable typography based on style guide
+- ✅ Table of contents and page numbering - Automatic ToC generation with accurate page numbers
 **Dependencies**: Task 17 ✅
-**Definition of Done**: Node generates professional PDF with correct formatting and structure
+**Definition of Done**: ✅ Node generates professional PDF with correct formatting and structure
 
 >>  ** THIS POINT IS THE MINIMAL FULL PIPELINE (PDF output, backend only) **
 

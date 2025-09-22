@@ -392,6 +392,39 @@ if (error) {
 
 ## Component Standards
 
+### PDF Generation Standards
+```typescript
+// ✅ Use React.createElement for Node.js compatibility (avoid JSX in backend)
+import React from 'react';
+import { Document, Page, Text, View, StyleSheet, pdf } from '@react-pdf/renderer';
+
+// Create PDF components programmatically
+const pdfDocument = React.createElement(Document, {
+  title: outline.title,
+  author: requirements.author.name
+}, [
+  React.createElement(Page, { size: "A4", style: styles.page },
+    React.createElement(Text, { style: styles.title }, title)
+  )
+]);
+
+// ✅ Typography configuration based on style guide
+const typographyConfig = {
+  titleFont: 'Helvetica-Bold',
+  bodyFont: 'Helvetica',
+  titleSize: 24,
+  bodySize: 12,
+  lineHeight: 1.5,
+  margins: 72 // 1 inch
+};
+
+// ✅ Professional PDF structure
+// 1. Title page with author credentials
+// 2. Table of contents with page numbers
+// 3. Chapters with headers and page numbering
+// 4. Consistent typography throughout
+```
+
 ### Tool Components
 ```typescript
 // ✅ Use tool framework for all AI tools

@@ -63,7 +63,7 @@ Each to-do task should be numbered sequentially, and include:
 
 Then refresh your memory by checking `HISTORY.md`. Review the `ARCHITECTURE.md` and `FUNCTIONAL.md` to understand what we are building.
 
-We are working through `TO-DO.md` and are on task 17.
+We are working through `TO-DO.md` and are on task 19.
 
 **Before implementing anything:**
 
@@ -79,14 +79,14 @@ As you implement, explain:
 
 Now, here is the next task to complete:
 
-### 17. Formatting Node (combine chapters → minimal PDF export)
-**Description**: Implement PDF generation and formatting node
+### 19. Set Up UI Library (shadcn/ui, or fallback components if faster)
+**Description**: Install and configure shadcn/ui component library
 **Deliverables**:
-- React-PDF integration for book layout
-- Professional typography and styling
-- Table of contents and page numbering
-**Dependencies**: Task 16
-**Definition of Done**: Node generates professional PDF with correct formatting and structure
+- shadcn/ui installation and configuration
+- Custom theme setup (New York style, neutral colors)
+- Base component customizations
+**Dependencies**: Task 1 ✅
+**Definition of Done**: Component library installed, theme applied, components render correctly
 
 ```
 
