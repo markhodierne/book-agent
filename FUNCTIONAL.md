@@ -6,9 +6,16 @@ The Book Agent application generates comprehensive books (30,000+ words) from mi
 
 ## Core User Journey
 
+### User Interface: Multi-Step Wizard ✅ IMPLEMENTED (Task 20)
+- **Professional Wizard Interface**: Step-by-step guided experience with progress tracking
+- **Visual Progress**: Progress bar, step indicators, and completion percentages
+- **Step Navigation**: Sidebar navigation with jump-to-step capability and validation
+- **Real-time Validation**: Immediate feedback with Zod-based form validation
+
 ### Initial Input
 - **User Prompt**: 3-word minimum to full paragraph describing desired book topic
-- **PDF Upload** (Optional): Text files or PDFs as base content (50MB limit)
+- **PDF Upload** (Optional): Text files or PDFs as base content (50MB limit) with drag-and-drop support
+- **Author Information**: Author name field for book attribution
 - **File Processing**: Extract text only from PDFs using pdf-parse library
 
 ### Stage 0: Dynamic Planning & Task Decomposition

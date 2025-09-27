@@ -64,7 +64,7 @@ Each to-do task should be numbered sequentially, and include:
 
 Then refresh your memory by checking `HISTORY.md`. Review the `ARCHITECTURE.md` and `FUNCTIONAL.md` to understand what we are building.
 
-We are working through `TO-DO.md` and are on task 2.
+We are working through `TO-DO.md` and are on task 21.
 
 **Before implementing anything:**
 
@@ -80,21 +80,14 @@ As you implement, explain:
 
 Now, here is the next task to complete:
 
-#### **MVP Task 2: Create Basic Planning Agent Foundation** ⭐ CRITICAL
-**Description**: Build minimal GPT-5 Planning Agent for basic strategy selection
-**Dependencies**: MVP Task 1 (requires state schema extensions)
-**MVP Scope**: Simple complexity analysis only (defer advanced resource allocation)
+### 21. Requirements Gathering UI (author name, audience, style)
+**Description**: Build the conversation interface for Stage 1
 **Deliverables**:
-- `PlanningAgent` class with GPT-5 mini integration
-- Basic complexity analysis functions (simple, moderate, complex)
-- Strategy selection logic (sequential vs parallel execution)
-- Planning state persistence to Supabase
-
-**Definition of Done**:
-- ✅ Planning agent can analyze user prompts and classify complexity
-- ✅ Agent generates execution strategies (sequential/parallel)
-- ✅ Planning state saves to database successfully
-- ✅ Basic unit tests pass for planning functions
+- Chat interface for AI conversation
+- File upload component for PDFs
+- Requirements review and confirmation
+**Dependencies**: Task 20
+**Definition of Done**: Users can have natural conversations, upload files, review requirements
 
 ```
 

@@ -214,23 +214,31 @@ The following tasks are essential for a working MVP that generates .MD books wit
 - ✅ Base component customizations (LoadingSpinner, WizardStep, ProgressCard)
 **Definition of Done**: ✅ Component library installed, theme applied, components render correctly
 
-#### **Frontend Tasks 20-24: Working Wizard Interface** ⭐ CRITICAL
-**Description**: Create functional frontend for MVP book generation
-**Dependencies**: Task 19 ✅, MVP backend tasks completion
-**MVP Scope**: Basic wizard interface for .MD book generation
+#### **Task 20: Wizard Page for User Prompts** ⭐ CRITICAL - ✅ COMPLETED
+**Description**: Create the multi-step wizard framework for book creation
+**Dependencies**: Task 19 ✅
 **Deliverables**:
-- Working wizard UI with existing shadcn/ui components
-- User prompt input and PDF upload interface
+- ✅ Wizard container component with step navigation and validation
+- ✅ Step validation system with real-time feedback
+- ✅ Progress indicator and step management
+- ✅ User prompt form with PDF upload and drag-and-drop
+**Definition of Done**: ✅ Wizard navigates between steps correctly, validates inputs appropriately
+
+#### **Tasks 21-24: Complete Wizard Interface** ⭐ CRITICAL
+**Description**: Complete functional frontend for MVP book generation
+**Dependencies**: Task 20 ✅, MVP backend tasks completion
+**MVP Scope**: Full wizard interface for .MD book generation
+**Deliverables**:
 - Requirements gathering interface
 - Outline review and approval interface
 - Progress monitoring and .MD download interface
 - API routes for workflow execution
 
 **Definition of Done**:
-- ✅ Complete user journey from prompt to .MD book download
-- ✅ Real-time progress monitoring during generation
-- ✅ Error handling and user feedback
-- ✅ Responsive design for all screen sizes
+- Complete user journey from prompt to .MD book download
+- Real-time progress monitoring during generation
+- Error handling and user feedback
+- Responsive design for all screen sizes
 
 ## MVP Dependencies Summary
 
@@ -245,7 +253,8 @@ The following tasks are essential for a working MVP that generates .MD books wit
 
 **Frontend Parallel Track**:
 - Task 19 (UI Library): ✅ COMPLETED - shadcn/ui foundation ready
-- Frontend Tasks 20-24 can start after MVP Task 5 (Planning Node) is complete
+- Task 20 (Wizard Framework): ✅ COMPLETED - Multi-step wizard with validation ready
+- Tasks 21-24 can proceed with wizard completion and API integration
 - Full integration requires MVP Tasks 1-14 completion
 
 **Phase 2 Dependencies** (Post-MVP):

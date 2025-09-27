@@ -55,25 +55,23 @@ const wizardSteps: WizardStepConfig[] = [
   }
 ]
 
-export default function Home() {
+export default function WizardDemoPage() {
   const handleComplete = async (data: any) => {
     console.log("Wizard completed with data:", data)
     alert("Wizard completed! Check console for data.")
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto py-8">
-        <BookWizard
-          steps={wizardSteps}
-          onComplete={handleComplete}
-          initialData={{
-            prompt: "",
-            author: "",
-            pdfFile: undefined
-          }}
-        />
-      </div>
+    <div className="container mx-auto py-8">
+      <BookWizard
+        steps={wizardSteps}
+        onComplete={handleComplete}
+        initialData={{
+          prompt: "",
+          author: "",
+          pdfFile: undefined
+        }}
+      />
     </div>
   )
 }
