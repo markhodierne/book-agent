@@ -71,6 +71,13 @@ export class BaseError extends Error implements IBaseError {
 
     return details.join('\n');
   }
+
+  /**
+   * Override toString to prevent [object Object] display
+   */
+  toString(): string {
+    return `${this.name}: ${this.message}`;
+  }
 }
 
 /**
@@ -182,6 +189,13 @@ export class ToolError extends BaseError implements IToolError {
       parameters,
     });
   }
+
+  /**
+   * Override toString to prevent [object Object] display
+   */
+  toString(): string {
+    return `${this.name}: ${this.message}`;
+  }
 }
 
 /**
@@ -278,6 +292,13 @@ export class DatabaseError extends BaseError implements IDatabaseError {
       table,
       cause,
     });
+  }
+
+  /**
+   * Override toString to prevent [object Object] display
+   */
+  toString(): string {
+    return `${this.name}: ${this.message}`;
   }
 }
 
@@ -393,6 +414,13 @@ export class WorkflowError extends BaseError implements IWorkflowError {
         cause,
       }
     );
+  }
+
+  /**
+   * Override toString to prevent [object Object] display
+   */
+  toString(): string {
+    return `${this.name}: ${this.message}`;
   }
 }
 

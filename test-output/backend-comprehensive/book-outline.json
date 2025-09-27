@@ -1,0 +1,356 @@
+{
+  "title": "Practical Python Automation and Web Scraping: A Project-Based Guide to Real-World Workflows",
+  "subtitle": "",
+  "totalWordCount": 47700,
+  "estimatedPages": 191,
+  "chapters": [
+    {
+      "number": 1,
+      "title": "Orientation, Tooling, and Project Workflow",
+      "overview": "This chapter covers essential aspects of Orientation, Tooling, and Project Workflow as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 1600,
+      "objectives": [
+        "Understand the core concepts of Orientation, Tooling, and Project Workflow",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": []
+    },
+    {
+      "number": 2,
+      "title": "Python Patterns for Automation: Structuring Scripts",
+      "overview": "This chapter covers essential aspects of Python Patterns for Automation: Structuring Scripts as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 1700,
+      "objectives": [
+        "Understand the core concepts of Python Patterns for Automation: Structuring Scripts",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        1
+      ]
+    },
+    {
+      "number": 3,
+      "title": "The Web Under the Hood: HTTP, Headers, Sessions, and Cookies",
+      "overview": "This chapter covers essential aspects of The Web Under the Hood: HTTP, Headers, Sessions, and Cookies as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 1800,
+      "objectives": [
+        "Understand the core concepts of The Web Under the Hood: HTTP, Headers, Sessions, and Cookies",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        2
+      ]
+    },
+    {
+      "number": 4,
+      "title": "HTML, CSS, and the DOM: Parsing with Selectors and XPath",
+      "overview": "This chapter covers essential aspects of HTML, CSS, and the DOM: Parsing with Selectors and XPath as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 1800,
+      "objectives": [
+        "Understand the core concepts of HTML, CSS, and the DOM: Parsing with Selectors and XPath",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        3
+      ]
+    },
+    {
+      "number": 5,
+      "title": "Project 1: Static Site Scraper with Requests and BeautifulSoup",
+      "overview": "This chapter covers essential aspects of Project 1: Static Site Scraper with Requests and BeautifulSoup as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 2000,
+      "objectives": [
+        "Understand the core concepts of Project 1: Static Site Scraper with Requests and BeautifulSoup",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        4
+      ]
+    },
+    {
+      "number": 6,
+      "title": "Responsible Scraping: Politeness, robots.txt, and Anti-Blocking Basics",
+      "overview": "This chapter covers essential aspects of Responsible Scraping: Politeness, robots.txt, and Anti-Blocking Basics as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 1700,
+      "objectives": [
+        "Understand the core concepts of Responsible Scraping: Politeness, robots.txt, and Anti-Blocking Basics",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        5
+      ]
+    },
+    {
+      "number": 7,
+      "title": "Project 2: Price Tracker with Scheduling and Email/Slack Alerts",
+      "overview": "This chapter covers essential aspects of Project 2: Price Tracker with Scheduling and Email/Slack Alerts as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 2100,
+      "objectives": [
+        "Understand the core concepts of Project 2: Price Tracker with Scheduling and Email/Slack Alerts",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        6
+      ]
+    },
+    {
+      "number": 8,
+      "title": "Working with APIs: REST, GraphQL, Auth, and Pagination",
+      "overview": "This chapter covers essential aspects of Working with APIs: REST, GraphQL, Auth, and Pagination as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 1800,
+      "objectives": [
+        "Understand the core concepts of Working with APIs: REST, GraphQL, Auth, and Pagination",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        7
+      ]
+    },
+    {
+      "number": 9,
+      "title": "Project 3: Job Aggregator to Google Sheets and CSV",
+      "overview": "This chapter covers essential aspects of Project 3: Job Aggregator to Google Sheets and CSV as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 2100,
+      "objectives": [
+        "Understand the core concepts of Project 3: Job Aggregator to Google Sheets and CSV",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        8
+      ]
+    },
+    {
+      "number": 10,
+      "title": "Browser Automation: Selenium and Playwright Fundamentals",
+      "overview": "This chapter covers essential aspects of Browser Automation: Selenium and Playwright Fundamentals as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 1900,
+      "objectives": [
+        "Understand the core concepts of Browser Automation: Selenium and Playwright Fundamentals",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        9
+      ]
+    },
+    {
+      "number": 11,
+      "title": "Project 4: Authenticated Scraping and Form Submission to Download Reports",
+      "overview": "This chapter covers essential aspects of Project 4: Authenticated Scraping and Form Submission to Download Reports as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 2100,
+      "objectives": [
+        "Understand the core concepts of Project 4: Authenticated Scraping and Form Submission to Download Reports",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        10
+      ]
+    },
+    {
+      "number": 12,
+      "title": "Async and Concurrency: asyncio, aiohttp, and Task Coordination",
+      "overview": "This chapter covers essential aspects of Async and Concurrency: asyncio, aiohttp, and Task Coordination as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 1900,
+      "objectives": [
+        "Understand the core concepts of Async and Concurrency: asyncio, aiohttp, and Task Coordination",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        11
+      ]
+    },
+    {
+      "number": 13,
+      "title": "Project 5: Scalable Catalog Scraper with Async, Proxies, and Rate Limiting",
+      "overview": "This chapter covers essential aspects of Project 5: Scalable Catalog Scraper with Async, Proxies, and Rate Limiting as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 2200,
+      "objectives": [
+        "Understand the core concepts of Project 5: Scalable Catalog Scraper with Async, Proxies, and Rate Limiting",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        12
+      ]
+    },
+    {
+      "number": 14,
+      "title": "Data Cleaning and Normalization: From Raw HTML to Structured Schemas",
+      "overview": "This chapter covers essential aspects of Data Cleaning and Normalization: From Raw HTML to Structured Schemas as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 1800,
+      "objectives": [
+        "Understand the core concepts of Data Cleaning and Normalization: From Raw HTML to Structured Schemas",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        13
+      ]
+    },
+    {
+      "number": 15,
+      "title": "Persistence and Pipelines: CSV/JSON, SQLite/Postgres, and SQLAlchemy",
+      "overview": "This chapter covers essential aspects of Persistence and Pipelines: CSV/JSON, SQLite/Postgres, and SQLAlchemy as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 2000,
+      "objectives": [
+        "Understand the core concepts of Persistence and Pipelines: CSV/JSON, SQLite/Postgres, and SQLAlchemy",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        14
+      ]
+    },
+    {
+      "number": 16,
+      "title": "Working with Files, PDFs, Excel, and Email Automation",
+      "overview": "This chapter covers essential aspects of Working with Files, PDFs, Excel, and Email Automation as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 1900,
+      "objectives": [
+        "Understand the core concepts of Working with Files, PDFs, Excel, and Email Automation",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        15
+      ]
+    },
+    {
+      "number": 17,
+      "title": "Project 6: Invoice Pipeline—Parse PDFs, Reconcile in Excel, and Notify",
+      "overview": "This chapter covers essential aspects of Project 6: Invoice Pipeline—Parse PDFs, Reconcile in Excel, and Notify as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 2100,
+      "objectives": [
+        "Understand the core concepts of Project 6: Invoice Pipeline—Parse PDFs, Reconcile in Excel, and Notify",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        16
+      ]
+    },
+    {
+      "number": 18,
+      "title": "Testing, Debugging, and Reliability for Scrapers and Bots",
+      "overview": "This chapter covers essential aspects of Testing, Debugging, and Reliability for Scrapers and Bots as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 1800,
+      "objectives": [
+        "Understand the core concepts of Testing, Debugging, and Reliability for Scrapers and Bots",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        17
+      ]
+    },
+    {
+      "number": 19,
+      "title": "Packaging, CLI Design, Virtual Envs, and Dockerization",
+      "overview": "This chapter covers essential aspects of Packaging, CLI Design, Virtual Envs, and Dockerization as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 2000,
+      "objectives": [
+        "Understand the core concepts of Packaging, CLI Design, Virtual Envs, and Dockerization",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        18
+      ]
+    },
+    {
+      "number": 20,
+      "title": "Project 7: Deploy a Scraping Microservice with FastAPI and a Scheduler",
+      "overview": "This chapter covers essential aspects of Project 7: Deploy a Scraping Microservice with FastAPI and a Scheduler as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 2200,
+      "objectives": [
+        "Understand the core concepts of Project 7: Deploy a Scraping Microservice with FastAPI and a Scheduler",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        19
+      ]
+    },
+    {
+      "number": 21,
+      "title": "Scheduling and Orchestration: Cron, APScheduler, and Airflow Intro",
+      "overview": "This chapter covers essential aspects of Scheduling and Orchestration: Cron, APScheduler, and Airflow Intro as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 1800,
+      "objectives": [
+        "Understand the core concepts of Scheduling and Orchestration: Cron, APScheduler, and Airflow Intro",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        20
+      ]
+    },
+    {
+      "number": 22,
+      "title": "Advanced Web Challenges: Dynamic Pages, Captchas, Sitemaps, and GraphQL",
+      "overview": "This chapter covers essential aspects of Advanced Web Challenges: Dynamic Pages, Captchas, Sitemaps, and GraphQL as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 1900,
+      "objectives": [
+        "Understand the core concepts of Advanced Web Challenges: Dynamic Pages, Captchas, Sitemaps, and GraphQL",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        21
+      ]
+    },
+    {
+      "number": 23,
+      "title": "Security, Legal, and Ethical Considerations in Automation",
+      "overview": "This chapter covers essential aspects of Security, Legal, and Ethical Considerations in Automation as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 1700,
+      "objectives": [
+        "Understand the core concepts of Security, Legal, and Ethical Considerations in Automation",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        22
+      ]
+    },
+    {
+      "number": 24,
+      "title": "Troubleshooting Playbook: Common Failure Modes and Fixes",
+      "overview": "This chapter covers essential aspects of Troubleshooting Playbook: Common Failure Modes and Fixes as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 1600,
+      "objectives": [
+        "Understand the core concepts of Troubleshooting Playbook: Common Failure Modes and Fixes",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        23
+      ]
+    },
+    {
+      "number": 25,
+      "title": "Capstone: End-to-End Data Pipeline—News and E‑Commerce Monitor Dashboard",
+      "overview": "This chapter covers essential aspects of Capstone: End-to-End Data Pipeline—News and E‑Commerce Monitor Dashboard as it relates to Create a practical guide to Python automation and web scraping for beginners.",
+      "wordCount": 2200,
+      "objectives": [
+        "Understand the core concepts of Capstone: End-to-End Data Pipeline—News and E‑Commerce Monitor Dashboard",
+        "Apply practical techniques and methods",
+        "Integrate knowledge with overall Create a practical guide to Python automation and web scraping for beginners understanding"
+      ],
+      "dependencies": [
+        24
+      ]
+    }
+  ]
+}

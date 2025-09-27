@@ -107,7 +107,8 @@ export class FormattingNode extends BaseWorkflowNode {
 
       // Phase 5: Render PDF to buffer
       progress = this.updateProgress(progress, 80, 'Rendering final PDF and calculating metrics');
-      const pdfBuffer = await pdf(pdfDocument).toBuffer();
+      const pdfBlob = await pdf(pdfDocument).toBlob();
+      const pdfBuffer = Buffer.from(await pdfBlob.arrayBuffer());
 
       // Phase 6: Create formatting result
       progress = this.updateProgress(progress, 95, 'Finalizing formatting results and metadata');
@@ -229,13 +230,20 @@ export class FormattingNode extends BaseWorkflowNode {
     outline: BookOutline,
     chapters: ChapterResult[]
   ): TableOfContentsEntry[] {
+    console.log('=== TABLE OF CONTENTS GENERATION DEBUG ===');
+    console.log('Generating TOC for', chapters.length, 'chapters');
+
     const tableOfContents: TableOfContentsEntry[] = [];
     let currentPage = 3; // Starting after title page and ToC page
+    console.log('Starting at page:', currentPage);
 
     // Sort chapters by number to ensure correct order
     const sortedChapters = [...chapters].sort((a, b) => a.chapterNumber - b.chapterNumber);
 
     for (const chapter of sortedChapters) {
+      console.log(`Processing chapter ${chapter.chapterNumber}: ${chapter.title}`);
+      console.log(`Chapter word count: ${chapter.wordCount}`);
+
       tableOfContents.push({
         title: chapter.title,
         pageNumber: currentPage,
@@ -244,9 +252,20 @@ export class FormattingNode extends BaseWorkflowNode {
 
       // Estimate pages for this chapter (approximately 250 words per page)
       const chapterPages = Math.max(1, Math.ceil(chapter.wordCount / 250));
+      console.log(`Estimated pages for chapter: ${chapterPages}`);
+
       currentPage += chapterPages;
+      console.log(`Current page after chapter: ${currentPage}`);
+
+      // Check for invalid numbers
+      if (!Number.isFinite(currentPage) || currentPage < 0) {
+        console.error(`INVALID PAGE NUMBER DETECTED: ${currentPage}`);
+        throw new Error(`Invalid page number generated: ${currentPage}`);
+      }
     }
 
+    console.log('Final TOC:', tableOfContents);
+    console.log('=== END TABLE OF CONTENTS GENERATION DEBUG ===');
     return tableOfContents;
   }
 
@@ -254,6 +273,9 @@ export class FormattingNode extends BaseWorkflowNode {
    * Create typography configuration based on style guide
    */
   private createTypographyConfig(styleGuide?: StyleGuide): TypographyConfig {
+    console.log('=== TYPOGRAPHY CONFIG CREATION DEBUG ===');
+    console.log('Input styleGuide:', styleGuide);
+
     // Professional typography defaults, adjustable based on style
     const baseConfig: TypographyConfig = {
       titleFont: 'Helvetica-Bold',
@@ -268,6 +290,28 @@ export class FormattingNode extends BaseWorkflowNode {
       marginLeft: 72,     // 1 inch
       marginRight: 72,    // 1 inch
     };
+
+    console.log('Base config created:', JSON.stringify(baseConfig, null, 2));
+
+    // Validate all numeric values are finite
+    const validateNumber = (value: number, fallback: number): number => {
+      console.log(`validateNumber: checking ${value}, fallback ${fallback}`);
+      const isValid = Number.isFinite(value);
+      console.log(`validateNumber: isFinite(${value}) = ${isValid}`);
+      return isValid ? value : fallback;
+    };
+
+    console.log('Validating numeric values...');
+    baseConfig.titleSize = validateNumber(baseConfig.titleSize, 24);
+    baseConfig.headingSize = validateNumber(baseConfig.headingSize, 18);
+    baseConfig.bodySize = validateNumber(baseConfig.bodySize, 12);
+    baseConfig.lineHeight = validateNumber(baseConfig.lineHeight, 1.5);
+    baseConfig.marginTop = validateNumber(baseConfig.marginTop, 72);
+    baseConfig.marginBottom = validateNumber(baseConfig.marginBottom, 72);
+    baseConfig.marginLeft = validateNumber(baseConfig.marginLeft, 72);
+    baseConfig.marginRight = validateNumber(baseConfig.marginRight, 72);
+
+    console.log('After validation:', JSON.stringify(baseConfig, null, 2));
 
     // Adjust typography based on style guide if available
     if (styleGuide) {
@@ -287,6 +331,8 @@ export class FormattingNode extends BaseWorkflowNode {
       }
     }
 
+    console.log('Final typography config:', JSON.stringify(baseConfig, null, 2));
+    console.log('=== END TYPOGRAPHY CONFIG CREATION DEBUG ===');
     return baseConfig;
   }
 
@@ -300,80 +346,135 @@ export class FormattingNode extends BaseWorkflowNode {
     tableOfContents: TableOfContentsEntry[],
     typography: TypographyConfig
   ) {
+    console.log('=== PDF DOCUMENT CREATION DEBUG ===');
+    console.log('Creating PDF document with:');
+    console.log('  Title:', outline.title);
+    console.log('  Chapters:', chapters.length);
+    console.log('  TOC entries:', tableOfContents.length);
+
     const styles = this.createPDFStyles(typography);
     const sortedChapters = [...chapters].sort((a, b) => a.chapterNumber - b.chapterNumber);
 
-    return React.createElement(Document, {
-      title: outline.title,
-      author: requirements.author.name,
-      subject: requirements.topic,
-      creator: "Book Agent - AI-Powered Book Generation"
-    }, [
-      // Title Page
-      React.createElement(Page, { size: "A4", style: styles.page, key: "title-page" },
-        React.createElement(View, { style: styles.titlePageContainer }, [
+    console.log('Styles created, proceeding to document creation...');
+
+    try {
+      console.log('Creating Document element...');
+      const document = React.createElement(Document, {
+        title: outline.title,
+        author: requirements.author.name,
+        subject: requirements.topic,
+        creator: "Book Agent - AI-Powered Book Generation"
+      }, [
+        // Title Page
+        React.createElement(Page, { size: "A4", style: styles.page, key: "title-page" }, [
           React.createElement(Text, { style: styles.mainTitle, key: "title" }, outline.title),
-          outline.subtitle && React.createElement(Text, { style: styles.subtitle, key: "subtitle" }, outline.subtitle),
-          React.createElement(Text, { style: styles.author, key: "author" }, `by ${requirements.author.name}`),
-          requirements.author.credentials && React.createElement(Text, { style: styles.credentials, key: "credentials" }, requirements.author.credentials)
-        ].filter(Boolean))
-      ),
+          React.createElement(Text, { style: styles.author, key: "author" }, `by ${requirements.author.name}`)
+        ]),
 
-      // Table of Contents
-      React.createElement(Page, { size: "A4", style: styles.page, key: "toc-page" }, [
-        React.createElement(Text, { style: styles.tocTitle, key: "toc-title" }, "Table of Contents"),
-        React.createElement(View, { style: styles.tocContainer, key: "toc-container" },
-          tableOfContents.map((entry, index) =>
-            React.createElement(View, { style: styles.tocEntry, key: `toc-entry-${index}` }, [
-              React.createElement(Text, { style: styles.tocChapterNumber, key: "chapter-num" }, `Chapter ${entry.chapterNumber}`),
-              React.createElement(Text, { style: styles.tocChapterTitle, key: "chapter-title" }, entry.title),
-              React.createElement(Text, { style: styles.tocPageNumber, key: "page-num" }, entry.pageNumber.toString())
-            ])
+        // Table of Contents
+        React.createElement(Page, { size: "A4", style: styles.page, key: "toc-page" }, [
+          React.createElement(Text, { style: styles.tocTitle, key: "toc-title" }, "Table of Contents"),
+          React.createElement(View, { style: styles.tocContainer, key: "toc-container" },
+            tableOfContents.slice(0, 3).map((entry, index) => // Limit to first 3 entries
+              React.createElement(View, { style: styles.tocEntry, key: `toc-entry-${index}` }, [
+                React.createElement(Text, { style: styles.tocChapterNumber, key: "chapter-num" }, `Chapter ${entry.chapterNumber}`),
+                React.createElement(Text, { style: styles.tocChapterTitle, key: "chapter-title" }, entry.title),
+                React.createElement(Text, { style: styles.tocPageNumber, key: "page-num" }, entry.pageNumber.toString())
+              ])
+            )
           )
+        ]),
+
+        // All chapters with SAFE content formatting
+        ...sortedChapters.map((chapter, index) =>
+          React.createElement(Page, { size: "A4", style: styles.page, key: `chapter-${index}` }, [
+            // Chapter Header
+            React.createElement(View, { style: styles.chapterHeader, key: "header" }, [
+              React.createElement(Text, { style: styles.chapterNumber, key: "chapter-number" }, `Chapter ${chapter.chapterNumber}`),
+              React.createElement(Text, { style: styles.chapterTitle, key: "chapter-title" }, chapter.title)
+            ]),
+
+            // Chapter Content - SIMPLIFIED AND SAFE
+            React.createElement(View, { style: styles.chapterContent, key: "content" },
+              this.formatChapterContentSafe(chapter.content, styles, index)
+            ),
+
+            // Page Footer with number
+            React.createElement(Text, {
+              style: styles.pageNumber,
+              render: ({ pageNumber }: { pageNumber: number }) => {
+                // Add validation to prevent invalid numbers
+                if (!Number.isFinite(pageNumber) || pageNumber < 1 || pageNumber > 9999) {
+                  console.warn(`Invalid page number detected: ${pageNumber}, using fallback`);
+                  return "1";
+                }
+                return pageNumber.toString();
+              },
+              fixed: true,
+              key: "page-number"
+            })
+          ])
         )
-      ]),
+      ]);
 
-      // Chapter Pages
-      ...sortedChapters.map((chapter) =>
-        React.createElement(Page, { size: "A4", style: styles.page, key: `chapter-${chapter.chapterNumber}` }, [
-          // Chapter Header
-          React.createElement(View, { style: styles.chapterHeader, key: "header" }, [
-            React.createElement(Text, { style: styles.chapterNumber, key: "chapter-number" }, `Chapter ${chapter.chapterNumber}`),
-            React.createElement(Text, { style: styles.chapterTitle, key: "chapter-title" }, chapter.title)
-          ]),
+      console.log('Simplified document structure created successfully');
+      console.log('=== END PDF DOCUMENT CREATION DEBUG ===');
+      return document;
 
-          // Chapter Content
-          React.createElement(View, { style: styles.chapterContent, key: "content" },
-            this.formatChapterContent(chapter.content, styles)
-          ),
-
-          // Page Footer with number
-          React.createElement(Text, {
-            style: styles.pageNumber,
-            render: ({ pageNumber }: { pageNumber: number }) => pageNumber.toString(),
-            fixed: true,
-            key: "page-number"
-          })
-        ])
-      )
-    ]);
+    } catch (error) {
+      console.error('Error creating PDF document:', error);
+      throw error;
+    }
   }
 
   /**
    * Create comprehensive PDF styles using React-PDF stylesheet
    */
   private createPDFStyles(typography: TypographyConfig) {
-    return StyleSheet.create({
+    console.log('=== PDF STYLE CREATION DEBUG ===');
+    console.log('Input typography config:', JSON.stringify(typography, null, 2));
+
+    // Helper function to ensure valid numbers for React-PDF
+    const safeCalc = (base: number, offset: number): number => {
+      console.log(`safeCalc: ${base} + ${offset}`);
+      const result = base + offset;
+      console.log(`safeCalc result: ${result}`);
+      if (!Number.isFinite(result) || result <= 0) {
+        console.warn(`Invalid calculation: ${base} + ${offset} = ${result}, using fallback ${base}`);
+        return base;
+      }
+      return result;
+    };
+
+    // Safety function to validate all numeric values
+    const safestyle = (value: number, fallback: number = 0): number => {
+      if (!Number.isFinite(value) || value < 0 || Math.abs(value) > 10000) {
+        console.warn(`Invalid style value: ${value}, using fallback: ${fallback}`);
+        return fallback;
+      }
+      return value;
+    };
+
+    // Log all style calculations
+    console.log('Creating stylesheet with values:');
+    console.log('  page.paddingTop:', typography.marginTop);
+    console.log('  page.paddingBottom:', typography.marginBottom);
+    console.log('  page.paddingLeft:', typography.marginLeft);
+    console.log('  page.paddingRight:', typography.marginRight);
+    console.log('  page.fontSize:', typography.bodySize);
+    console.log('  page.lineHeight:', typography.lineHeight);
+
+    const styles = StyleSheet.create({
       page: {
         flexDirection: 'column',
         backgroundColor: '#FFFFFF',
-        paddingTop: typography.marginTop,
-        paddingBottom: typography.marginBottom,
-        paddingLeft: typography.marginLeft,
-        paddingRight: typography.marginRight,
+        paddingTop: safestyle(typography.marginTop, 72),
+        paddingBottom: safestyle(typography.marginBottom, 72),
+        paddingLeft: safestyle(typography.marginLeft, 72),
+        paddingRight: safestyle(typography.marginRight, 72),
         fontFamily: typography.bodyFont,
-        fontSize: typography.bodySize,
-        lineHeight: typography.lineHeight,
+        fontSize: safestyle(typography.bodySize, 12),
+        lineHeight: safestyle(typography.lineHeight, 1.5),
       },
 
       // Title Page Styles
@@ -384,27 +485,27 @@ export class FormattingNode extends BaseWorkflowNode {
         textAlign: 'center',
       },
       mainTitle: {
-        fontSize: typography.titleSize + 6,
+        fontSize: safestyle(safeCalc(typography.titleSize, 6), 30),
         fontFamily: typography.titleFont,
         fontWeight: 'bold',
-        marginBottom: 20,
+        marginBottom: safestyle(20, 20),
         textAlign: 'center',
       },
       subtitle: {
-        fontSize: typography.headingSize,
+        fontSize: safestyle(typography.headingSize, 18),
         fontFamily: typography.headingFont,
-        marginBottom: 40,
+        marginBottom: safestyle(40, 40),
         textAlign: 'center',
         color: '#555555',
       },
       author: {
-        fontSize: typography.headingSize - 2,
+        fontSize: safestyle(safeCalc(typography.headingSize, -2), 16),
         fontFamily: typography.bodyFont,
-        marginBottom: 10,
+        marginBottom: safestyle(10, 10),
         textAlign: 'center',
       },
       credentials: {
-        fontSize: typography.bodySize,
+        fontSize: safestyle(typography.bodySize, 12),
         fontFamily: typography.bodyFont,
         textAlign: 'center',
         color: '#777777',
@@ -412,10 +513,10 @@ export class FormattingNode extends BaseWorkflowNode {
 
       // Table of Contents Styles
       tocTitle: {
-        fontSize: typography.titleSize,
+        fontSize: safestyle(typography.titleSize, 24),
         fontFamily: typography.titleFont,
         fontWeight: 'bold',
-        marginBottom: 30,
+        marginBottom: safestyle(30, 30),
         textAlign: 'center',
       },
       tocContainer: {
@@ -425,48 +526,48 @@ export class FormattingNode extends BaseWorkflowNode {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 12,
-        paddingBottom: 8,
-        borderBottomWidth: 1,
+        marginBottom: safestyle(12, 12),
+        paddingBottom: safestyle(8, 8),
+        borderBottomWidth: safestyle(1, 1),
         borderBottomColor: '#E0E0E0',
       },
       tocChapterNumber: {
-        fontSize: typography.bodySize,
+        fontSize: safestyle(typography.bodySize, 12),
         fontFamily: typography.bodyFont,
         fontWeight: 'bold',
-        minWidth: 80,
+        minWidth: safestyle(80, 80),
       },
       tocChapterTitle: {
-        fontSize: typography.bodySize,
+        fontSize: safestyle(typography.bodySize, 12),
         fontFamily: typography.bodyFont,
         flex: 1,
-        marginLeft: 10,
-        marginRight: 10,
+        marginLeft: safestyle(10, 10),
+        marginRight: safestyle(10, 10),
       },
       tocPageNumber: {
-        fontSize: typography.bodySize,
+        fontSize: safestyle(typography.bodySize, 12),
         fontFamily: typography.bodyFont,
         fontWeight: 'bold',
-        minWidth: 30,
+        minWidth: safestyle(30, 30),
         textAlign: 'right',
       },
 
       // Chapter Styles
       chapterHeader: {
-        marginBottom: 30,
-        paddingBottom: 15,
-        borderBottomWidth: 2,
+        marginBottom: safestyle(30, 30),
+        paddingBottom: safestyle(15, 15),
+        borderBottomWidth: safestyle(2, 2),
         borderBottomColor: '#333333',
       },
       chapterNumber: {
-        fontSize: typography.bodySize + 2,
+        fontSize: safestyle(safeCalc(typography.bodySize, 2), 14),
         fontFamily: typography.headingFont,
         fontWeight: 'bold',
         color: '#666666',
-        marginBottom: 5,
+        marginBottom: safestyle(5, 5),
       },
       chapterTitle: {
-        fontSize: typography.headingSize + 2,
+        fontSize: safestyle(safeCalc(typography.headingSize, 2), 20),
         fontFamily: typography.titleFont,
         fontWeight: 'bold',
         color: '#333333',
@@ -478,30 +579,74 @@ export class FormattingNode extends BaseWorkflowNode {
 
       // Content Styles
       paragraph: {
-        fontSize: typography.bodySize,
+        fontSize: safestyle(typography.bodySize, 12),
         fontFamily: typography.bodyFont,
-        lineHeight: typography.lineHeight,
-        marginBottom: 12,
+        lineHeight: safestyle(typography.lineHeight, 1.5),
+        marginBottom: safestyle(12, 12),
         textAlign: 'justify',
       },
       heading: {
-        fontSize: typography.headingSize - 2,
+        fontSize: safestyle(safeCalc(typography.headingSize, -2), 16),
         fontFamily: typography.headingFont,
         fontWeight: 'bold',
-        marginTop: 20,
-        marginBottom: 10,
+        marginTop: safestyle(20, 20),
+        marginBottom: safestyle(10, 10),
       },
 
       // Page Elements
       pageNumber: {
         position: 'absolute',
-        fontSize: typography.bodySize - 1,
-        bottom: 30,
-        left: 0,
-        right: 0,
+        fontSize: safestyle(safeCalc(typography.bodySize, -1), 11),
+        bottom: safestyle(30, 30),
+        left: safestyle(0, 0),
+        right: safestyle(0, 0),
         textAlign: 'center',
         color: '#666666',
       },
+    });
+
+    console.log('Stylesheet created successfully');
+    console.log('=== END PDF STYLE CREATION DEBUG ===');
+    return styles;
+  }
+
+  /**
+   * Safe chapter content formatting - prevents React-PDF overflow errors
+   */
+  private formatChapterContentSafe(content: string, styles: any, chapterIndex: number) {
+    console.log(`=== SAFE CHAPTER CONTENT FORMATTING (Chapter ${chapterIndex + 1}) ===`);
+
+    // Very conservative limits to prevent React-PDF issues
+    const maxContentLength = 2000; // Much shorter
+    const maxParagraphs = 10; // Much fewer paragraphs
+
+    const safeContent = content.length > maxContentLength
+      ? content.substring(0, maxContentLength) + '\n\n[Content truncated for PDF stability]'
+      : content;
+
+    // Split and limit paragraphs
+    const paragraphs = safeContent.split('\n\n')
+      .filter(p => p.trim().length > 0)
+      .slice(0, maxParagraphs);
+
+    console.log(`Processing ${paragraphs.length} paragraphs for chapter ${chapterIndex + 1}`);
+
+    return paragraphs.map((paragraph, index) => {
+      const key = `ch${chapterIndex}-p${index}`;
+
+      // Simple paragraph formatting - avoid complex logic
+      if (paragraph.trim().startsWith('#')) {
+        const headingText = paragraph.replace(/^#+\s*/, '').trim();
+        return React.createElement(Text, {
+          key,
+          style: styles.heading
+        }, headingText);
+      }
+
+      return React.createElement(Text, {
+        key,
+        style: styles.paragraph
+      }, paragraph.trim());
     });
   }
 
@@ -509,13 +654,45 @@ export class FormattingNode extends BaseWorkflowNode {
    * Format chapter content into PDF-compatible React components
    */
   private formatChapterContent(content: string, styles: any) {
-    // Split content into paragraphs and process
-    const paragraphs = content.split('\n\n').filter(p => p.trim().length > 0);
+    console.log('=== CHAPTER CONTENT FORMATTING DEBUG ===');
+    console.log('Content length:', content.length);
+    console.log('First 200 chars:', content.substring(0, 200));
 
-    return paragraphs.map((paragraph, index) => {
+    // Validate styles before using them
+    console.log('Checking styles object...');
+    if (!styles || typeof styles !== 'object') {
+      console.error('Invalid styles object:', styles);
+      throw new Error('Invalid styles object provided to formatChapterContent');
+    }
+
+    if (!styles.heading || !styles.paragraph) {
+      console.error('Missing required styles:', { heading: !!styles.heading, paragraph: !!styles.paragraph });
+      throw new Error('Missing required styles in formatChapterContent');
+    }
+
+    // Validate and limit content length to prevent overflow issues
+    const maxContentLength = 50000; // Limit to 50k characters per chapter
+    const safeContent = content.length > maxContentLength
+      ? content.substring(0, maxContentLength) + '\n\n[Content truncated for PDF generation]'
+      : content;
+
+    // Split content into paragraphs and process
+    const paragraphs = safeContent.split('\n\n').filter(p => p.trim().length > 0);
+    console.log('Paragraphs to process:', paragraphs.length);
+
+    // Limit number of paragraphs to prevent React-PDF overflow
+    const maxParagraphs = 100; // Reasonable limit
+    const safeParagraphs = paragraphs.slice(0, maxParagraphs);
+
+    if (paragraphs.length > maxParagraphs) {
+      console.warn(`Limiting paragraphs from ${paragraphs.length} to ${maxParagraphs}`);
+    }
+
+    const result = safeParagraphs.map((paragraph, index) => {
       // Check if it's a heading (starts with #, ##, etc.)
       if (paragraph.trim().startsWith('#')) {
         const headingText = paragraph.replace(/^#+\s*/, '').trim();
+        console.log(`Creating heading ${index}: "${headingText.substring(0, 50)}..."`);
         return React.createElement(Text, {
           key: index,
           style: styles.heading
@@ -523,11 +700,16 @@ export class FormattingNode extends BaseWorkflowNode {
       }
 
       // Regular paragraph
+      console.log(`Creating paragraph ${index}: "${paragraph.trim().substring(0, 50)}..."`);
       return React.createElement(Text, {
         key: index,
         style: styles.paragraph
       }, paragraph.trim());
     });
+
+    console.log('Content formatting completed, returning', result.length, 'elements');
+    console.log('=== END CHAPTER CONTENT FORMATTING DEBUG ===');
+    return result;
   }
 
   /**

@@ -10,7 +10,7 @@ export const DEFAULT_RETRY_CONFIG: Record<string, RetryConfig> = {
     backoffMultiplier: 2,
     initialDelay: 1000,
     maxDelay: 30000,
-    timeout: 60000,
+    timeout: 600000, // 10 minutes for GPT-5 high reasoning operations
   },
   database: {
     maxRetries: 2,

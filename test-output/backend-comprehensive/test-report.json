@@ -1,0 +1,50 @@
+{
+  "testType": "Comprehensive Backend Test",
+  "timestamp": "2025-09-22T19:13:56.442Z",
+  "duration": 249796,
+  "status": "PARTIAL_FAILURE",
+  "error": "Book word count (15000) below minimum requirement (30,000)",
+  "stages": [
+    {
+      "name": "🏗️  Workflow Initialization",
+      "status": "success",
+      "duration": 0,
+      "data": {
+        "sessionId": "backend-test-1758568186648"
+      }
+    },
+    {
+      "name": "💬 Requirements Gathering",
+      "status": "success",
+      "duration": 81025,
+      "data": {
+        "topic": "Create a practical guide to Python automation and web scraping for beginners",
+        "wordTarget": 35000
+      }
+    },
+    {
+      "name": "📋 Outline Generation",
+      "status": "success",
+      "duration": 168751,
+      "data": {
+        "title": "Practical Python Automation and Web Scraping: A Project-Based Guide to Real-World Workflows",
+        "chapters": 25,
+        "totalWords": 47700
+      }
+    },
+    {
+      "name": "🔄 Chapter Spawning",
+      "status": "success",
+      "duration": 10,
+      "data": {
+        "chaptersConfigured": 10
+      }
+    },
+    {
+      "name": "📖 PDF Generation",
+      "status": "error",
+      "duration": 2,
+      "error": "Book word count (15000) below minimum requirement (30,000)"
+    }
+  ]
+}

@@ -28,14 +28,13 @@ async function testBasicAgent() {
   try {
     const basicAgent = createGPT5Agent({
       name: 'Test Agent',
-      instructions: 'You are a helpful assistant. Respond with exactly "Hello from GPT-5 mini!" and nothing else.',
+      instructions: 'You are a helpful assistant for testing purposes. Respond with exactly "Hello from GPT-5!" and nothing else.',
       reasoning_effort: 'minimal',
       verbosity: 'low',
-      temperature: 0.1,
     });
 
     const startTime = Date.now();
-    const response = await basicAgent.execute('Say hello from GPT-5 mini');
+    const response = await basicAgent.execute('Say hello');
     const duration = Date.now() - startTime;
 
     console.log('✅ Basic agent test successful!');

@@ -1,5 +1,5 @@
-// GPT-5 Mini Agent Wrapper
-// Hybrid approach: OpenAI Agents SDK for GPT-5 mini calls within LangGraph workflows
+// GPT-5 Agent Wrapper
+// Hybrid approach: OpenAI Agents SDK for GPT-5 calls within LangGraph workflows
 // Handles new GPT-5 parameters (reasoning_effort, verbosity) automatically
 
 import { Agent, run } from '@openai/agents';
@@ -8,29 +8,24 @@ import {
   WorkflowError,
   WorkflowErrorContext,
   logger,
-  withRetry,
   retryAPI,
 } from '@/lib/errors/exports';
 
 // Validate environment on import
 validateEnvironment();
 
-const config = getEnvironmentConfig();
-
 /**
- * GPT-5 Mini Agent Configuration
+ * GPT-5 Agent Configuration
  */
 export interface GPT5AgentConfig {
   name: string;
   instructions: string;
   reasoning_effort?: 'minimal' | 'low' | 'medium' | 'high';
   verbosity?: 'low' | 'medium' | 'high';
-  temperature?: number;
-  max_tokens?: number;
 }
 
 /**
- * GPT-5 Mini Agent Response
+ * GPT-5 Agent Response
  */
 export interface GPT5Response {
   content: string;
@@ -43,8 +38,8 @@ export interface GPT5Response {
 }
 
 /**
- * GPT-5 Mini Agent Wrapper Class
- * Provides simplified interface for GPT-5 mini calls within LangGraph workflows
+ * GPT-5 Agent Wrapper Class
+ * Provides simplified interface for GPT-5 calls within LangGraph workflows
  */
 export class GPT5Agent {
   private agent: Agent;
@@ -53,16 +48,14 @@ export class GPT5Agent {
   constructor(config: GPT5AgentConfig) {
     this.config = config;
 
-    // Create OpenAI Agent with GPT-5 mini specific configuration
+    // Create OpenAI Agent with GPT-5 specific configuration
     this.agent = new Agent({
       name: config.name,
       instructions: config.instructions,
-      model: 'gpt-5-mini-2025-08-07',
-      // GPT-5 specific parameters
+      model: 'gpt-5-2025-08-07',
+      // GPT-5 specific parameters only
       reasoning_effort: config.reasoning_effort || 'medium',
       verbosity: config.verbosity || 'medium',
-      temperature: config.temperature || 0.7,
-      max_tokens: config.max_tokens || 2000,
     });
 
     logger.info('GPT-5 Agent created', {
@@ -73,7 +66,7 @@ export class GPT5Agent {
   }
 
   /**
-   * Execute GPT-5 mini call with error handling and retry logic
+   * Execute GPT-5 call with error handling and retry logic
    */
   async execute(
     prompt: string,
@@ -116,15 +109,26 @@ export class GPT5Agent {
         error: error instanceof Error ? error.message : 'Unknown error',
       });
 
-      throw new WorkflowError(
-        'gpt5_agent_failure',
-        `GPT-5 agent '${this.config.name}' execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        {
+      if (errorContext) {
+        throw errorContext.createError(WorkflowError, `GPT-5 agent '${this.config.name}' execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`, {
+          code: 'gpt5_agent_failure',
           agentName: this.config.name,
           recoverable: true,
           cause: error instanceof Error ? error : undefined,
-        }
-      );
+        });
+      } else {
+        throw new WorkflowError(
+          sessionId,
+          'unknown',
+          `GPT-5 agent '${this.config.name}' execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+          {
+            code: 'gpt5_agent_failure',
+            agentName: this.config.name,
+            recoverable: true,
+            cause: error instanceof Error ? error : undefined,
+          }
+        );
+      }
     }
   }
 
@@ -138,11 +142,9 @@ export class GPT5Agent {
     this.agent = new Agent({
       name: this.config.name,
       instructions: this.config.instructions,
-      model: 'gpt-5-mini-2025-08-07',
+      model: 'gpt-5-2025-08-07',
       reasoning_effort: this.config.reasoning_effort || 'medium',
       verbosity: this.config.verbosity || 'medium',
-      temperature: this.config.temperature || 0.7,
-      max_tokens: this.config.max_tokens || 2000,
     });
 
     logger.info('GPT-5 Agent configuration updated', {
@@ -189,7 +191,6 @@ Format your response as a numbered list:
 ...`,
     reasoning_effort: 'medium',
     verbosity: 'medium',
-    temperature: 0.8,
   }),
 
   /**
@@ -213,7 +214,6 @@ CHAPTER TITLES:
 ...`,
     reasoning_effort: 'high', // Need thorough structural planning
     verbosity: 'medium',
-    temperature: 0.7,
   }),
 
   /**
@@ -241,7 +241,6 @@ RESEARCH REQUIREMENTS:
 DEPENDENCIES: [Chapter numbers this depends on, or "None"]`,
     reasoning_effort: 'high', // Need detailed planning
     verbosity: 'medium',
-    temperature: 0.7,
   }),
 
   /**
@@ -261,7 +260,6 @@ Ask focused questions to understand:
 Be conversational, insightful, and help users think through their book concept thoroughly.`,
     reasoning_effort: 'medium',
     verbosity: 'medium',
-    temperature: 0.8, // More conversational
   }),
 
   /**
@@ -284,8 +282,6 @@ Create well-structured content with:
 - Engaging introduction and strong conclusion`,
     reasoning_effort: 'high', // Need deep content generation
     verbosity: 'high', // Generate comprehensive content
-    temperature: 0.7,
-    max_tokens: 4000, // Longer content generation
   }),
 
   /**
@@ -312,7 +308,5 @@ Provide specific, constructive feedback in JSON format with:
 Focus on issues that affect publication quality and reader experience.`,
     reasoning_effort: 'high', // Need thorough analysis
     verbosity: 'medium', // Structured, analytical output
-    temperature: 0.3, // Consistent, analytical responses
-    max_tokens: 3000, // Detailed analysis
   }),
 };

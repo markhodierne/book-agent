@@ -14,9 +14,7 @@ vi.mock('@/lib/config/environment', () => ({
   getEnvironmentConfig: vi.fn(() => ({
     openai: {
       apiKey: 'test-openai-key',
-      model: 'gpt-5-mini-2025-08-07',
-      maxTokens: 4000,
-      temperature: 0.7,
+      model: 'gpt-5-2025-08-07',
     },
     supabase: {
       url: 'https://test-project.supabase.co',

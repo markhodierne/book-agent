@@ -1,0 +1,137 @@
+{
+  "title": "Production-Grade Python Web Scraping and Automation: Practical Patterns, Proxies, and Data Pipelines for Professionals",
+  "chapters": [
+    {
+      "number": 1,
+      "title": "Production-Grade Foundations: Architecture, Ethics, and the Scraper’s Toolkit",
+      "wordCount": 1900,
+      "overview": "This chapter covers essential aspects of Production-Grade Foundations: Architecture, Ethics, and the Scraper’s Toolkit as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    },
+    {
+      "number": 2,
+      "title": "The HTTP Stack Deep-Dive: Sessions, Cookies, Headers, and Caching Semantics",
+      "wordCount": 1800,
+      "overview": "This chapter covers essential aspects of The HTTP Stack Deep-Dive: Sessions, Cookies, Headers, and Caching Semantics as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    },
+    {
+      "number": 3,
+      "title": "Robust Parsing: CSS/XPath, Structured Data, and Resilient Selectors",
+      "wordCount": 1800,
+      "overview": "This chapter covers essential aspects of Robust Parsing: CSS/XPath, Structured Data, and Resilient Selectors as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    },
+    {
+      "number": 4,
+      "title": "Modern Web Apps: Headless Browsers, Network Interception, and SPA Strategies",
+      "wordCount": 1900,
+      "overview": "This chapter covers essential aspects of Modern Web Apps: Headless Browsers, Network Interception, and SPA Strategies as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    },
+    {
+      "number": 5,
+      "title": "Handling State: Authentication, CSRF, MFA, and Captchas with Human-in-the-Loop",
+      "wordCount": 1900,
+      "overview": "This chapter covers essential aspects of Handling State: Authentication, CSRF, MFA, and Captchas with Human-in-the-Loop as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    },
+    {
+      "number": 6,
+      "title": "Navigating Anti-Bot Systems: Fingerprinting, TLS Impersonation, and Headless Stealth",
+      "wordCount": 2000,
+      "overview": "This chapter covers essential aspects of Navigating Anti-Bot Systems: Fingerprinting, TLS Impersonation, and Headless Stealth as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    },
+    {
+      "number": 7,
+      "title": "Proxies That Work: Rotation, Pools, Residential/Mobile, and Geo-Targeting at Scale",
+      "wordCount": 2000,
+      "overview": "This chapter covers essential aspects of Proxies That Work: Rotation, Pools, Residential/Mobile, and Geo-Targeting at Scale as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    },
+    {
+      "number": 8,
+      "title": "Concurrency Patterns in Python: asyncio, Multiprocessing, and Backpressure",
+      "wordCount": 1900,
+      "overview": "This chapter covers essential aspects of Concurrency Patterns in Python: asyncio, Multiprocessing, and Backpressure as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    },
+    {
+      "number": 9,
+      "title": "Smart Crawling: Sitemaps, Link Graphs, Politeness, and Rate-Limit–Aware Schedulers",
+      "wordCount": 1800,
+      "overview": "This chapter covers essential aspects of Smart Crawling: Sitemaps, Link Graphs, Politeness, and Rate-Limit–Aware Schedulers as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    },
+    {
+      "number": 10,
+      "title": "Reliability Patterns: Retries, Timeouts, Circuit Breakers, and Idempotent Design",
+      "wordCount": 1900,
+      "overview": "This chapter covers essential aspects of Reliability Patterns: Retries, Timeouts, Circuit Breakers, and Idempotent Design as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    },
+    {
+      "number": 11,
+      "title": "Data Modeling and Validation: Typed Schemas, Pydantic, Dedupe, and Entity Resolution",
+      "wordCount": 1900,
+      "overview": "This chapter covers essential aspects of Data Modeling and Validation: Typed Schemas, Pydantic, Dedupe, and Entity Resolution as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    },
+    {
+      "number": 12,
+      "title": "Storage Layers: Postgres, Document Stores, S3/Parquet, and Efficient Serialization",
+      "wordCount": 1800,
+      "overview": "This chapter covers essential aspects of Storage Layers: Postgres, Document Stores, S3/Parquet, and Efficient Serialization as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    },
+    {
+      "number": 13,
+      "title": "Streaming and Queues: Kafka, RabbitMQ, and Redis Streams for Pipelines",
+      "wordCount": 1800,
+      "overview": "This chapter covers essential aspects of Streaming and Queues: Kafka, RabbitMQ, and Redis Streams for Pipelines as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    },
+    {
+      "number": 14,
+      "title": "Monitoring and Observability: Structured Logging, Metrics, Traces, and Alerting",
+      "wordCount": 1800,
+      "overview": "This chapter covers essential aspects of Monitoring and Observability: Structured Logging, Metrics, Traces, and Alerting as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    },
+    {
+      "number": 15,
+      "title": "Orchestration and Scheduling: Airflow, Prefect, Dagster, and Dependency Management",
+      "wordCount": 1800,
+      "overview": "This chapter covers essential aspects of Orchestration and Scheduling: Airflow, Prefect, Dagster, and Dependency Management as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    },
+    {
+      "number": 16,
+      "title": "Caching and Incremental Fetch: ETags, Delta Detection, Bloom Filters, and Change Feeds",
+      "wordCount": 1700,
+      "overview": "This chapter covers essential aspects of Caching and Incremental Fetch: ETags, Delta Detection, Bloom Filters, and Change Feeds as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    },
+    {
+      "number": 17,
+      "title": "Testing and QA for Scrapers: Fixtures, VCR/Betamax, Golden Files, and Data Quality Gates",
+      "wordCount": 1800,
+      "overview": "This chapter covers essential aspects of Testing and QA for Scrapers: Fixtures, VCR/Betamax, Golden Files, and Data Quality Gates as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    },
+    {
+      "number": 18,
+      "title": "Performance Tuning: Profiling, Parser Speed, Network Throughput, and Memory Footprint",
+      "wordCount": 1700,
+      "overview": "This chapter covers essential aspects of Performance Tuning: Profiling, Parser Speed, Network Throughput, and Memory Footprint as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    },
+    {
+      "number": 19,
+      "title": "Beyond HTML: PDFs, Images, OCR, and File Download Workflows",
+      "wordCount": 1800,
+      "overview": "This chapter covers essential aspects of Beyond HTML: PDFs, Images, OCR, and File Download Workflows as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    },
+    {
+      "number": 20,
+      "title": "API-Centric Scraping: REST, GraphQL, WebSockets, and Network Analysis",
+      "wordCount": 1900,
+      "overview": "This chapter covers essential aspects of API-Centric Scraping: REST, GraphQL, WebSockets, and Network Analysis as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    },
+    {
+      "number": 21,
+      "title": "Domain Playbooks and Case Studies: E‑commerce, Jobs, Travel, Real Estate, and News",
+      "wordCount": 1900,
+      "overview": "This chapter covers essential aspects of Domain Playbooks and Case Studies: E‑commerce, Jobs, Travel, Real Estate, and News as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    },
+    {
+      "number": 22,
+      "title": "Operating at Scale: Containers, K8s, CI/CD, Secrets, Cost Control, and Compliance",
+      "wordCount": 2000,
+      "overview": "This chapter covers essential aspects of Operating at Scale: Containers, K8s, CI/CD, Secrets, Cost Control, and Compliance as it relates to Advanced Python Web Scraping and Automation for Professional Developers."
+    }
+  ]
+}

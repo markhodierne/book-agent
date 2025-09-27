@@ -10,7 +10,6 @@ import {
   withRetry,
   retryChapterGeneration,
 } from '@/lib/errors/exports';
-import { updateSessionStatus } from '../state/persistence';
 
 /**
  * Base interface for all workflow nodes
@@ -58,13 +57,15 @@ export abstract class BaseWorkflowNode implements WorkflowNode {
       // Validate input state
       if (this.validate && !this.validate(state)) {
         throw new WorkflowError(
-          'validation',
+          state.sessionId,
+          state.currentStage,
           `Node validation failed: ${this.name}`,
           {
-            nodeName: this.name,
-            sessionId: state.sessionId,
-            stage: state.currentStage,
+            code: 'NODE_VALIDATION_ERROR',
             recoverable: false,
+            context: {
+              nodeName: this.name,
+            }
           }
         );
       }
@@ -125,10 +126,11 @@ export abstract class BaseWorkflowNode implements WorkflowNode {
         recoverable: workflowError.recoverable,
       });
 
-      // Update session status to failed if not recoverable
-      if (!workflowError.recoverable) {
-        await updateSessionStatus(state.sessionId, 'failed', state.currentStage);
-      }
+      // TODO: Database functionality will be added in enhanced features phase
+      // For MVP, we skip database persistence and work in-memory only
+      // if (!workflowError.recoverable) {
+      //   await updateSessionStatus(state.sessionId, 'failed', state.currentStage);
+      // }
 
       throw workflowError;
     } finally {

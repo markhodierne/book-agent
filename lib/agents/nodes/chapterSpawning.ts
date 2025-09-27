@@ -30,12 +30,15 @@ export class ChapterSpawningNode extends BaseWorkflowNode {
   protected async executeNode(state: WorkflowState): Promise<WorkflowState> {
     if (!state.outline) {
       throw new WorkflowError(
-        'missing_outline',
+        state.sessionId,
+        state.currentStage,
         'Chapter spawning requires a complete book outline',
         {
-          nodeName: this.name,
-          sessionId: state.sessionId,
+          code: 'missing_outline',
           recoverable: false,
+          context: {
+            nodeName: this.name,
+          },
         }
       );
     }
@@ -167,14 +170,62 @@ export class ChapterSpawningNode extends BaseWorkflowNode {
    * Validate that we have everything needed for chapter spawning
    */
   validate(state: WorkflowState): boolean {
-    return !!(
+    console.log('Chapter spawning validation - detailed debugging:');
+
+    // Check each condition individually
+    const hasOutline = !!state.outline;
+    console.log('- Has outline:', hasOutline);
+
+    const hasChapters = !!(state.outline && state.outline.chapters);
+    console.log('- Has chapters array:', hasChapters);
+
+    const chapterCount = state.outline?.chapters?.length || 0;
+    console.log('- Chapter count:', chapterCount);
+
+    const hasRequirements = !!state.requirements;
+    console.log('- Has requirements:', hasRequirements);
+
+    const hasStyleGuide = !!state.styleGuide;
+    console.log('- Has direct styleGuide:', hasStyleGuide);
+
+    const hasRequirementsStyleGuide = !!(state.requirements && state.requirements.styleGuide);
+    console.log('- Has requirements.styleGuide:', hasRequirementsStyleGuide);
+
+    // Check for the actual field that conversation node creates
+    const hasRequirementsStyle = !!(state.requirements && (state.requirements as any).style);
+    console.log('- Has requirements.style:', hasRequirementsStyle);
+
+    const hasSessionId = !!state.sessionId;
+    console.log('- Has sessionId:', hasSessionId);
+
+    // Log the actual structure for debugging
+    if (state.outline) {
+      console.log('- Outline keys:', Object.keys(state.outline));
+      if (state.outline.chapters && state.outline.chapters.length > 0) {
+        console.log('- First chapter keys:', Object.keys(state.outline.chapters[0]));
+      }
+    }
+
+    if (state.requirements) {
+      console.log('- Requirements keys:', Object.keys(state.requirements));
+      if ((state.requirements as any).style) {
+        console.log('- Style keys:', Object.keys((state.requirements as any).style));
+      }
+    }
+
+    // Fixed validation logic - check for the correct field path
+    const isValid = !!(
       state.outline &&
       state.outline.chapters &&
       state.outline.chapters.length > 0 &&
       state.requirements &&
-      state.styleGuide &&
+      (state.styleGuide || state.requirements.styleGuide || (state.requirements as any).style) &&
       state.sessionId
     );
+
+    console.log('- Final validation result:', isValid);
+
+    return isValid;
   }
 
   /**
@@ -231,8 +282,8 @@ export class ChapterSpawningNode extends BaseWorkflowNode {
       const config: ChapterNodeConfig = {
         chapterNumber: chapter.chapterNumber || index + 1,
         title: chapter.title,
-        outline: chapter.outline,
-        objectives: chapter.objectives || [],
+        outline: chapter.contentOverview || chapter.outline || `Chapter ${index + 1} outline`,
+        objectives: chapter.keyObjectives || chapter.objectives || [],
         wordTarget: chapter.wordCount,
         dependencies: chapter.dependencies || [],
         sessionId,
@@ -407,7 +458,7 @@ export function validateChapterSpawningPrerequisites(state: WorkflowState): {
     errors.push('Missing book requirements');
   }
 
-  if (!state.styleGuide) {
+  if (!state.styleGuide && !state.requirements?.styleGuide) {
     errors.push('Missing style guide');
   }
 

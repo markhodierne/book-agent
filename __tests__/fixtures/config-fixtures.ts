@@ -9,9 +9,7 @@ import { EnvironmentConfig } from '@/types';
 export const mockEnvironmentConfig: EnvironmentConfig = {
   openai: {
     apiKey: 'test-openai-key',
-    model: 'gpt-5-mini-2025-08-07',
-    maxTokens: 4000,
-    temperature: 0.7,
+    model: 'gpt-5-2025-08-07',
   },
   supabase: {
     url: 'https://test-project.supabase.co',
@@ -50,7 +48,7 @@ export function createMockEnvVars(): Record<string, string> {
 export const mockInvalidEnvironmentConfig = {
   openai: {
     apiKey: '', // Invalid: empty
-    model: 'gpt-5-mini-2025-08-07',
+    model: 'gpt-5-2025-08-07',
   },
   supabase: {
     url: 'invalid-url', // Invalid: not a proper URL
