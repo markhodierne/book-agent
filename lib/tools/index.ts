@@ -45,6 +45,14 @@ export {
   type ChapterWriteParams,
 } from './chapterWriteTool';
 
+export {
+  planningStateTool,
+  PlanningStateOperations,
+  type PlanningOperation,
+  type PlanningStateParams,
+  type PlanningStateResult,
+} from './planningStateTool';
+
 // Tool initialization
 export {
   initializeTools,

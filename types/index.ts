@@ -30,6 +30,9 @@ export interface WorkflowState {
   chapters: ChapterResult[];
   currentChapter?: ChapterConfig;
 
+  // Planning Context (MVP Intelligent State Extension)
+  planningContext?: PlanningContext;
+
   // Progress & State
   progress: WorkflowProgress;
   error?: string;
@@ -54,6 +57,7 @@ export interface WorkflowState {
  * Workflow stage progression through book generation
  */
 export type WorkflowStage =
+  | 'planning'
   | 'conversation'
   | 'outline'
   | 'chapter_spawning'
@@ -84,6 +88,73 @@ export interface WorkflowProgress {
   totalChapters: number;
   estimatedTimeRemaining?: number; // seconds
 }
+
+// ============================================================================
+// INTELLIGENT PLANNING TYPES (MVP Extensions)
+// ============================================================================
+
+/**
+ * Planning context for adaptive strategy selection
+ * MVP scope: Basic planning and strategy fields only
+ */
+export interface PlanningContext {
+  // Content Analysis
+  complexity: ContentComplexity;
+  topicCategory: string;
+  estimatedWordCount: number;
+
+  // Execution Strategy
+  strategy: ExecutionStrategy;
+  approach: ContentApproach;
+  chapterCount: number;
+
+  // Resource Planning
+  estimatedDuration: number; // in minutes
+  researchIntensity: ResearchIntensity;
+
+  // Adaptation Triggers (basic)
+  adaptationTriggers: string[];
+
+  // Timestamps
+  createdAt: string;
+  lastUpdated: string;
+}
+
+/**
+ * Content complexity analysis for strategy selection
+ */
+export type ContentComplexity =
+  | 'simple'      // Basic topics, minimal research needed
+  | 'moderate'    // Standard topics, some research required
+  | 'complex'     // Advanced topics, extensive research needed
+  | 'expert';     // Highly specialized, domain expertise required
+
+/**
+ * Execution strategy for book generation
+ */
+export type ExecutionStrategy =
+  | 'sequential'  // Generate chapters one by one
+  | 'parallel'    // Generate multiple chapters simultaneously
+  | 'hybrid';     // Mix of sequential and parallel based on dependencies
+
+/**
+ * Content approach based on complexity and requirements
+ */
+export type ContentApproach =
+  | 'standard'          // Balanced approach for most topics
+  | 'research_heavy'    // Focus on external research and sources
+  | 'narrative_focused' // Emphasis on storytelling and flow
+  | 'technical_deep'    // Deep technical content with precision
+  | 'practical_guide';  // Step-by-step actionable guidance
+
+/**
+ * Research intensity level for content generation
+ */
+export type ResearchIntensity =
+  | 'minimal'     // Basic fact-checking only
+  | 'moderate'    // Standard research for most chapters
+  | 'extensive'   // Deep research for complex topics
+  | 'expert';     // Specialist-level research and validation
 
 // ============================================================================
 // BOOK CONTENT TYPES

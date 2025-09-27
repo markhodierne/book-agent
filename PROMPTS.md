@@ -37,7 +37,7 @@ Break the project down into manageable, atomic to-do tasks that:
 - Build on each other logically
 - Are small enough to complete in one session
 
-UPDATE `TO-DO.md` with:
+Create `TO-DO.md` with:
 
 1. Clear statements of each task in implementation order
 2. Clear dependencies between to-do tasks
@@ -64,7 +64,7 @@ Each to-do task should be numbered sequentially, and include:
 
 Then refresh your memory by checking `HISTORY.md`. Review the `ARCHITECTURE.md` and `FUNCTIONAL.md` to understand what we are building.
 
-We are working through `TO-DO.md` and are on task 19.
+We are working through `TO-DO.md` and are on task 2.
 
 **Before implementing anything:**
 
@@ -80,14 +80,21 @@ As you implement, explain:
 
 Now, here is the next task to complete:
 
-### 19. Set Up UI Library (shadcn/ui, or fallback components if faster)
-**Description**: Install and configure shadcn/ui component library
+#### **MVP Task 2: Create Basic Planning Agent Foundation** ⭐ CRITICAL
+**Description**: Build minimal GPT-5 Planning Agent for basic strategy selection
+**Dependencies**: MVP Task 1 (requires state schema extensions)
+**MVP Scope**: Simple complexity analysis only (defer advanced resource allocation)
 **Deliverables**:
-- shadcn/ui installation and configuration
-- Custom theme setup (New York style, neutral colors)
-- Base component customizations
-**Dependencies**: Task 1 ✅
-**Definition of Done**: Component library installed, theme applied, components render correctly
+- `PlanningAgent` class with GPT-5 mini integration
+- Basic complexity analysis functions (simple, moderate, complex)
+- Strategy selection logic (sequential vs parallel execution)
+- Planning state persistence to Supabase
+
+**Definition of Done**:
+- ✅ Planning agent can analyze user prompts and classify complexity
+- ✅ Agent generates execution strategies (sequential/parallel)
+- ✅ Planning state saves to database successfully
+- ✅ Basic unit tests pass for planning functions
 
 ```
 
