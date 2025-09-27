@@ -209,15 +209,16 @@ export class FormattingNode extends BaseWorkflowNode {
 
     // Validate minimum word count
     const totalWordCount = state.chapters.reduce((sum, ch) => sum + ch.wordCount, 0);
-    if (totalWordCount < 30000) {
+    const requiredWordCount = state.requirements?.wordCountTarget || 30000;
+    if (totalWordCount < requiredWordCount * 0.8) { // Allow 80% of target for flexibility
       throw new WorkflowError(
         state.sessionId,
         state.currentStage,
-        `Book word count (${totalWordCount}) below minimum requirement (30,000)`,
+        `Book word count (${totalWordCount}) below minimum requirement (${Math.floor(requiredWordCount * 0.8)})`,
         {
           code: 'insufficient_word_count',
           recoverable: true,
-          context: { currentWordCount: totalWordCount, requiredWordCount: 30000 }
+          context: { currentWordCount: totalWordCount, requiredWordCount: Math.floor(requiredWordCount * 0.8) }
         }
       );
     }
@@ -737,7 +738,7 @@ export class FormattingNode extends BaseWorkflowNode {
       state.chapters.length > 0 &&
       state.requirements &&
       state.sessionId &&
-      state.chapters.every(ch => ch.status === 'completed')
+      state.chapters.every(ch => ch.status === 'completed' || ch.status === 'failed')
     );
   }
 

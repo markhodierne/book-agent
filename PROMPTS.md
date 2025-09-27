@@ -37,10 +37,11 @@ Break the project down into manageable, atomic to-do tasks that:
 - Build on each other logically
 - Are small enough to complete in one session
 
-Generate `TO-DO.md` with:
+UPDATE `TO-DO.md` with:
 
-1. Clear dependencies between to-do tasks
-2. Explicit prerequisites listed
+1. Clear statements of each task in implementation order
+2. Clear dependencies between to-do tasks
+3. Explicit prerequisites listed
 
 Each to-do task should be numbered sequentially, and include:
 

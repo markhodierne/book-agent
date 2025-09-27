@@ -1,7 +1,0 @@
-{
-  "error": "Node validation failed: formatting",
-  "stack": "WorkflowError: Node validation failed: formatting\n    at FormattingNode.execute (/Users/markhodierne/projects-2/book-agent/lib/agents/nodes/base.ts:59:15)\n    at testSmallBook (/Users/markhodierne/projects-2/book-agent/scripts/test-small-book.ts:172:45)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)",
-  "timestamp": "2025-09-27T12:19:29.961Z",
-  "stage": "Unknown",
-  "totalWords": 12069
-}

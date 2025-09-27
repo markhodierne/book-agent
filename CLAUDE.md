@@ -1,4 +1,4 @@
-# CLAUDE.md - Book Agent Development Standards
+# CLAUDE.md - Book Agent Intelligent Development Standards
 
 ## Development Commands
 
@@ -18,9 +18,9 @@ This project strictly uses **pnpm**. Do not use npm or yarn.
 
 ### Core Framework
 - **Next.js 15** with App Router and TypeScript
-- **LangGraph** for workflow orchestration with **OpenAI Agents SDK** for GPT-5 mini calls
-- **OpenAI GPT-5 mini** with configurable parameters per agent
-- **Supabase** for PostgreSQL database, real-time subscriptions, file storage
+- **LangGraph** for intelligent workflow orchestration with **OpenAI Agents SDK** for GPT-5 mini calls
+- **OpenAI GPT-5 mini** with adaptive parameters, agent collaboration, and learning capabilities
+- **Supabase** for PostgreSQL database, real-time subscriptions, file storage, and learning data persistence
 
 ### State & UI
 - **Zustand** for client state management
@@ -31,51 +31,88 @@ This project strictly uses **pnpm**. Do not use npm or yarn.
 ### Specialized Libraries
 - **React-PDF** (@react-pdf/renderer) for document generation
 - **pdf-parse** for PDF text extraction
-- **Firecrawl** (@mendable/firecrawl-js) for web research
-- **DALL-E 3** (via OpenAI) for cover image generation
+- **Firecrawl** (@mendable/firecrawl-js) for adaptive web research
+- **DALL-E 3** (via OpenAI) for intelligent cover image generation
 
-## Architecture Principles
+## Intelligent Agentic Architecture Principles
 
-### 1. Hybrid Architecture
+### 1. Intelligent State-First Hybrid Architecture
 ```
 presentation/ → service/ → data/
      ↓           ↓         ↓
     UI      LangGraph   Supabase
             +    ↓
      OpenAI Agents SDK (GPT-5 mini)
+            +    ↓
+    Agent Communication & Learning
 ```
 
-**Hybrid Approach Benefits:**
-- **LangGraph**: Workflow orchestration, state management, node execution
-- **OpenAI Agents SDK**: GPT-5 mini calls with automatic parameter handling
-- **Best of Both**: Complex workflows + simplified AI model integration
+**Enhanced Hybrid Approach Benefits:**
+- **LangGraph**: Intelligent workflow orchestration with adaptive routing
+- **OpenAI Agents SDK**: GPT-5 mini calls with agent collaboration
+- **Agent Communication**: Real-time coordination and problem-solving
+- **Continuous Learning**: Performance improvement through experience
+- **Best of All**: Complex workflows + AI collaboration + adaptive intelligence
 
-### 2. Tool-Centric Design
-- All AI capabilities exposed as discrete tools
+### 2. Adaptive Planning & Strategy Selection
+- **Dynamic Workflow Planning**: Agents analyze requirements and create optimal strategies
+- **Resource Allocation**: Intelligent estimation of time, tokens, and quality thresholds
+- **Strategy Adaptation**: Real-time adjustment based on intermediate results
+- **Complexity-Aware Processing**: Adaptive approach selection based on content complexity
+
+### 3. Inter-Agent Collaboration & Communication
+- **Message-Based Communication**: Real-time agent-to-agent coordination
+- **Collaborative Problem-Solving**: Agents work together to resolve conflicts
+- **Specialized Agent Roles**: Coordinator, arbitrator, and specialist agents
+- **Knowledge Sharing**: Agents share insights, patterns, and learned strategies
+
+### 4. Dynamic Tool Selection & Intelligence
+- **Task-Aware Tool Recommendation**: Tools selected based on specific requirements
+- **Adaptive Tool Configuration**: Parameters optimized based on performance
+- **Performance Learning**: Tool effectiveness tracked and strategies learned
+- **Custom Tool Creation**: Dynamic tool generation for specialized requirements
+
+### 5. Continuous Learning & Self-Improvement
+- **Experience-Based Learning**: Agents learn from feedback and performance metrics
+- **Pattern Recognition**: Identification of successful strategies across content types
+- **Strategy Evolution**: Continuous improvement of planning and execution
+- **Knowledge Synthesis**: Aggregation of learning across projects and domains
+
+### 6. Enhanced Tool-Centric Design
+- All AI capabilities exposed as discrete, intelligent tools
 - Tools are reusable, testable, and independently maintainable
-- LangGraph nodes orchestrate tool usage, not business logic
+- LangGraph nodes orchestrate intelligent tool usage with learning
+- Tools adapt and improve through usage patterns and feedback
 
-### 3. Dynamic Parallel Execution
-- Single LangGraph that spawns N parallel chapter nodes
-- Shared state coordination through Supabase
-- Automatic dependency resolution between chapters
+### 7. Sequential Processing with State Persistence
+- Single LangGraph with sequential chapter processing for context management
+- Persistent state coordination through Supabase with learning storage
+- Agent communication and collaboration for dependency resolution
+- Chapter-by-chapter review and quality assurance with intelligence
 
 ## Project Structure
 
 ```
 app/                    # Next.js App Router
-├── api/workflow/       # LangGraph execution endpoints
-├── wizard/            # Multi-step UI pages
+├── api/workflow/       # LangGraph execution endpoints with adaptive routing
+├── wizard/            # Multi-step UI pages with intelligent planning
 components/
 ├── ui/                # shadcn/ui components
-├── wizard/            # Wizard step components
-├── chat/              # AI conversation interface
-├── dashboard/         # Progress monitoring
+├── wizard/            # Wizard step components with adaptive flows
+├── chat/              # AI conversation interface with learning
+├── dashboard/         # Progress monitoring with agent activity
+├── collaboration/     # Agent communication and coordination interfaces
 lib/
-├── agents/            # LangGraph workflow definitions
-├── tools/             # AI tool implementations
+├── agents/            # LangGraph workflow definitions with intelligence
+│   ├── planning/      # Adaptive planning and strategy selection
+│   ├── communication/ # Inter-agent collaboration framework
+│   ├── learning/      # Continuous learning and improvement
+│   └── nodes/         # Enhanced workflow nodes with state persistence
+├── tools/             # AI tool implementations with intelligence
+│   ├── orchestration/ # Dynamic tool selection and management
+│   └── supabase-state/# Enhanced state management with learning
 ├── state/             # Zustand stores and React Query hooks
-├── database/          # Supabase client and schema
+├── database/          # Supabase client, schema, and learning tables
 ```
 
 ## Coding Standards
@@ -85,6 +122,7 @@ lib/
 - **Utilities**: camelCase (`pdfExtractor.ts`)
 - **Constants**: SCREAMING_SNAKE_CASE (`API_ENDPOINTS.ts`)
 - **Directories**: kebab-case (`multi-step-wizard/`)
+- **Agent Files**: PascalCase with Agent suffix (`PlanningAgent.ts`)
 
 ### Import Organization
 ```typescript
@@ -92,16 +130,19 @@ lib/
 import { StateGraph } from '@langchain/langgraph';
 import { createClient } from '@supabase/supabase-js';
 
-// 2. Internal utilities
+// 2. Internal utilities and intelligent systems
 import { cn } from '@/lib/utils';
 import { retryConfig } from '@/lib/config';
+import { AgentCommunicationHub } from '@/lib/agents/communication';
+import { ToolOrchestrator } from '@/lib/tools/orchestration';
 
 // 3. Components
 import { Button } from '@/components/ui/button';
 import { ChatInterface } from '@/components/chat/ChatInterface';
+import { AgentMonitor } from '@/components/collaboration/AgentMonitor';
 
 // 4. Types
-import type { WorkflowState, ChapterConfig } from '@/types';
+import type { WorkflowState, ChapterConfig, AgentMessage, LearningExperience } from '@/types';
 ```
 
 ### TypeScript Guidelines
@@ -114,19 +155,32 @@ import type { WorkflowState, ChapterConfig } from '@/types';
 - **MVP Warning Status**: Current ESLint warnings in infrastructure code are acceptable during MVP phase; address during polish phase (Tasks 40+)
 
 ```typescript
-// ✅ Good
+// ✅ Good - Enhanced with intelligent agent interfaces
 interface BookRequirements {
   topic: string;
   audience: AudienceProfile;
   styleGuide: StylePreferences;
+  adaptivePlan?: AdaptivePlan;
+  learningContext?: LearningContext;
 }
 
-// ✅ Good
-async function generateChapter<T extends ChapterConfig>(
+interface AgentMessage {
+  id: string;
+  from: string;
+  to: string;
+  type: 'question' | 'feedback' | 'coordination' | 'clarification';
+  content: string;
+  context: MessageContext;
+  requiresResponse: boolean;
+}
+
+// ✅ Good - Intelligent agent function signatures
+async function generateChapterWithCollaboration<T extends ChapterConfig>(
   config: T,
-  state: WorkflowState
+  state: WorkflowState,
+  collaborationHub: AgentCommunicationHub
 ): Promise<ChapterResult> {
-  // implementation
+  // implementation with agent coordination
 }
 
 // ❌ Avoid
@@ -135,55 +189,84 @@ const bookData: any = {};
 
 ## Error Handling Standards
 
-### Tool Error Handling
+### Intelligent Tool Error Handling
 ```typescript
-import { executeWithToolContext, ToolError } from '@/lib/errors/exports';
+import { executeWithToolContext, ToolError, AgentCommunicationHub } from '@/lib/errors/exports';
 
-export async function createTool<P, R>(config: ToolConfig<P, R>) {
+export async function createIntelligentTool<P, R>(config: IntelligentToolConfig<P, R>) {
   return async (params: P): Promise<R> => {
     return executeWithToolContext(
       config.name,
       params,
-      () => config.execute(params),
+      async () => {
+        // Try primary execution
+        try {
+          return await config.execute(params);
+        } catch (error) {
+          // Attempt agent collaboration for problem-solving
+          if (config.allowCollaboration) {
+            const solution = await config.communicationHub.requestHelp(
+              config.name,
+              error.message,
+              params
+            );
+            if (solution) {
+              return await config.executeWithSolution(params, solution);
+            }
+          }
+          throw error;
+        }
+      },
       config.sessionId
     );
   };
 }
-
-// Alternative manual approach
-export async function manualToolExecution<P, R>(config: ToolConfig<P, R>) {
-  return async (params: P): Promise<R> => {
-    try {
-      return await withRetry(() => config.execute(params), config.retryConfig);
-    } catch (error) {
-      throw new ToolError(config.name, error.message, {
-        parameters: params,
-        cause: error instanceof Error ? error : undefined,
-      });
-    }
-  };
-}
 ```
 
-### LangGraph Error Recovery
+### Enhanced LangGraph Error Recovery with Learning
 ```typescript
-import { WorkflowErrorContext, WorkflowError } from '@/lib/errors/exports';
+import { WorkflowErrorContext, WorkflowError, AgentLearningSystem } from '@/lib/errors/exports';
 
-// Always implement node-level error handling with context
-async function chapterNode(state: WorkflowState): Promise<WorkflowState> {
+// Enhanced node-level error handling with learning and collaboration
+async function intelligentChapterNode(state: WorkflowState): Promise<WorkflowState> {
   const errorContext = new WorkflowErrorContext(state.sessionId, state.userId);
+  const learningSystem = new AgentLearningSystem();
 
   try {
     errorContext.updateStage(state.currentStage);
-    const result = await generateChapter(state.currentChapter);
+
+    // Load previous learning experiences
+    const learningHistory = await learningSystem.getRelevantExperiences(
+      'ChapterAgent',
+      'chapter_generation',
+      state.context
+    );
+
+    // Execute with learned optimizations
+    const result = await generateChapterWithLearning(state, learningHistory);
+
+    // Save successful execution for future learning
+    await learningSystem.recordSuccess(state.sessionId, 'chapter_generation', result);
+
     await saveCheckpoint(state.sessionId, { ...state, currentChapter: result });
     return { ...state, chapters: [...state.chapters, result] };
+
   } catch (error) {
+    // Record failure for learning
+    await learningSystem.recordFailure(state.sessionId, 'chapter_generation', error, state.context);
+
+    // Attempt agent collaboration for problem resolution
+    const collaborationResult = await attemptCollaborativeRecovery(error, state);
+    if (collaborationResult.success) {
+      return collaborationResult.state;
+    }
+
     const workflowError = error instanceof WorkflowError
       ? error
       : errorContext.createError(WorkflowError, error.message, {
           recoverable: true,
           cause: error instanceof Error ? error : undefined,
+          learningOpportunity: true
         });
 
     return {
@@ -191,426 +274,243 @@ async function chapterNode(state: WorkflowState): Promise<WorkflowState> {
       error: workflowError.message,
       needsRetry: workflowError.recoverable,
       lastError: workflowError,
+      learningContext: await learningSystem.extractLearningContext(error, state)
     };
+
   } finally {
     errorContext.cleanup();
   }
 }
 ```
 
-### Error Handling Best Practices
-
-**Import Pattern**:
+### Agent Communication Error Patterns
 ```typescript
-// ✅ Use barrel imports for error utilities
-import {
-  ToolError,
-  DatabaseError,
-  WorkflowError,
-  withRetry,
-  executeWithToolContext,
-  logger
-} from '@/lib/errors/exports';
-
-// ❌ Don't import individual files
-import { ToolError } from '@/lib/errors/index';
-```
-
-**Error Creation**:
-```typescript
-// ✅ Use static factory methods for common scenarios
-const timeoutError = ToolError.forTimeout('pdfExtract', 30000);
-const retryError = ToolError.forRetry('webResearch', 'Failed after retries', 3);
-
-// ✅ Include context for debugging
-throw new DatabaseError('insert', 'Constraint violation', {
-  table: 'chapters',
-  context: { bookId, chapterNumber },
-});
-```
-
-**Retry Configuration**:
-```typescript
-// ✅ Use operation-specific retry configs
-import { retryAPI, retryDatabase, retryChapterGeneration } from '@/lib/errors/exports';
-
-// API calls with network resilience
-const apiResult = await retryAPI(() => openai.createCompletion(params));
-
-// Database operations with connection handling
-const dbResult = await retryDatabase(() => supabase.from('books').insert(data));
-
-// Chapter generation with extended timeout
-const chapter = await retryChapterGeneration(() => generateChapterContent(config));
-```
-
-## Monitoring & Performance Standards
-
-### Metrics Collection
-```typescript
-import { applicationMetrics, timeOperation, timed } from '@/lib/monitoring/metrics';
-
-// ✅ Time operations automatically
-const result = await timeOperation(
-  applicationMetrics.workflowDuration,
-  () => executeWorkflow(config)
-);
-
-// ✅ Use decorator for method timing
-class WorkflowManager {
-  @timed(applicationMetrics.chapterGenerationTime)
-  async generateChapter(config: ChapterConfig): Promise<ChapterResult> {
-    // implementation
-  }
-}
-
-// ✅ Track counters and gauges
-applicationMetrics.workflowSuccess.inc();
-applicationMetrics.activeWorkflows.inc();
-```
-
-### Analytics & Event Tracking
-```typescript
-import { trackEvent, trackUserJourney, trackError } from '@/lib/monitoring/analytics';
-
-// ✅ Track user actions
-await trackEvent('workflow_started', {
-  sessionId,
-  wordCount: requirements.wordCountTarget,
-  chapterCount: outline.chapters.length
-});
-
-// ✅ Track user journey through wizard
-await trackUserJourney('wizard_step_completed', {
-  step: 'requirements',
-  completionTime: Date.now() - stepStartTime
-});
-
-// ✅ Track errors with context
-await trackError(error, {
-  operation: 'chapter_generation',
-  sessionId,
-  retryAttempt: attempt
-});
-```
-
-### Monitoring Best Practices
-
-**Performance Metrics**:
-```typescript
-// ✅ Use appropriate metric types
-const responseTime = metricsRegistry.createHistogram('api_response_time', 'API response time');
-const errorCount = metricsRegistry.createCounter('api_errors_total', 'Total API errors');
-const activeUsers = metricsRegistry.createGauge('active_users_count', 'Current active users');
-
-// ✅ Export for external monitoring
-const prometheusMetrics = metricsRegistry.exportPrometheusFormat();
-```
-
-**Event Analytics**:
-```typescript
-// ✅ Structure events consistently
-interface BaseEvent {
-  eventType: string;
-  timestamp: string;
-  sessionId?: string;
-  userId?: string;
-  context: Record<string, unknown>;
-}
-
-// ✅ Environment-aware configuration
-const analyticsConfig = {
-  enableConsoleLogging: process.env.NODE_ENV === 'development',
-  batchSize: process.env.NODE_ENV === 'production' ? 100 : 10,
-  flushInterval: process.env.NODE_ENV === 'production' ? 30000 : 5000
-};
-```
-
-**Type Safety for Monitoring**:
-```typescript
-// ✅ Proper array bounds checking
-const bucket = this.metric.buckets[i];
-if (bucket !== undefined && value <= bucket) {
-  const currentCount = this.metric.observations[i];
-  if (currentCount !== undefined) {
-    this.metric.observations[i] = currentCount + 1;
-  }
-}
-
-// ✅ Decorator typing with proper context
-const decoratedMethod = async function (this: unknown, ...args: Parameters<T>) {
-  const endTimer = histogram.startTimer();
+// ✅ Handle agent communication failures gracefully
+async function requestAgentHelp(
+  fromAgent: string,
+  toAgent: string,
+  problem: string,
+  context: any,
+  timeout: number = 30000
+): Promise<string | null> {
   try {
-    return await originalMethod.call(this, ...args);
-  } finally {
-    endTimer();
-  }
-};
-```
+    const response = await communicationHub.requestClarification(
+      fromAgent,
+      toAgent,
+      problem,
+      context
+    );
+    return response;
+  } catch (error) {
+    // Log communication failure but don't fail the entire workflow
+    logger.warn(`Agent communication failed: ${fromAgent} -> ${toAgent}`, {
+      error: error.message,
+      problem,
+      context
+    });
 
-## Database Conventions
-
-### Table Naming
-- **Singular nouns**: `book`, `chapter`, `workflow_state`
-- **Snake case**: `book_session`, `chapter_dependency`
-- **Descriptive**: `user_feedback` not `feedback`
-
-### Column Naming
-```sql
--- ✅ Good
-CREATE TABLE chapters (
-  id UUID PRIMARY KEY,
-  book_id UUID REFERENCES books(id),
-  chapter_number INTEGER NOT NULL,
-  word_count INTEGER,
-  status chapter_status_enum,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
--- ❌ Avoid generic names
-CREATE TABLE items (
-  id INTEGER,
-  data TEXT,
-  type VARCHAR(50)
-);
-```
-
-### Query Patterns
-```typescript
-// ✅ Use typed query builders
-const { data, error } = await supabase
-  .from('chapters')
-  .select('id, title, word_count, status')
-  .eq('book_id', bookId)
-  .order('chapter_number');
-
-// ✅ Handle errors explicitly
-if (error) {
-  throw new DatabaseError(`Failed to fetch chapters: ${error.message}`);
-}
-```
-
-## Component Standards
-
-### PDF Generation Standards
-```typescript
-// ✅ Use React.createElement for Node.js compatibility (avoid JSX in backend)
-import React from 'react';
-import { Document, Page, Text, View, StyleSheet, pdf } from '@react-pdf/renderer';
-
-// Create PDF components programmatically
-const pdfDocument = React.createElement(Document, {
-  title: outline.title,
-  author: requirements.author.name
-}, [
-  React.createElement(Page, { size: "A4", style: styles.page },
-    React.createElement(Text, { style: styles.title }, title)
-  )
-]);
-
-// ✅ Typography configuration based on style guide
-const typographyConfig = {
-  titleFont: 'Helvetica-Bold',
-  bodyFont: 'Helvetica',
-  titleSize: 24,
-  bodySize: 12,
-  lineHeight: 1.5,
-  margins: 72 // 1 inch
-};
-
-// ✅ Professional PDF structure
-// 1. Title page with author credentials
-// 2. Table of contents with page numbers
-// 3. Chapters with headers and page numbering
-// 4. Consistent typography throughout
-```
-
-### Tool Components
-```typescript
-// ✅ Use tool framework for all AI tools
-import { createTool, ToolFactory, toolRegistry } from '@/lib/tools';
-
-// Basic tool creation
-const pdfExtractTool = createTool({
-  name: 'pdf_extract',
-  description: 'Extract text content from PDF files',
-  execute: async (params: PdfExtractParams): Promise<string> => {
-    // implementation
-  },
-  validateParams: (params) => {
-    if (!Buffer.isBuffer(params.fileBuffer)) {
-      throw new Error('Valid file buffer required');
+    // Try alternative agents or fallback strategies
+    const alternatives = await findAlternativeAgents(toAgent, problem);
+    for (const altAgent of alternatives) {
+      try {
+        return await communicationHub.requestClarification(fromAgent, altAgent, problem, context);
+      } catch (altError) {
+        continue; // Try next alternative
+      }
     }
-  },
-});
 
-// Factory pattern for common tool types
-const apiTool = ToolFactory.createApiTool(
-  'web_research',
-  'Research topics using web scraping',
-  async (params) => await fetchWebData(params),
-  30000 // timeout
-);
-
-// Register tools for discovery
-toolRegistry.register(pdfExtractTool);
-```
-
-### GPT-5 Mini Integration Patterns
-```typescript
-// ✅ Use specialized agents for different tasks
-import { BookGenerationAgents } from '@/lib/agents/gpt5-wrapper';
-
-// Chapter content generation
-const chapterAgent = BookGenerationAgents.chapterWriter();
-const combinedPrompt = `${systemPrompt}\n\n${userPrompt}`;
-const response = await chapterAgent.execute(combinedPrompt);
-
-// Title generation with creative parameters
-const titleAgent = BookGenerationAgents.titleGenerator();
-const titles = await titleAgent.execute(titleGenerationPrompt);
-
-// Structure planning with high reasoning
-const structureAgent = BookGenerationAgents.structurePlanner();
-const outline = await structureAgent.execute(structurePlanningPrompt);
-
-// ✅ Task-specific parameter optimization
-const customAgent = createGPT5Agent({
-  name: 'Custom Task Agent',
-  instructions: 'Specialized instructions for this task...',
-  reasoning_effort: 'high',    // For complex analysis
-  verbosity: 'medium',         // Balanced output
-  temperature: 0.7,            // Consistency vs creativity
-  max_tokens: 4000,           // For longer content
-});
-
-// ✅ Content validation after generation
-const validation = validateContent(response.content, requirements);
-if (!validation.isValid) {
-  throw new ToolError('content_quality', validation.issues.join(', '));
+    return null; // No help available, continue with default approach
+  }
 }
 ```
 
-### React Components
+## Intelligent Agent Orchestration Standards
+
+### Enhanced LangGraph Node Implementation with Intelligence
 ```typescript
-// ✅ Consistent component interface
-interface WizardStepProps {
-  currentStep: number;
-  totalSteps: number;
-  onNext: (data: StepData) => void;
-  onPrevious: () => void;
-  initialData?: StepData;
-  isLoading?: boolean;
-}
-
-export function RequirementsStep({
-  onNext,
-  initialData,
-  isLoading = false
-}: WizardStepProps) {
-  // implementation
-}
-```
-
-## Workflow Orchestration Standards
-
-### LangGraph Node Implementation
-```typescript
-// ✅ Use BaseWorkflowNode pattern for all workflow nodes
+// ✅ Use BaseWorkflowNode pattern with intelligent capabilities
 import { BaseWorkflowNode } from '@/lib/agents/nodes/base';
+import { AgentCommunicationHub } from '@/lib/agents/communication';
+import { ToolOrchestrator } from '@/lib/tools/orchestration';
+import { AgentLearningSystem } from '@/lib/agents/learning';
 import { WorkflowState } from '@/types';
 
-class ConversationNode extends BaseWorkflowNode {
+class IntelligentConversationNode extends BaseWorkflowNode {
+  private communicationHub: AgentCommunicationHub;
+  private toolOrchestrator: ToolOrchestrator;
+  private learningSystem: AgentLearningSystem;
+
   constructor() {
-    super('conversation', 'Gather book requirements through guided conversation');
+    super('conversation', 'Gather book requirements through intelligent guided conversation');
+    this.communicationHub = new AgentCommunicationHub();
+    this.toolOrchestrator = new ToolOrchestrator();
+    this.learningSystem = new AgentLearningSystem();
   }
 
   protected async executeNode(state: WorkflowState): Promise<WorkflowState> {
-    // Update progress during execution
-    let progress = this.updateProgress(state, 30, 'Analyzing user prompt');
+    // Load adaptive plan for context-aware execution
+    const adaptivePlan = await this.loadAdaptivePlan(state);
 
-    // Perform node-specific work
-    const requirements = await gatherRequirements(state.userPrompt);
+    // Get improved instructions based on learning history
+    const enhancedInstructions = await this.learningSystem.getImprovedInstructions(
+      'ConversationAgent',
+      'requirements_gathering',
+      state.context
+    );
+
+    // Update progress with intelligent estimation
+    let progress = this.updateProgress(state, 30, 'Analyzing user prompt with adaptive planning');
+
+    // Select optimal tools for this specific conversation
+    const recommendedTools = await this.toolOrchestrator.recommendTools({
+      type: 'conversation',
+      complexity: adaptivePlan.complexity,
+      domain: state.userPrompt,
+      context: state.context
+    });
+
+    // Perform conversation with agent collaboration
+    const requirements = await this.gatherRequirementsWithCollaboration(
+      state.userPrompt,
+      adaptivePlan,
+      enhancedInstructions,
+      recommendedTools
+    );
+
+    // Learn from this execution
+    await this.learningSystem.recordExecution(
+      'ConversationAgent',
+      'requirements_gathering',
+      requirements,
+      state.context
+    );
 
     // ✅ Add data to state before transition (transitionToStage only accepts 3 params)
     const stateWithResults = {
       ...progress,
       requirements,
       baseContent: extractedContent,
+      adaptivePlan,
+      learningContext: await this.learningSystem.extractLearningContext(requirements, state)
     };
 
-    // Transition to next stage
-    return this.transitionToStage(stateWithResults, 'outline');
+    // Transition to next stage with intelligent routing
+    const nextStage = adaptivePlan.strategy === 'fast_track' ? 'chapter_spawning' : 'outline';
+    return this.transitionToStage(stateWithResults, nextStage);
   }
 
-  // Optional validation and recovery
+  // Enhanced validation with learning context
   validate(state: WorkflowState): boolean {
-    return !!state.userPrompt && state.userPrompt.length >= 3;
+    const basicValidation = !!state.userPrompt && state.userPrompt.length >= 3;
+
+    // Additional intelligent validation based on complexity
+    if (state.adaptivePlan?.complexity === 'expert') {
+      return basicValidation && state.userPrompt.length >= 50; // More detailed prompts for expert content
+    }
+
+    return basicValidation;
   }
-}
 
-// ✅ Multi-phase workflow pattern for complex generation
-class OutlineNode extends BaseWorkflowNode {
-  protected async executeNode(state: WorkflowState): Promise<WorkflowState> {
-    // Phase 1: Title generation
-    let progress = this.updateProgress(state, 20, 'Generating title options');
-    const titleOptions = await this.generateTitleOptions(requirements, errorContext);
+  // Intelligent recovery with collaboration
+  async recover(state: WorkflowState, error: WorkflowError): Promise<WorkflowState> {
+    // Try collaborative problem-solving first
+    const collaborationResult = await this.communicationHub.requestHelp(
+      'ConversationAgent',
+      'QualityArbitrator',
+      `Failed to gather requirements: ${error.message}`,
+      state.context
+    );
 
-    // Phase 2: Structure planning
-    progress = this.updateProgress(progress, 40, 'Planning chapter structure');
-    const structure = await this.planChapterStructure(requirements, titleOptions[0]);
+    if (collaborationResult) {
+      // Apply collaborative solution
+      return this.executeWithGuidance(state, collaborationResult);
+    }
 
-    // Phase 3: Detailed outlines
-    progress = this.updateProgress(progress, 70, 'Creating detailed outlines');
-    const outlines = await this.createDetailedOutlines(requirements, structure);
+    // Fallback to simplified approach with learning
+    const simplifiedPlan = await this.createSimplifiedPlan(state.adaptivePlan);
+    const recoveryState = { ...state, adaptivePlan: simplifiedPlan };
 
-    // Phase 4: Validation with pre-schema adjustment
-    progress = this.updateProgress(progress, 90, 'Validating outline');
-    const finalOutline = await this.validateAndFinalizeOutline(outline);
+    // Record learning opportunity
+    await this.learningSystem.recordRecovery('ConversationAgent', error, simplifiedPlan);
 
-    // Add data to state before transition
-    const stateWithResults = { ...progress, outline: finalOutline };
-    return this.transitionToStage(stateWithResults, 'chapter_spawning');
+    return this.executeNode(recoveryState);
   }
 }
 ```
 
-### StateGraph Configuration
+### Intelligent StateGraph Configuration with Adaptive Routing
 ```typescript
-// ✅ Use channel-based state management
-const stateGraphArgs: StateGraphArgs<BookWorkflowState> = {
+// ✅ Use channel-based state management with intelligence
+const intelligentStateGraphArgs: StateGraphArgs<BookWorkflowState> = {
   channels: {
     sessionId: {
       value: (prev?: string, next?: string) => next ?? prev ?? '',
       default: () => '',
     },
     currentStage: {
-      value: (prev?: WorkflowStage, next?: WorkflowStage) => next ?? prev ?? 'conversation',
-      default: () => 'conversation' as WorkflowStage,
+      value: (prev?: WorkflowStage, next?: WorkflowStage) => next ?? prev ?? 'planning',
+      default: () => 'planning' as WorkflowStage,
+    },
+    adaptivePlan: {
+      value: (prev?: AdaptivePlan, next?: AdaptivePlan) => next ?? prev,
+      default: () => undefined,
+    },
+    learningContext: {
+      value: (prev?: LearningContext, next?: LearningContext) => next ?? prev,
+      default: () => ({}),
+    },
+    communicationLog: {
+      value: (prev?: AgentMessage[], next?: AgentMessage[]) => next ?? prev ?? [],
+      default: () => [],
     },
     // ... other channels
   },
 };
 
-export const bookWorkflowGraph = new StateGraph<BookWorkflowState>(stateGraphArgs);
+export const intelligentBookWorkflowGraph = new StateGraph<BookWorkflowState>(intelligentStateGraphArgs);
+
+// Add adaptive routing logic
+intelligentBookWorkflowGraph.addConditionalEdges(
+  'planning',
+  (state: BookWorkflowState) => {
+    if (state.adaptivePlan?.strategy === 'minimal_viable') {
+      return 'chapter_spawning'; // Skip detailed conversation and outline
+    }
+    return 'conversation';
+  }
+);
+
+intelligentBookWorkflowGraph.addConditionalEdges(
+  'chapter_generation',
+  (state: BookWorkflowState) => {
+    if (state.adaptivePlan?.reviewCycles > 1) {
+      return 'chapter_review';
+    }
+    return 'markdown_assembly'; // Skip review for simple content
+  }
+);
 ```
 
-### Dynamic Parallel Execution
+### Dynamic Agent Collaboration
 ```typescript
-// ✅ Create parallel nodes dynamically based on outline
-export async function createParallelChapterNodes(
+// ✅ Create collaborative chapter generation with intelligence
+export async function createCollaborativeChapterGeneration(
   graph: StateGraph<BookWorkflowState>,
-  chapterConfigs: ChapterConfig[]
+  chapterConfigs: ChapterConfig[],
+  communicationHub: AgentCommunicationHub
 ): Promise<string[]> {
   const chapterNodeIds: string[] = [];
 
   for (const config of chapterConfigs) {
     const nodeId = `chapter_${config.chapterNumber}`;
-    const chapterNode = createChapterNode(config);
+
+    // Create intelligent chapter node with collaboration capabilities
+    const chapterNode = createIntelligentChapterNode(config, communicationHub);
 
     graph.addNode(nodeId, async (state: BookWorkflowState) => {
-      return await executeNodeWithContext(nodeId, state,
-        async (s: BookWorkflowState) => await chapterNode.execute(s)
+      return await executeNodeWithCollaboration(nodeId, state,
+        async (s: BookWorkflowState) => await chapterNode.execute(s),
+        communicationHub
       ) as Partial<BookWorkflowState>;
     });
 
@@ -621,299 +521,437 @@ export async function createParallelChapterNodes(
 }
 ```
 
-### Checkpoint and Recovery
+### Enhanced Checkpoint and Recovery with Learning
 ```typescript
-// ✅ Use automatic checkpointing for workflow recovery
-export async function executeNodeWithContext<T>(
+// ✅ Use intelligent checkpointing with learning integration
+export async function executeNodeWithIntelligence<T>(
   nodeName: string,
   state: BookWorkflowState,
-  nodeFunction: (state: BookWorkflowState) => Promise<T>
+  nodeFunction: (state: BookWorkflowState) => Promise<T>,
+  learningSystem: AgentLearningSystem,
+  communicationHub: AgentCommunicationHub
 ): Promise<T> {
   try {
-    const result = await nodeFunction(state);
+    // Load relevant learning experiences
+    const learningHistory = await learningSystem.getRelevantExperiences(
+      nodeName,
+      state.currentStage,
+      state.context
+    );
 
-    // Save checkpoint after successful execution
-    await saveCheckpoint(state.sessionId, {
+    // Execute with learned optimizations
+    const result = await nodeFunction({
+      ...state,
+      learningHistory,
+      enhancedCapabilities: true
+    });
+
+    // Save checkpoint with learning metadata
+    await saveIntelligentCheckpoint(state.sessionId, {
       ...state,
       updatedAt: new Date().toISOString(),
+      lastSuccessfulNode: nodeName,
+      learningMetadata: await learningSystem.extractSuccessMetadata(result)
     });
+
+    // Record successful execution for learning
+    await learningSystem.recordSuccess(state.sessionId, nodeName, result, state.context);
 
     return result;
+
   } catch (error) {
-    // Handle errors with context
-    throw workflowError;
-  }
-}
-```
-
-### Error Recovery Pattern
-```typescript
-// ✅ Implement three-tier recovery: retry → reduce complexity → fail
-async recover(state: WorkflowState, error: WorkflowError): Promise<WorkflowState> {
-  const retryState = { ...state, retryCount: (state.retryCount || 0) + 1 };
-
-  if (retryState.retryCount > 2) {
-    throw new WorkflowError(
-      state.sessionId,
-      state.currentStage,
-      `Maximum retries exceeded for ${this.name}`,
-      {
-        code: 'max_retries_exceeded',
-        recoverable: false,
-        context: { nodeName: this.name },
-      }
+    // Attempt collaborative problem-solving
+    const collaborationResult = await communicationHub.requestProblemSolving(
+      nodeName,
+      error.message,
+      state.context
     );
-  }
 
-  // Reduce complexity for retry
-  const recoveryConfig = {
-    ...this.config,
-    wordTarget: Math.max(1000, this.config.wordTarget * 0.8),
-  };
+    if (collaborationResult.success) {
+      // Retry with collaborative guidance
+      const guidedResult = await nodeFunction({
+        ...state,
+        collaborativeGuidance: collaborationResult.guidance
+      });
 
-  return this.executeWithReducedComplexity(retryState, recoveryConfig);
-}
-```
+      // Record collaborative success
+      await learningSystem.recordCollaborativeSuccess(
+        state.sessionId,
+        nodeName,
+        guidedResult,
+        collaborationResult
+      );
 
-### WorkflowError Constructor Pattern
-```typescript
-// ✅ Use proper WorkflowError constructor parameters: sessionId, stage, message, options
-throw new WorkflowError(
-  state.sessionId,
-  state.currentStage,
-  'Description of what went wrong',
-  {
-    code: 'error_type',
-    recoverable: true,
-    context: {
-      nodeName: this.name,
-      additionalContext: value,
-    },
-  }
-);
-
-// ❌ Avoid incorrect parameter order
-throw new WorkflowError('error_code', 'message', { context });
-```
-
-### Content Validation and Adjustment
-```typescript
-// ✅ Pre-validation adjustment pattern for schema compliance
-private async validateAndFinalizeOutline(outline: BookOutline): Promise<BookOutline> {
-  try {
-    // Business logic validation BEFORE schema validation
-    const adjustedOutline = { ...outline };
-
-    // Adjust word counts if below minimum (prevents schema validation failures)
-    if (adjustedOutline.totalWordCount < 30000) {
-      const multiplier = 30000 / adjustedOutline.totalWordCount;
-      adjustedOutline.chapters = adjustedOutline.chapters.map(chapter => ({
-        ...chapter,
-        wordCount: Math.ceil(chapter.wordCount * multiplier),
-      }));
-      adjustedOutline.totalWordCount = adjustedOutline.chapters.reduce((sum, ch) => sum + ch.wordCount, 0);
+      return guidedResult;
     }
 
-    // Schema validation after business logic adjustment
-    const validatedOutline = BookOutlineSchema.parse(adjustedOutline);
-
-    // Custom validation (dependencies, circular references, etc.)
-    this.validateDependencies(validatedOutline.chapters);
-
-    return validatedOutline;
-  } catch (error) {
-    throw new WorkflowError('outline_validation_failed', 'Generated outline failed validation', {
-      recoverable: true,
-      cause: error instanceof Error ? error : undefined,
-    });
+    // Record failure for learning and re-throw
+    await learningSystem.recordFailure(state.sessionId, nodeName, error, state.context);
+    throw error;
   }
 }
+```
+
+## Enhanced Component Standards
+
+### Intelligent PDF Generation with Learning
+```typescript
+// ✅ Use React.createElement with adaptive formatting based on learned preferences
+import React from 'react';
+import { Document, Page, Text, View, StyleSheet, pdf } from '@react-pdf/renderer';
+
+// Create intelligent PDF components with learned user preferences
+const createIntelligentPDFDocument = (
+  outline: BookOutline,
+  requirements: BookRequirements,
+  learningContext: LearningContext
+) => {
+  // Adapt typography based on learned user preferences
+  const adaptiveTypography = adaptTypographyFromLearning(
+    requirements.styleGuide,
+    learningContext.userPreferences
+  );
+
+  return React.createElement(Document, {
+    title: outline.title,
+    author: requirements.author.name,
+    creator: 'Book Agent - Intelligent PDF Generation'
+  }, [
+    React.createElement(Page, {
+      size: "A4",
+      style: adaptiveTypography.pageStyle
+    }, [
+      React.createElement(Text, {
+        style: adaptiveTypography.titleStyle
+      }, outline.title),
+      React.createElement(Text, {
+        style: adaptiveTypography.subtitleStyle
+      }, outline.subtitle || '')
+    ])
+  ]);
+};
+
+// ✅ Intelligent typography configuration with learning adaptation
+const adaptTypographyFromLearning = (
+  styleGuide: StyleGuide,
+  userPreferences: UserPreferences
+) => {
+  const baseConfig = {
+    titleFont: 'Helvetica-Bold',
+    bodyFont: 'Helvetica',
+    titleSize: 24,
+    bodySize: 12,
+    lineHeight: 1.5,
+    margins: 72 // 1 inch
+  };
+
+  // Adapt based on learned preferences
+  if (userPreferences.typography?.preferSansSerif) {
+    baseConfig.bodyFont = 'Helvetica';
+  } else if (userPreferences.typography?.preferSerif) {
+    baseConfig.bodyFont = 'Times-Roman';
+  }
+
+  // Adjust sizing based on feedback patterns
+  if (userPreferences.feedback?.textTooSmall) {
+    baseConfig.bodySize += 1;
+    baseConfig.titleSize += 2;
+  }
+
+  return baseConfig;
+};
+```
+
+### Intelligent Tool Components with Dynamic Selection
+```typescript
+// ✅ Use intelligent tool framework with adaptive selection
+import { createTool, ToolFactory, toolRegistry, ToolOrchestrator } from '@/lib/tools';
+
+// Enhanced tool creation with learning capabilities
+const intelligentPdfExtractTool = createTool({
+  name: 'intelligent_pdf_extract',
+  description: 'Extract text content from PDF files with adaptive processing',
+  execute: async (params: PdfExtractParams): Promise<string> => {
+    // Select optimal extraction strategy based on PDF characteristics
+    const strategy = await selectExtractionStrategy(params.fileBuffer);
+
+    // Execute with adaptive parameters
+    return await executeWithStrategy(params, strategy);
+  },
+  validateParams: (params) => {
+    if (!Buffer.isBuffer(params.fileBuffer)) {
+      throw new Error('Valid file buffer required');
+    }
+  },
+  learningCapabilities: {
+    trackPerformance: true,
+    adaptParameters: true,
+    shareInsights: true
+  }
+});
+
+// Intelligent tool orchestration for chapter generation
+const createIntelligentChapterWriter = (
+  taskDescription: TaskDescription,
+  orchestrator: ToolOrchestrator
+) => {
+  return ToolFactory.createAdaptiveTool(
+    'intelligent_chapter_writer',
+    'Generate chapters with intelligent tool selection and collaboration',
+    async (params) => {
+      // Get optimal tool recommendations
+      const recommendedTools = await orchestrator.recommendTools(taskDescription);
+
+      // Execute with dynamic tool selection
+      return await generateChapterWithOptimalTools(params, recommendedTools);
+    },
+    {
+      timeout: 300000, // 5 minutes
+      retryConfig: 'intelligent', // Use learning-based retry strategy
+      collaborationEnabled: true,
+      learningEnabled: true
+    }
+  );
+};
+```
+
+### Enhanced GPT-5 Mini Integration with Agent Collaboration
+```typescript
+// ✅ Use collaborative agents for enhanced task execution
+import { BookGenerationAgents, CollaborativeAgents } from '@/lib/agents/gpt5-wrapper';
+
+// Intelligent chapter content generation with collaboration
+const generateChapterWithCollaboration = async (
+  chapterConfig: ChapterConfig,
+  state: WorkflowState,
+  communicationHub: AgentCommunicationHub
+) => {
+  // Primary chapter generation
+  const chapterAgent = BookGenerationAgents.chapterWriter();
+  const primaryContent = await chapterAgent.execute(buildChapterPrompt(chapterConfig, state));
+
+  // Request coordination for cross-chapter consistency
+  const coordinationGuidance = await communicationHub.requestClarification(
+    'ChapterAgent',
+    'ChapterCoordinator',
+    `Review chapter ${chapterConfig.chapterNumber} for consistency with previous chapters`,
+    { chapterContent: primaryContent, chapterConfig }
+  );
+
+  // Apply coordination feedback
+  const refinedContent = await applyCoordinationGuidance(primaryContent, coordinationGuidance);
+
+  // Validate content quality with arbitrator if needed
+  const qualityScore = await assessContentQuality(refinedContent, chapterConfig);
+  if (qualityScore < 0.8) {
+    const qualityGuidance = await communicationHub.requestClarification(
+      'ChapterAgent',
+      'QualityArbitrator',
+      `Chapter ${chapterConfig.chapterNumber} quality score is ${qualityScore}. How can it be improved?`,
+      { content: refinedContent, qualityScore, requirements: state.requirements }
+    );
+
+    return await improveContentWithGuidance(refinedContent, qualityGuidance);
+  }
+
+  return refinedContent;
+};
+
+// ✅ Task-specific parameter optimization with learning
+const createLearningOptimizedAgent = (
+  agentType: string,
+  taskHistory: LearningExperience[],
+  context: TaskContext
+) => {
+  // Analyze successful patterns from history
+  const optimalParameters = analyzeOptimalParameters(taskHistory, context);
+
+  return createGPT5Agent({
+    name: `Learning-Optimized ${agentType}`,
+    instructions: generateOptimizedInstructions(agentType, taskHistory, context),
+    reasoning_effort: optimalParameters.reasoningEffort,
+    verbosity: optimalParameters.verbosity,
+    temperature: optimalParameters.temperature,
+    max_tokens: optimalParameters.maxTokens,
+    learningContext: {
+      previousExperiences: taskHistory,
+      optimizationApplied: true,
+      performanceTargets: optimalParameters.targets
+    }
+  });
+};
+
+// ✅ Content validation with collaborative feedback
+const validateContentWithCollaboration = async (
+  content: string,
+  requirements: BookRequirements,
+  communicationHub: AgentCommunicationHub
+) => {
+  const validation = validateContent(content, requirements);
+
+  if (!validation.isValid) {
+    // Request collaborative problem-solving
+    const solution = await communicationHub.requestProblemSolving(
+      'ContentValidator',
+      `Content validation failed: ${validation.issues.join(', ')}`,
+      { content, requirements, validationResults: validation }
+    );
+
+    if (solution.success) {
+      const improvedContent = await applyCollaborativeSolution(content, solution);
+      return validateContent(improvedContent, requirements);
+    }
+
+    throw new ToolError('content_quality', validation.issues.join(', '));
+  }
+
+  return validation;
+};
 ```
 
 ## Testing Standards
 
-### Test File Organization
+### Intelligent Test File Organization
 ```
 __tests__/
-├── tools/             # Tool unit tests
-├── agents/            # LangGraph workflow tests
+├── agents/            # Intelligent agent workflow tests
+│   ├── planning/      # Adaptive planning tests
+│   ├── communication/ # Agent collaboration tests
+│   ├── learning/      # Learning system tests
+│   └── nodes/         # Enhanced workflow node tests
+├── tools/             # Intelligent tool unit tests
 ├── components/        # React component tests
 ├── e2e/              # Playwright end-to-end tests
-├── fixtures/         # Test data and mocks
+├── fixtures/         # Test data and intelligent mocks
+│   ├── learning/      # Learning experience fixtures
+│   ├── communication/# Agent message fixtures
+│   └── adaptive/      # Adaptive plan fixtures
 ```
 
-### Test Naming
+### Enhanced Test Naming with Intelligence Context
 ```typescript
-// ✅ Descriptive test names
-describe('pdfExtractTool', () => {
-  it('extracts text from valid PDF file', async () => {});
-  it('throws error for corrupted PDF file', async () => {});
-  it('respects extraction options for formatting', async () => {});
+// ✅ Descriptive test names with intelligent context
+describe('IntelligentPdfExtractTool', () => {
+  it('adapts extraction strategy based on PDF complexity', async () => {});
+  it('learns from extraction performance and improves accuracy', async () => {});
+  it('collaborates with other agents when extraction fails', async () => {});
+  it('respects learned user preferences for formatting', async () => {});
 });
 
-describe('Book Creation Workflow', () => {
-  it('completes successfully with minimal user input', async () => {});
-  it('recovers from chapter generation failure', async () => {});
-  it('generates book meeting minimum word count', async () => {});
+describe('Collaborative Book Creation Workflow', () => {
+  it('completes successfully with adaptive planning and agent coordination', async () => {});
+  it('recovers from failures through agent collaboration', async () => {});
+  it('learns from user feedback and improves subsequent generations', async () => {});
+  it('adapts strategy based on content complexity analysis', async () => {});
+  it('maintains quality through intelligent agent arbitration', async () => {});
+});
+
+describe('Agent Learning System', () => {
+  it('captures performance patterns and improves agent instructions', async () => {});
+  it('shares knowledge effectively between specialized agents', async () => {});
+  it('adapts workflow strategies based on historical success rates', async () => {});
 });
 ```
 
-## Environment Configuration
+## Security Requirements
 
-### Required Variables
-```bash
-# .env.local
-OPENAI_API_KEY=sk-...
-SUPABASE_URL=https://....supabase.co
-SUPABASE_ANON_KEY=eyJ...
-FIRECRAWL_API_KEY=fc-...
-NODE_ENV=development
-```
-
-### Environment Validation
+### Enhanced Input Validation with Intelligence
 ```typescript
-// Always validate on startup
-const requiredEnvVars = [
-  'OPENAI_API_KEY',
-  'SUPABASE_URL',
-  'SUPABASE_ANON_KEY',
-  'FIRECRAWL_API_KEY'
-] as const;
+// ✅ Validate all inputs with intelligent threat detection
+const IntelligentBookPromptSchema = z.object({
+  prompt: z.string().min(3).max(1000),
+  pdfFile: z.instanceof(File).optional(),
+  author: z.string().min(1).max(100),
+  adaptivePlan: AdaptivePlanSchema.optional(),
+  learningPreferences: UserPreferencesSchema.optional()
+});
 
-export function validateEnvironment(): void {
-  for (const envVar of requiredEnvVars) {
-    if (!process.env[envVar]) {
-      throw new Error(`Missing required environment variable: ${envVar}`);
-    }
+export async function validateIntelligentBookRequest(input: unknown) {
+  const validated = IntelligentBookPromptSchema.parse(input);
+
+  // Additional intelligent validation
+  const threatAnalysis = await analyzePotentialThreats(validated);
+  if (threatAnalysis.risk > 0.7) {
+    throw new SecurityError('High-risk input detected', { threatAnalysis });
   }
+
+  return validated;
 }
 ```
 
-## Code Quality Configuration
+### Secure Agent Communication
+```typescript
+// ✅ Secure agent message validation and encryption
+export async function validateAgentMessage(message: AgentMessage): Promise<void> {
+  // Validate message structure
+  AgentMessageSchema.parse(message);
 
-### ESLint Setup
-```javascript
-// eslint.config.mjs - Modern flat config
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+  // Verify agent authorization
+  await verifyAgentAuthorization(message.from, message.to);
 
-const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
-  {
-    rules: {
-      "@typescript-eslint/no-unused-vars": "warn",
-      "@typescript-eslint/no-explicit-any": "warn",
-      "prefer-const": "error",
-      "no-var": "error"
-    }
+  // Scan for sensitive information
+  const sensitivityAnalysis = await analyzeSensitivity(message.content);
+  if (sensitivityAnalysis.containsSensitiveData) {
+    message.content = await redactSensitiveInformation(message.content);
   }
-];
-```
 
-### Prettier Setup
-```json
-{
-  "semi": true,
-  "trailingComma": "es5",
-  "singleQuote": true,
-  "printWidth": 80,
-  "tabWidth": 2,
-  "useTabs": false
+  // Encrypt if required
+  if (message.context.requiresEncryption) {
+    message.content = await encryptMessage(message.content);
+  }
 }
-```
-
-## Git Commit Standards
-
-### Commit Message Format
-```
-type(scope): brief description
-
-Detailed explanation if needed
-
-- Bullet points for multiple changes
-- Reference issues: Fixes #123
-```
-
-### Commit Types
-- **feat**: New feature implementation
-- **fix**: Bug fix or error correction
-- **refactor**: Code restructuring without feature changes
-- **test**: Adding or updating tests
-- **docs**: Documentation updates
-- **chore**: Build process, dependency updates
-
-### Examples
-```
-feat(agents): implement parallel chapter generation with LangGraph
-
-- Add dynamic node creation for variable chapter count
-- Implement shared state coordination via Supabase
-- Add retry logic for chapter generation failures
-
-Fixes #45
 ```
 
 ## Performance Guidelines
 
-### LangGraph Optimization
+### Intelligent LangGraph Optimization
 ```typescript
-// ✅ Efficient parallel execution
-const chapterPromises = chapterConfigs.map(config =>
-  graph.invokeNode(`chapter_${config.number}`, {
-    ...state,
-    currentChapter: config
-  })
-);
-const results = await Promise.all(chapterPromises);
+// ✅ Efficient sequential execution with intelligent batching
+const processChaptersWithIntelligence = async (
+  chapterConfigs: ChapterConfig[],
+  state: WorkflowState,
+  learningSystem: AgentLearningSystem
+) => {
+  // Group chapters by complexity and dependencies for optimal processing
+  const processingGroups = await learningSystem.optimizeProcessingOrder(chapterConfigs);
 
-// ❌ Avoid sequential execution
+  const results = [];
+  for (const group of processingGroups) {
+    // Process group with intelligent parallelization when safe
+    const groupResults = await Promise.all(
+      group.map(config => generateChapterWithOptimization(config, state))
+    );
+    results.push(...groupResults);
+  }
+
+  return results;
+};
+
+// ❌ Avoid naive sequential execution without intelligence
 for (const config of chapterConfigs) {
   await graph.invokeNode(`chapter_${config.number}`, state);
 }
 ```
 
-### React Query Optimization
+### Enhanced React Query Optimization with Learning
 ```typescript
-// ✅ Strategic caching
-export const useChapterProgress = (sessionId: string) => {
+// ✅ Strategic caching with intelligent invalidation
+export const useIntelligentChapterProgress = (sessionId: string) => {
   return useQuery({
     queryKey: ['chapters', sessionId],
-    queryFn: () => fetchChapterProgress(sessionId),
+    queryFn: () => fetchChapterProgressWithLearning(sessionId),
     staleTime: 30 * 1000,        // 30 seconds
     refetchInterval: 5 * 1000,   // 5 second polling
-    enabled: !!sessionId
+    enabled: !!sessionId,
+    // Intelligent cache invalidation based on agent activity
+    onSuccess: (data) => {
+      if (data.agentActivity?.highActivity) {
+        // Reduce cache time during high agent activity
+        return { staleTime: 10 * 1000 };
+      }
+    }
   });
 };
 ```
 
-## Security Requirements
-
-### Input Validation
-```typescript
-// ✅ Validate all user inputs
-const BookPromptSchema = z.object({
-  prompt: z.string().min(3).max(1000),
-  pdfFile: z.instanceof(File).optional(),
-  author: z.string().min(1).max(100)
-});
-
-export async function validateBookRequest(input: unknown) {
-  return BookPromptSchema.parse(input);
-}
-```
-
-### File Upload Security
-```typescript
-// ✅ Secure PDF processing
-export async function processPdfUpload(file: File): Promise<string> {
-  // Validate file type and size
-  validatePdfFile(file);
-
-  // Scan for malware
-  await scanFileForThreats(file);
-
-  // Extract text safely
-  return await extractPdfText(file);
-}
-```
+This enhanced CLAUDE.md specification transforms the Book Agent development standards to support intelligent agentic design with adaptive planning, inter-agent collaboration, dynamic tool selection, and continuous learning capabilities while maintaining excellent code quality and production readiness.

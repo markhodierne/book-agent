@@ -33,7 +33,7 @@ const BookRequirementsSchema = z.object({
   audience: z.object({
     demographics: z.string(),
     expertiseLevel: z.enum(['beginner', 'intermediate', 'advanced', 'mixed']),
-    ageGroup: z.string().optional(),
+    ageRange: z.string().optional(),
     context: z.enum(['professional', 'academic', 'casual', 'mixed']),
   }),
   author: z.object({
@@ -41,15 +41,16 @@ const BookRequirementsSchema = z.object({
     credentials: z.string().optional(),
     background: z.string().optional(),
   }),
-  style: z.object({
-    tone: z.string(),
-    voice: z.string(),
-    perspective: z.enum(['first-person', 'second-person', 'third-person']),
-    formality: z.enum(['formal', 'informal', 'mixed']),
-    technicalLevel: z.enum(['basic', 'intermediate', 'advanced']),
+  scope: z.object({
+    purpose: z.enum(['educational', 'reference', 'entertainment', 'professional', 'academic']),
+    approach: z.enum(['practical', 'theoretical', 'mixed']),
+    coverageDepth: z.enum(['comprehensive', 'focused', 'survey']),
   }),
-  approach: z.enum(['practical', 'theoretical', 'mixed']),
-  focus: z.enum(['comprehensive', 'focused', 'survey']),
+  contentOrientation: z.object({
+    primaryAngle: z.string(),
+    secondaryAngles: z.array(z.string()),
+    engagementStrategy: z.enum(['step-by-step', 'case-study', 'problem-solving', 'storytelling', 'reference']),
+  }),
   wordCountTarget: z.number().min(30000).max(150000),
 });
 
@@ -117,10 +118,17 @@ export class ConversationNode extends BaseWorkflowNode {
       // Update progress and transition to next stage
       const updatedState = this.updateProgress(state, 100, 'Requirements gathering completed');
 
+      // Extract style guide from requirements
+      const styleGuide = this.conversationState.collectedData.style;
+
+      // Remove style from requirements since it belongs in styleGuide field
+      const { style: _style, ...requirementsWithoutStyle } = requirements as any;
+
       // Add conversation results to state
       const stateWithResults = {
         ...updatedState,
-        requirements,
+        requirements: requirementsWithoutStyle,
+        styleGuide,
         baseContent,
         conversationHistory: this.conversationState.conversationHistory,
       };
@@ -316,13 +324,13 @@ Keep it simple and optional beyond the name. Be encouraging about their expertis
 Here are the style samples:
 
 **Style Option 1: Professional & Direct**
-${styleOptions[0].description}
+${styleOptions[0].exampleUsage}
 
 **Style Option 2: Conversational & Engaging**
-${styleOptions[1].description}
+${styleOptions[1].exampleUsage}
 
 **Style Option 3: Academic & Comprehensive**
-${styleOptions[2].description}
+${styleOptions[2].exampleUsage}
 
 Ask the user to select their preferred style or request modifications.`;
 
@@ -383,28 +391,28 @@ Summarize the planned book approach for final confirmation.`;
   private async generateStyleSamples(): Promise<StyleGuide[]> {
     return [
       {
-        tone: 'Professional and authoritative',
-        voice: 'Expert practitioner sharing proven methods',
-        perspective: 'third-person' as const,
-        formality: 'formal' as const,
-        technicalLevel: 'intermediate' as const,
-        description: 'Clear, direct communication with professional terminology. Focuses on established practices and proven methodologies. Uses evidence-based recommendations and structured presentations.',
+        tone: 'professional',
+        voice: 'active',
+        perspective: 'third_person',
+        formality: 'formal',
+        technicalLevel: 'semi_technical',
+        exampleUsage: 'Clear, direct communication with professional terminology. Focuses on established practices and proven methodologies. Uses evidence-based recommendations and structured presentations. This approach maintains authority while remaining accessible.',
       },
       {
-        tone: 'Conversational and engaging',
-        voice: 'Knowledgeable guide walking alongside the reader',
-        perspective: 'second-person' as const,
-        formality: 'informal' as const,
-        technicalLevel: 'intermediate' as const,
-        description: 'Friendly, approachable tone that makes complex topics accessible. Uses examples, analogies, and direct address to the reader. Balances expertise with relatability.',
+        tone: 'conversational',
+        voice: 'active',
+        perspective: 'second_person',
+        formality: 'casual',
+        technicalLevel: 'semi_technical',
+        exampleUsage: 'Friendly, approachable tone that makes complex topics accessible. Uses examples, analogies, and direct address to the reader. Balances expertise with relatability. You will find this style engaging and easy to follow.',
       },
       {
-        tone: 'Academic and comprehensive',
-        voice: 'Thorough researcher presenting complete analysis',
-        perspective: 'third-person' as const,
-        formality: 'formal' as const,
-        technicalLevel: 'advanced' as const,
-        description: 'Systematic, detailed exploration of all aspects. Includes theoretical foundations, research citations, and comprehensive coverage. Assumes reader wants deep understanding.',
+        tone: 'academic',
+        voice: 'mixed',
+        perspective: 'third_person',
+        formality: 'formal',
+        technicalLevel: 'technical',
+        exampleUsage: 'Systematic, detailed exploration of all aspects. Includes theoretical foundations, research citations, and comprehensive coverage. Assumes reader wants deep understanding of underlying principles and methodologies.',
       },
     ];
   }
@@ -425,15 +433,16 @@ Summarize the planned book approach for final confirmation.`;
         author: this.conversationState.collectedData.author || {
           name: 'Anonymous Author',
         },
-        style: this.conversationState.collectedData.style || {
-          tone: 'Professional and clear',
-          voice: 'Expert guide',
-          perspective: 'third-person',
-          formality: 'formal',
-          technicalLevel: 'intermediate',
+        scope: this.conversationState.collectedData.scope || {
+          purpose: 'educational',
+          approach: 'practical',
+          coverageDepth: 'comprehensive',
         },
-        approach: this.conversationState.collectedData.approach || 'practical',
-        focus: this.conversationState.collectedData.focus || 'comprehensive',
+        contentOrientation: this.conversationState.collectedData.contentOrientation || {
+          primaryAngle: 'Practical application and implementation',
+          secondaryAngles: ['Best practices', 'Real-world examples'],
+          engagementStrategy: 'step-by-step',
+        },
         wordCountTarget: this.conversationState.collectedData.wordCountTarget || 35000,
       };
 
@@ -518,22 +527,34 @@ Summarize the planned book approach for final confirmation.`;
       author: {
         name: 'Author',
       },
-      style: {
-        tone: 'Professional and clear',
-        voice: 'Expert guide',
-        perspective: 'third-person',
-        formality: 'formal',
-        technicalLevel: 'intermediate',
+      scope: {
+        purpose: 'educational',
+        approach: 'practical',
+        coverageDepth: 'comprehensive',
       },
-      approach: 'practical',
-      focus: 'comprehensive',
+      contentOrientation: {
+        primaryAngle: 'Practical application and implementation',
+        secondaryAngles: ['Best practices', 'Real-world examples'],
+        engagementStrategy: 'step-by-step',
+      },
       wordCountTarget: 30000,
+    };
+
+    // Create fallback style guide separately
+    const fallbackStyleGuide = {
+      tone: 'professional',
+      voice: 'active',
+      perspective: 'third_person',
+      formality: 'formal',
+      technicalLevel: 'semi_technical',
+      exampleUsage: 'This guide will walk you through the essential concepts and practical applications. Each chapter builds upon the previous one, providing hands-on examples and real-world scenarios. You will learn step-by-step approaches that can be immediately applied to your projects.',
     };
 
     // Add fallback requirements to state
     const stateWithFallback = {
       ...state,
       requirements: fallbackRequirements,
+      styleGuide: fallbackStyleGuide,
       baseContent: '',
       conversationHistory: [{ role: 'assistant', content: 'Requirements collected with fallback defaults due to conversation error.' }],
     };
