@@ -406,3 +406,45 @@ This enhanced architectural evolution transforms the Book Agent from a reliable 
 - `app/page.tsx` - Updated main page to showcase wizard
 
 **Current State**: Enhanced wizard with integrated API key input, optimized spacing, improved copy, and clean user experience ready for backend workflow integration.
+
+## Task 21 Implementation: Requirements Gathering UI ✅
+
+### **Task 21: Requirements Gathering Conversation UI - COMPLETED (September 28, 2025)**
+
+**Status**: ✅ Complete - Professional 2-step wizard with chat interface and refined UI consistency
+
+**Key Achievements**:
+- **Chat Interface**: Complete AI conversation component with message history, auto-scroll, and real-time interaction
+- **Step 2 Integration**: Requirements gathering step with guided conversation flow and validation
+- **Professional UI Design**: Clean, consistent design with perfect circular step indicators and unified styling
+- **Typography Consistency**: Standardized font sizes across both steps matching CardTitle styling
+
+**Technical Implementation**:
+- **ChatInterface Component**: Full-featured chat with user/AI message display, loading states, and textarea input
+- **DetailedRequirementsStep**: Conversational requirements gathering with progress tracking and completion validation
+- **Wizard Integration**: 2-step wizard (Idea → Details) with proper validation and navigation
+- **ScrollArea Fix**: Resolved infinite loop by replacing with simple div for stable scrolling
+
+**UI/UX Refinements Applied**:
+- **Sidebar Consistency**: Perfect circles for all step numbers (1, 2, 3, 4) with proper sizing constraints
+- **Step Titles**: Concise labels - "Idea", "Details", "Outline", "Book"
+- **Content Simplification**: Removed nested boxes, redundant titles, and unnecessary text
+- **Layout Harmony**: Consistent card layouts between Step 1 and Step 2
+- **Typography Standards**: All form labels match "AI Book Assistant" font size using `text-base leading-none font-semibold`
+
+**Key UI Design Decisions**:
+- **Step Navigation**: Clean circular indicators with check marks for completed steps
+- **Content Areas**: Single-level card structure without nested complexity
+- **Chat Placeholder**: "Tell me about scope, audience and style..."
+- **Sidebar Description**: "Gather details about scope, audience and style"
+- **Professional Styling**: Consistent 6px padding, unified typography, clean navigation
+
+**Files Created/Modified**:
+- `components/chat/ChatInterface.tsx` - Complete chat interface with message display and input
+- `components/wizard/steps/DetailedRequirementsStep.tsx` - Requirements gathering with conversation flow
+- `components/ui/wizard-step.tsx` - Fixed circular step indicators with proper sizing
+- `app/page.tsx` - Updated step configuration and descriptions
+- `components/wizard/BookWizard.tsx` - Simplified main content layout
+- `components/wizard/steps/UserPromptStep.tsx` - Enhanced typography and consistent styling
+
+**Current State**: Production-ready 2-step wizard with professional chat interface, consistent design, and backend integration structure ready for requirements gathering workflow.

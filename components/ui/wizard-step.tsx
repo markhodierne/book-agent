@@ -25,9 +25,10 @@ const WizardStep = React.forwardRef<HTMLDivElement, WizardStepProps>(
         {...props}
       >
         <div className={cn(
-          "flex items-center justify-center w-8 h-8 rounded-full border-2 text-sm font-medium transition-colors",
+          "flex items-center justify-center rounded-full border-2 text-sm font-medium transition-colors flex-shrink-0",
+          "w-8 h-8 min-w-[2rem] min-h-[2rem]",
           isCompleted && "bg-primary text-primary-foreground border-primary",
-          isActive && !isCompleted && "border-primary text-primary",
+          isActive && !isCompleted && "bg-primary text-primary-foreground border-primary",
           !isActive && !isCompleted && "border-muted-foreground/30 text-muted-foreground"
         )}>
           {isCompleted ? (
@@ -38,14 +39,14 @@ const WizardStep = React.forwardRef<HTMLDivElement, WizardStepProps>(
         </div>
         <div className="flex-1">
           <h3 className={cn(
-            "font-medium",
+            "font-medium leading-tight break-words",
             isActive && "text-foreground",
             !isActive && "text-muted-foreground"
           )}>
             {title}
           </h3>
           {description && (
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-sm text-muted-foreground mt-1 leading-tight">
               {description}
             </p>
           )}

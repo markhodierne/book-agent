@@ -2,9 +2,10 @@
 
 import React from "react"
 import { BookWizard, UserPromptStep, validateUserPrompt } from "@/components/wizard"
+import { DetailedRequirementsStep } from "@/components/wizard/steps/DetailedRequirementsStep"
 import type { WizardStepConfig } from "@/components/wizard"
 
-// Demo step component for testing
+// Demo step component for future steps
 const DemoStep: React.FC<any> = ({ data, setIsValid }) => {
   React.useEffect(() => {
     setIsValid(true) // Always valid for demo
@@ -12,9 +13,9 @@ const DemoStep: React.FC<any> = ({ data, setIsValid }) => {
 
   return (
     <div className="space-y-4 text-center">
-      <h3 className="text-lg font-semibold">Demo Step</h3>
+      <h3 className="text-lg font-semibold">Coming Soon</h3>
       <p className="text-muted-foreground">
-        This is a placeholder step for testing wizard navigation.
+        This step will be implemented in future tasks.
       </p>
       <div className="p-4 bg-muted rounded-lg">
         <p className="text-sm">Current data: {JSON.stringify(data, null, 2)}</p>
@@ -23,20 +24,26 @@ const DemoStep: React.FC<any> = ({ data, setIsValid }) => {
   )
 }
 
+// Validation for detailed requirements step
+const validateDetailedRequirements = (data: any): boolean => {
+  return Boolean(data.conversationComplete && data.chatMessages?.length >= 2)
+}
+
 const wizardSteps: WizardStepConfig[] = [
   {
     id: "user-prompt",
-    title: "Book Idea",
+    title: "Idea",
     description: "Tell us what book you want to create",
     component: UserPromptStep,
     validate: validateUserPrompt,
     required: true
   },
   {
-    id: "requirements",
-    title: "Requirements",
-    description: "Define your book's audience and style",
-    component: DemoStep,
+    id: "detailed-requirements",
+    title: "Details",
+    description: "Gather details about scope, audience and style",
+    component: DetailedRequirementsStep,
+    validate: validateDetailedRequirements,
     required: true
   },
   {
@@ -48,7 +55,7 @@ const wizardSteps: WizardStepConfig[] = [
   },
   {
     id: "generation",
-    title: "Generation",
+    title: "Book",
     description: "We'll create your book",
     component: DemoStep,
     required: false
@@ -70,7 +77,10 @@ export default function Home() {
           initialData={{
             prompt: "",
             author: "",
-            pdfFile: undefined
+            pdfFile: undefined,
+            chatMessages: [],
+            requirementsGathered: false,
+            conversationComplete: false
           }}
         />
       </div>

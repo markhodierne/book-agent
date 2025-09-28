@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { BookWizard, UserPromptStep, validateUserPrompt } from "@/components/wizard"
+import { BookWizard, UserPromptStep, DetailedRequirementsStep, validateUserPrompt } from "@/components/wizard"
 import type { WizardStepConfig } from "@/components/wizard"
 
 // Demo step component for testing
@@ -23,6 +23,11 @@ const DemoStep: React.FC<any> = ({ data, setIsValid }) => {
   )
 }
 
+// Validation for detailed requirements step
+const validateDetailedRequirements = (data: any): boolean => {
+  return Boolean(data.conversationComplete && data.chatMessages?.length >= 2)
+}
+
 const wizardSteps: WizardStepConfig[] = [
   {
     id: "user-prompt",
@@ -33,10 +38,11 @@ const wizardSteps: WizardStepConfig[] = [
     required: true
   },
   {
-    id: "requirements",
-    title: "Requirements",
-    description: "Define your book's audience and style",
-    component: DemoStep,
+    id: "detailed-requirements",
+    title: "Detailed Requirements",
+    description: "Refine your book's audience, style, and scope",
+    component: DetailedRequirementsStep,
+    validate: validateDetailedRequirements,
     required: true
   },
   {
@@ -69,7 +75,10 @@ export default function WizardDemoPage() {
         initialData={{
           prompt: "",
           author: "",
-          pdfFile: undefined
+          pdfFile: undefined,
+          chatMessages: [],
+          requirementsGathered: false,
+          conversationComplete: false
         }}
       />
     </div>

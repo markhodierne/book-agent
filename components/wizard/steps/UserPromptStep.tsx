@@ -55,15 +55,18 @@ export const UserPromptStep: React.FC<UserPromptStepProps> = ({
 
   // Update wizard data when form changes
   useEffect(() => {
-    if (isValid) {
-      updateData({
-        prompt: watchedValues.prompt,
-        author: watchedValues.author,
-        pdfFile: uploadedFile
-      })
+    const stepData = {
+      prompt: watchedValues.prompt,
+      author: watchedValues.author,
+      pdfFile: uploadedFile
     }
-    setIsValid(isValid)
-  }, [watchedValues, uploadedFile, isValid, updateData, setIsValid])
+
+    updateData(stepData)
+
+    // Set step validity based on required fields only (not the full form validation)
+    const stepIsValid = Boolean(watchedValues.prompt?.trim() && watchedValues.author?.trim())
+    setIsValid(stepIsValid)
+  }, [watchedValues, uploadedFile, updateData, setIsValid])
 
   const handleFileUpload = (file: File) => {
     if (file.type === "application/pdf" || file.name.endsWith('.pdf')) {
@@ -108,15 +111,17 @@ export const UserPromptStep: React.FC<UserPromptStepProps> = ({
 
   return (
     <div className="space-y-6">
-      <Form {...form}>
-        <form className="space-y-6">
+      <Card>
+        <CardContent className="px-6 py-6">
+          <Form {...form}>
+            <form className="space-y-6">
           {/* User Prompt Field */}
           <FormField
             control={form.control}
             name="prompt"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>What book would you like to create?</FormLabel>
+                <FormLabel className="text-base leading-none font-semibold">What book would you like to create?</FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder="Describe your book in a few sentences or paragraphs. The more detail you provide, the better your book will be."
@@ -135,7 +140,7 @@ export const UserPromptStep: React.FC<UserPromptStepProps> = ({
             name="author"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Author Name</FormLabel>
+                <FormLabel className="text-base leading-none font-semibold">Author Name</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Enter your name or pen name"
@@ -149,7 +154,7 @@ export const UserPromptStep: React.FC<UserPromptStepProps> = ({
 
           {/* PDF Upload Section */}
           <div className="space-y-4">
-            <Label>Reference Material (Optional)</Label>
+            <Label className="text-base leading-none font-semibold">Reference Material (Optional)</Label>
             <Card
               className={cn(
                 "border-2 border-dashed transition-colors cursor-pointer",
@@ -234,7 +239,7 @@ export const UserPromptStep: React.FC<UserPromptStepProps> = ({
               <div className="flex items-center gap-3">
                 <Key className="w-5 h-5 text-muted-foreground" />
                 <div className="flex-1">
-                  <Label htmlFor="openai-key" className="text-sm font-medium">
+                  <Label htmlFor="openai-key" className="text-base leading-none font-semibold">
                     OpenAI API Key
                   </Label>
                   <Input
@@ -252,8 +257,10 @@ export const UserPromptStep: React.FC<UserPromptStepProps> = ({
               </div>
             </div>
           )}
-        </form>
-      </Form>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
 
       {/* Validation Summary */}
       {!isValid && Object.keys(errors).length > 0 && (

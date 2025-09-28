@@ -66,7 +66,9 @@ export const BookWizard: React.FC<BookWizardProps> = ({
     }
 
     try {
+      console.log('Validating step:', currentStep.id, 'with data:', wizardData)
       const isValid = await currentStep.validate(wizardData)
+      console.log('Validation result:', isValid)
       setStepValid(currentStep.id, isValid)
       return isValid
     } catch (error) {
@@ -77,20 +79,30 @@ export const BookWizard: React.FC<BookWizardProps> = ({
   }
 
   const handleNext = async () => {
+    console.log('handleNext called')
     if (isProcessing) return
 
-    const isValid = await validateCurrentStep()
-    if (!isValid) return
-
-    if (isLastStep) {
-      setIsProcessing(true)
-      try {
-        await onComplete({ ...wizardData, openaiApiKey })
-      } finally {
-        setIsProcessing(false)
+    try {
+      const isValid = await validateCurrentStep()
+      if (!isValid) {
+        console.log('Step validation failed, not proceeding')
+        return
       }
-    } else {
-      setCurrentStepIndex(prev => Math.min(prev + 1, steps.length - 1))
+
+      if (isLastStep) {
+        console.log('Completing wizard')
+        setIsProcessing(true)
+        try {
+          await onComplete({ ...wizardData, openaiApiKey })
+        } finally {
+          setIsProcessing(false)
+        }
+      } else {
+        console.log('Moving to next step from', currentStepIndex, 'to', currentStepIndex + 1)
+        setCurrentStepIndex(prev => Math.min(prev + 1, steps.length - 1))
+      }
+    } catch (error) {
+      console.error('Error in handleNext:', error)
     }
   }
 
@@ -148,7 +160,7 @@ export const BookWizard: React.FC<BookWizardProps> = ({
                   description={step.description}
                   stepNumber={index + 1}
                   isActive={index === currentStepIndex}
-                  isCompleted={index < currentStepIndex || stepValidation[step.id]}
+                  isCompleted={index < currentStepIndex && stepValidation[step.id]}
                   className={cn(
                     "cursor-pointer transition-opacity hover:opacity-80",
                     index > currentStepIndex + 1 && "opacity-50 cursor-not-allowed"
@@ -162,63 +174,53 @@ export const BookWizard: React.FC<BookWizardProps> = ({
 
         {/* Main Content Area */}
         <div className="lg:col-span-3">
-          <Card className="min-h-[500px]">
-            <CardContent className="px-6 py-6">
-              {/* Step Header */}
-              <div className="mb-6">
-                <h2 className="text-2xl font-semibold mb-2">{currentStep.title}</h2>
-                <p className="text-muted-foreground">{currentStep.description}</p>
-              </div>
+          {/* Step Content - Direct without wrapper card */}
+          <div className="mb-8">
+            <CurrentStepComponent
+              data={wizardData}
+              updateData={updateData}
+              onNext={handleNext}
+              onBack={handleBack}
+              isValid={stepValidation[currentStep.id] || false}
+              setIsValid={(isValid) => setStepValid(currentStep.id, isValid)}
+              {...(currentStep.id === 'user-prompt' && {
+                openaiApiKey,
+                setOpenaiApiKey
+              })}
+            />
+          </div>
 
-              {/* Step Content */}
-              <div className="mb-8">
-                <CurrentStepComponent
-                  data={wizardData}
-                  updateData={updateData}
-                  onNext={handleNext}
-                  onBack={handleBack}
-                  isValid={stepValidation[currentStep.id] || false}
-                  setIsValid={(isValid) => setStepValid(currentStep.id, isValid)}
-                  {...(currentStep.id === 'user-prompt' && {
-                    openaiApiKey,
-                    setOpenaiApiKey
-                  })}
-                />
-              </div>
+          {/* Navigation Buttons */}
+          <div className="flex justify-between items-center pt-6 border-t">
+            <Button
+              variant="outline"
+              onClick={handleBack}
+              disabled={isFirstStep || isProcessing}
+              className="flex items-center gap-2"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Back
+            </Button>
 
-              {/* Navigation Buttons */}
-              <div className="flex justify-between items-center pt-6 border-t">
-                <Button
-                  variant="outline"
-                  onClick={handleBack}
-                  disabled={isFirstStep || isProcessing}
-                  className="flex items-center gap-2"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                  Back
-                </Button>
-
-                <Button
-                  onClick={handleNext}
-                  disabled={!stepValidation[currentStep.id] || isProcessing}
-                  className="flex items-center gap-2"
-                >
-                  {isLastStep ? (
-                    isProcessing ? (
-                      "Creating Book..."
-                    ) : (
-                      "Create Book"
-                    )
-                  ) : (
-                    <>
-                      Next
-                      <ChevronRight className="w-4 h-4" />
-                    </>
-                  )}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+            <Button
+              onClick={handleNext}
+              disabled={!stepValidation[currentStep.id] || isProcessing}
+              className="flex items-center gap-2"
+            >
+              {isLastStep ? (
+                isProcessing ? (
+                  "Creating Book..."
+                ) : (
+                  "Create Book"
+                )
+              ) : (
+                <>
+                  Next
+                  <ChevronRight className="w-4 h-4" />
+                </>
+              )}
+            </Button>
+          </div>
         </div>
       </div>
     </div>

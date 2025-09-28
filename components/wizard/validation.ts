@@ -5,7 +5,11 @@ export const userPromptSchema = z.object({
   prompt: z.string()
     .min(3, "Prompt must be at least 3 characters long")
     .max(1000, "Prompt cannot exceed 1000 characters"),
-  pdfFile: z.instanceof(File)
+  pdfFile: z.union([
+      z.instanceof(File),
+      z.undefined(),
+      z.null()
+    ])
     .optional()
     .refine(
       (file) => {

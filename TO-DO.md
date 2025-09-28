@@ -224,12 +224,21 @@ The following tasks are essential for a working MVP that generates .MD books wit
 - ✅ User prompt form with PDF upload and drag-and-drop
 **Definition of Done**: ✅ Wizard navigates between steps correctly, validates inputs appropriately
 
-#### **Tasks 21-24: Complete Wizard Interface** ⭐ CRITICAL
+#### **Task 21: Requirements Gathering Conversation UI** ⭐ CRITICAL - ✅ COMPLETED
+**Description**: Create chat interface for AI-guided requirements gathering
+**Dependencies**: Task 20 ✅
+**Deliverables**:
+- ✅ ChatInterface component with message display and real-time interaction
+- ✅ DetailedRequirementsStep with guided conversation flow and validation
+- ✅ Professional UI design with consistent styling and typography
+- ✅ Simulation system for testing conversation flow
+**Definition of Done**: ✅ Chat interface functional, conversation completes with validation
+
+#### **Tasks 22-24: Complete Wizard Interface** ⭐ CRITICAL
 **Description**: Complete functional frontend for MVP book generation
-**Dependencies**: Task 20 ✅, MVP backend tasks completion
+**Dependencies**: Task 21 ✅, MVP backend tasks completion
 **MVP Scope**: Full wizard interface for .MD book generation
 **Deliverables**:
-- Requirements gathering interface
 - Outline review and approval interface
 - Progress monitoring and .MD download interface
 - API routes for workflow execution
@@ -254,7 +263,8 @@ The following tasks are essential for a working MVP that generates .MD books wit
 **Frontend Parallel Track**:
 - Task 19 (UI Library): ✅ COMPLETED - shadcn/ui foundation ready
 - Task 20 (Wizard Framework): ✅ COMPLETED - Multi-step wizard with validation ready
-- Tasks 21-24 can proceed with wizard completion and API integration
+- Task 21 (Requirements UI): ✅ COMPLETED - Chat interface with conversation flow ready
+- Tasks 22-24 can proceed with outline/progress UI and API integration
 - Full integration requires MVP Tasks 1-14 completion
 
 **Phase 2 Dependencies** (Post-MVP):
@@ -285,7 +295,8 @@ The following tasks are essential for a working MVP that generates .MD books wit
 
 ### **What MVP Delivers**
 ✅ **UI Foundation**: Professional shadcn/ui components with New York style and neutral theme (Task 19 Complete)
-✅ **User Experience**: Complete wizard interface from prompt to .MD book download (Tasks 20-24)
+✅ **Wizard Framework**: Multi-step wizard with validation and step navigation (Task 20 Complete)
+✅ **Requirements UI**: Chat interface for AI-guided requirements gathering (Task 21 Complete)
 ✅ **Intelligent Planning**: Adaptive strategies based on content complexity
 ✅ **Quality Content**: GPT-5 mini generated books with improved context awareness
 ✅ **Professional Output**: Well-formatted .MD files with proper structure
