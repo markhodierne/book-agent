@@ -1,5 +1,6 @@
 import { toolRegistry } from './registry';
-import { pdfExtractTool } from './pdfExtractTool';
+// Temporarily disabled due to pdf-parse test file issue
+// import { pdfExtractTool } from './pdfExtractTool';
 import { chapterWriteTool } from './chapterWriteTool';
 import { logger } from '@/lib/errors/exports';
 
@@ -17,7 +18,8 @@ export function initializeTools(): void {
   logger.info('Initializing tool registry...');
 
   // Register PDF extraction tool
-  toolRegistry.register(pdfExtractTool);
+  // Temporarily disabled due to pdf-parse test file issue
+  // toolRegistry.register(pdfExtractTool);
 
   // Register chapter writing tool
   toolRegistry.register(chapterWriteTool);

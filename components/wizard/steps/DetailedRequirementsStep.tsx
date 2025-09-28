@@ -10,6 +10,9 @@ interface DetailedRequirementsData {
   chatMessages: ChatMessage[]
   requirementsGathered: boolean
   conversationComplete: boolean
+  planningComplete?: boolean
+  planningContext?: any
+  planningAnalysis?: any
 }
 
 export const DetailedRequirementsStep: React.FC<WizardStepProps> = ({
@@ -48,8 +51,8 @@ export const DetailedRequirementsStep: React.FC<WizardStepProps> = ({
 
       const updatedMessages = [...stepData.chatMessages, userMessage]
 
-      // Simulate AI response for requirements gathering
-      const aiResponse = await simulateRequirementsConversation(message, stepData, data)
+      // Call the LangGraph workflow
+      const aiResponse = await callLangGraphWorkflow(message, stepData, data)
 
       const aiMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
@@ -60,12 +63,18 @@ export const DetailedRequirementsStep: React.FC<WizardStepProps> = ({
 
       const finalMessages = [...updatedMessages, aiMessage]
 
-      // Update data with conversation progress
+      // Update data with conversation progress and planning results
       updateData({
         ...data,
         chatMessages: finalMessages,
         requirementsGathered: aiResponse.requirementsGathered,
-        conversationComplete: aiResponse.conversationComplete
+        conversationComplete: aiResponse.conversationComplete,
+        planningComplete: aiResponse.planningAnalysis ? true : (data.planningComplete || false),
+        planningAnalysis: aiResponse.planningAnalysis || data.planningAnalysis,
+        planningContext: aiResponse.planningContext || data.planningContext,
+        requirements: aiResponse.requirements || data.requirements,
+        styleGuide: aiResponse.styleGuide || data.styleGuide,
+        sessionId: aiResponse.sessionId || data.sessionId
       })
 
     } catch (error) {
@@ -135,89 +144,145 @@ export const DetailedRequirementsStep: React.FC<WizardStepProps> = ({
   )
 }
 
-// Simulate AI conversation for requirements gathering
-async function simulateRequirementsConversation(
+// LangGraph workflow execution agent
+async function callLangGraphWorkflow(
   message: string,
   stepData: DetailedRequirementsData,
   wizardData: any
 ) {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000))
+  try {
+    console.log('🤖 Calling LangGraph workflow...');
 
-  const messageCount = stepData.chatMessages.length
+    // First, execute planning stage if not already done
+    if (!stepData.planningComplete) {
+      console.log('📊 Executing planning stage...');
+      const planningResponse = await fetch('/api/workflow', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userPrompt: wizardData.prompt,
+          action: 'planning',
+          sessionId: wizardData.sessionId
+        })
+      });
 
-  // Progressive conversation flow
-  if (messageCount === 0) {
+      if (!planningResponse.ok) {
+        throw new Error(`Planning stage failed: ${planningResponse.status}`);
+      }
+
+      const planningData = await planningResponse.json();
+      if (!planningData.success) {
+        throw new Error(planningData.error || 'Planning stage failed');
+      }
+
+      console.log('✅ Planning stage completed:', {
+        complexity: planningData.planningContext?.complexity,
+        strategy: planningData.planningContext?.strategy,
+        nextStage: planningData.nextStage
+      });
+
+      // If planning recommends skipping detailed conversation, complete immediately
+      if (planningData.nextStage === 'outline') {
+        return {
+          content: `🎯 **Planning Analysis Complete!**
+
+Based on your request, I've determined this is a ${planningData.planningContext.complexity} complexity project that can proceed directly to outline creation.
+
+**📊 Analysis Results:**
+• **Complexity Level**: ${planningData.planningContext.complexity.toUpperCase()}
+• **Generation Strategy**: ${planningData.planningContext.strategy.toUpperCase()}
+• **Content Approach**: ${planningData.planningContext.approach.replace('_', ' ').toUpperCase()}
+• **Recommended Scope**: ${planningData.planningContext.estimatedWordCount.toLocaleString()} words across ${planningData.planningContext.chapterCount} chapters
+• **Research Level**: ${planningData.planningContext.researchIntensity.toUpperCase()}
+• **Time Estimate**: ~${planningData.planningContext.estimatedDuration} minutes
+
+Ready to proceed to outline creation!`,
+          requirementsGathered: true,
+          conversationComplete: true,
+          planningAnalysis: planningData.planningAnalysis,
+          planningContext: planningData.planningContext,
+          sessionId: planningData.sessionId
+        };
+      }
+
+      // Store planning results for conversation stage
+      stepData.planningComplete = true;
+      stepData.planningContext = planningData.planningContext;
+      stepData.planningAnalysis = planningData.planningAnalysis;
+    }
+
+    // Execute conversation stage
+    console.log('💬 Executing conversation stage...');
+    const conversationResponse = await fetch('/api/workflow', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userPrompt: wizardData.prompt,
+        action: 'conversation',
+        sessionId: wizardData.sessionId
+      })
+    });
+
+    if (!conversationResponse.ok) {
+      throw new Error(`Conversation stage failed: ${conversationResponse.status}`);
+    }
+
+    const conversationData = await conversationResponse.json();
+    if (!conversationData.success) {
+      throw new Error(conversationData.error || 'Conversation stage failed');
+    }
+
+    console.log('✅ Conversation stage completed');
+
+    // Format the response content based on conversation results
+    const content = `🎯 **Requirements Gathering Complete!**
+
+I've collected comprehensive requirements for your book through our structured conversation process.
+
+**📊 Collected Information:**
+• **Topic**: ${conversationData.requirements?.topic}
+• **Target Audience**: ${conversationData.requirements?.audience?.demographics} (${conversationData.requirements?.audience?.expertiseLevel} level)
+• **Author**: ${conversationData.requirements?.author?.name}
+• **Word Count Target**: ${conversationData.requirements?.wordCountTarget?.toLocaleString()} words
+• **Writing Style**: ${conversationData.styleGuide?.tone} tone, ${conversationData.styleGuide?.formality} formality
+
+Your requirements are complete! Ready to proceed to outline creation.`;
+
     return {
-      content: `Great! I can see you want to write about "${wizardData.prompt || 'your topic'}". Let's dive deeper into the requirements.
+      content,
+      requirementsGathered: true,
+      conversationComplete: true,
+      requirements: conversationData.requirements,
+      styleGuide: conversationData.styleGuide,
+      conversationHistory: conversationData.conversationHistory,
+      planningAnalysis: stepData.planningAnalysis,
+      planningContext: stepData.planningContext,
+      sessionId: conversationData.sessionId
+    };
 
-First, who is your target audience? Are you writing for:
-- Complete beginners who need everything explained
-- People with some knowledge who want to go deeper
-- Professionals or experts in the field
-- A general audience with mixed backgrounds
+  } catch (error) {
+    console.error('❌ LangGraph workflow failed:', error);
 
-Tell me about your ideal reader!`,
+    // Fallback response
+    return {
+      content: "I'm sorry, I'm having trouble processing that right now. The workflow system encountered an error. Please try again.",
       requirementsGathered: false,
       conversationComplete: false
-    }
-  } else if (messageCount === 2) {
-    return {
-      content: `Perfect! Now let's talk about writing style. What tone and approach do you prefer?
-
-For example:
-- **Conversational & friendly** - Like talking to a knowledgeable friend
-- **Professional & authoritative** - More formal, expert tone
-- **Academic & detailed** - Thorough, research-heavy approach
-- **Practical & hands-on** - Focus on actionable steps and examples
-
-What feels right for your book and audience?`,
-      requirementsGathered: false,
-      conversationComplete: false
-    }
-  } else if (messageCount === 4) {
-    return {
-      content: `Excellent choice! Now let's discuss the scope and structure:
-
-How comprehensive do you want this book to be?
-- **Quick guide** (10,000-15,000 words, 8-10 chapters) - Focused on essentials
-- **Comprehensive guide** (20,000-30,000 words, 12-15 chapters) - Thorough coverage
-- **In-depth reference** (30,000+ words, 15+ chapters) - Complete resource
-
-Also, do you want to include:
-- Step-by-step tutorials?
-- Real-world examples and case studies?
-- Practical exercises or worksheets?
-- Resource lists and references?
-
-What scope feels right for your vision?`,
-      requirementsGathered: true,
-      conversationComplete: false
-    }
-  } else if (messageCount >= 6) {
-    return {
-      content: `Perfect! I now have a comprehensive understanding of your book requirements:
-
-**Summary of Your Book:**
-- **Topic:** ${wizardData.prompt || 'Your chosen topic'}
-- **Author:** ${wizardData.author || 'Your name'}
-- **Target Audience:** Based on our conversation
-- **Writing Style:** The tone and approach we discussed
-- **Scope:** The comprehensive level you selected
-- **Special Features:** Any extras like tutorials, examples, etc.
-
-Your requirements are now complete! You can proceed to the next step where we'll create a detailed outline based on these requirements.
-
-Ready to move forward?`,
-      requirementsGathered: true,
-      conversationComplete: true
-    }
+    };
   }
+}
 
-  // Default fallback
-  return {
-    content: "I'd love to hear more about that! Can you tell me more details about your preferences?",
-    requirementsGathered: false,
-    conversationComplete: false
+// Helper function to describe complexity levels
+function getComplexityDescription(complexity: string): string {
+  switch (complexity) {
+    case 'simple': return 'straightforward content, easy to follow';
+    case 'moderate': return 'balanced depth, requires some expertise';
+    case 'complex': return 'advanced concepts, significant research needed';
+    case 'expert': return 'highly specialized, comprehensive coverage required';
+    default: return 'well-structured content';
   }
 }

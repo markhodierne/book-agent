@@ -3,7 +3,7 @@
 // Follows CLAUDE.md standards: error handling, database integration, tool patterns
 
 import { createTool } from './createTool';
-import { supabase } from '@/lib/database/supabaseClient';
+import { createServiceClient } from '@/lib/database/supabaseClient';
 import { PlanningContext } from '@/types';
 import {
   executeWithDatabaseContext,
@@ -54,19 +54,20 @@ async function savePlanningState(
 ): Promise<void> {
   return executeWithDatabaseContext(
     'savePlanningState',
-    { sessionId, complexity: planningContext.complexity },
+    'workflow_states',
     async () => {
+      const supabase = createServiceClient();
+
       const planningData = {
         session_id: sessionId,
-        state_type: 'planning',
+        node_name: 'planning',
         state_data: {
           planningContext,
           metadata,
           version: '1.0',
+          quality_score: metadata.confidence || null,
         },
-        quality_score: metadata.confidence || null,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
+        timestamp: new Date().toISOString(),
       };
 
       const { error } = await withRetry(
@@ -103,16 +104,18 @@ async function savePlanningState(
 async function loadPlanningState(sessionId: string): Promise<PlanningStateResult> {
   return executeWithDatabaseContext(
     'loadPlanningState',
-    { sessionId },
+    'workflow_states',
     async () => {
+      const supabase = createServiceClient();
+
       const { data, error } = await withRetry(
         () =>
           supabase
             .from('workflow_states')
             .select('*')
             .eq('session_id', sessionId)
-            .eq('state_type', 'planning')
-            .order('updated_at', { ascending: false })
+            .eq('node_name', 'planning')
+            .order('timestamp', { ascending: false })
             .limit(1)
             .single(),
         retryDatabase
@@ -153,14 +156,14 @@ async function loadPlanningState(sessionId: string): Promise<PlanningStateResult
         sessionId,
         complexity: stateData.planningContext.complexity,
         strategy: stateData.planningContext.strategy,
-        timestamp: data.updated_at,
+        timestamp: data.timestamp,
       });
 
       return {
         success: true,
         planningContext: stateData.planningContext,
         metadata: stateData.metadata,
-        timestamp: data.updated_at,
+        timestamp: data.timestamp,
       };
     },
     sessionId
@@ -177,7 +180,7 @@ async function updatePlanningState(
 ): Promise<void> {
   return executeWithDatabaseContext(
     'updatePlanningState',
-    { sessionId },
+    'workflow_states',
     async () => {
       // First load existing state
       const existing = await loadPlanningState(sessionId);
@@ -230,15 +233,17 @@ async function updatePlanningState(
 async function deletePlanningState(sessionId: string): Promise<void> {
   return executeWithDatabaseContext(
     'deletePlanningState',
-    { sessionId },
+    'workflow_states',
     async () => {
+      const supabase = createServiceClient();
+
       const { error } = await withRetry(
         () =>
           supabase
             .from('workflow_states')
             .delete()
             .eq('session_id', sessionId)
-            .eq('state_type', 'planning'),
+            .eq('node_name', 'planning'),
         retryDatabase
       );
 
@@ -266,13 +271,15 @@ async function deletePlanningState(sessionId: string): Promise<void> {
 async function listPlanningStates(sessionId?: string): Promise<any[]> {
   return executeWithDatabaseContext(
     'listPlanningStates',
-    { sessionId },
+    'workflow_states',
     async () => {
+      const supabase = createServiceClient();
+
       let query = supabase
         .from('workflow_states')
-        .select('session_id, state_data, quality_score, created_at, updated_at')
-        .eq('state_type', 'planning')
-        .order('updated_at', { ascending: false });
+        .select('session_id, state_data, timestamp')
+        .eq('node_name', 'planning')
+        .order('timestamp', { ascending: false });
 
       if (sessionId) {
         query = query.eq('session_id', sessionId);

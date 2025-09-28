@@ -30,12 +30,13 @@ export {
 } from './errorHandling';
 
 // Specific tool implementations
-export {
-  pdfExtractTool,
-  extractPdfText,
-  validatePdfBuffer,
-  sanitizeExtractedText,
-} from './pdfExtractTool';
+// Temporarily disabled due to pdf-parse test file issue
+// export {
+//   pdfExtractTool,
+//   extractPdfText,
+//   validatePdfBuffer,
+//   sanitizeExtractedText,
+// } from './pdfExtractTool';
 
 export {
   chapterWriteTool,

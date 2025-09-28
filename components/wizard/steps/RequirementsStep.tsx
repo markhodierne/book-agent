@@ -27,6 +27,8 @@ interface RequirementsStepData {
   chatMessages: ChatMessage[]
   requirements?: BookRequirements
   requirementsConfirmed: boolean
+  sessionId?: string
+  planningAnalysis?: any
 }
 
 export const RequirementsStep: React.FC<RequirementsStepProps> = ({
@@ -123,23 +125,24 @@ export const RequirementsStep: React.FC<RequirementsStepProps> = ({
 
       const updatedMessages = [...stepData.chatMessages, userMessage]
 
-      // Simulate AI response (replace with actual API call)
-      const aiResponse = await simulateAIResponse(message, stepData)
+      // Call real Planning Agent
+      const planningResponse = await callPlanningAgent(stepData.prompt, stepData.pdfFile)
 
       const aiMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: aiResponse.content,
+        content: planningResponse.content,
         timestamp: new Date()
       }
 
       const finalMessages = [...updatedMessages, aiMessage]
 
-      // Update data with new messages and potentially requirements
+      // Update data with new messages and requirements
       updateData({
         ...stepData,
         chatMessages: finalMessages,
-        requirements: aiResponse.requirements || stepData.requirements
+        requirements: planningResponse.requirements || stepData.requirements,
+        sessionId: planningResponse.sessionId // Store session ID for later use
       })
 
     } catch (error) {
@@ -378,63 +381,133 @@ export const RequirementsStep: React.FC<RequirementsStepProps> = ({
   )
 }
 
-// Simulate AI response (replace with actual API call)
-async function simulateAIResponse(message: string, stepData: RequirementsStepData) {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000))
-
-  // Simple simulation - in reality, this would call the conversation agent
-  const responses = [
-    {
-      content: "I'd love to help you refine your book concept! Can you tell me more about who your target audience is? For example, are you writing for beginners, professionals, or a general audience?",
-      requirements: undefined
-    },
-    {
-      content: "Great! Based on our conversation, I'm starting to understand your vision. What writing style do you prefer - more formal and academic, conversational and friendly, or something else?",
-      requirements: undefined
-    },
-    {
-      content: `Perfect! I now have a good understanding of your book requirements. Here's what I've gathered:
-
-**Topic**: ${stepData.prompt}
-**Target Audience**: General readers interested in the subject
-**Writing Style**: Conversational and accessible
-**Estimated Scope**: 20,000-30,000 words, 10-15 chapters
-
-Would you like to review these requirements and make any adjustments?`,
-      requirements: {
-        topic: stepData.prompt,
-        purpose: "Educational and practical guide",
-        audience: {
-          demographics: "General readers",
-          expertiseLevel: "Beginner to intermediate",
-          readingContext: "Self-improvement and learning"
-        },
-        author: {
-          name: stepData.author
-        },
-        style: {
-          tone: "Conversational and friendly",
-          complexity: "Accessible",
-          approach: "Practical with examples"
-        },
-        scope: {
-          estimatedWordCount: 25000,
-          chapterCount: 12,
-          depth: "Comprehensive but accessible"
-        },
-        contentOrientation: ["Practical", "Example-driven", "Step-by-step"]
-      }
-    }
-  ]
-
-  // Return a random response or the final one if we have enough messages
-  const messageCount = stepData.chatMessages.length
-  if (messageCount >= 4) {
-    return responses[2] // Return the complete requirements
-  } else if (messageCount >= 2) {
-    return responses[1]
-  } else {
-    return responses[0]
+// Call the real Planning Agent via API
+async function callPlanningAgent(userPrompt: string, pdfFile?: File) {
+  // Extract PDF content if provided
+  let baseContent = undefined;
+  if (pdfFile) {
+    // TODO: Implement PDF extraction for base content
+    // For now, we'll just note that a PDF was provided
+    baseContent = `[PDF file provided: ${pdfFile.name}]`;
   }
+
+  const response = await fetch('/api/planning', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      userPrompt,
+      baseContent
+    })
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+
+  if (!data.success) {
+    throw new Error(data.error || 'Planning analysis failed');
+  }
+
+  const analysis = data.analysis;
+
+  // Format the Planning Agent response for the chat interface
+  const content = `🎯 **Planning Analysis Complete!**
+
+I've analyzed your book concept and created an optimal generation strategy:
+
+**📊 Complexity Assessment**: ${analysis.complexity.toUpperCase()}
+**📚 Topic Category**: ${analysis.topicCategory}
+**📈 Estimated Word Count**: ${analysis.estimatedWordCount.toLocaleString()} words
+**⚡ Generation Strategy**: ${analysis.strategy.toUpperCase()}
+**🎨 Content Approach**: ${analysis.approach.replace('_', ' ').toUpperCase()}
+**📖 Planned Chapters**: ${analysis.chapterCount} chapters
+**⏱️ Estimated Duration**: ${analysis.estimatedDuration} minutes
+**🔬 Research Intensity**: ${analysis.researchIntensity.toUpperCase()}
+
+${analysis.reasoning ? `**💡 Strategy Reasoning**: ${analysis.reasoning}` : ''}
+
+This comprehensive plan will guide the creation of your book. Would you like to review and confirm these requirements?`;
+
+  // Convert Planning Agent analysis to BookRequirements format
+  const requirements: BookRequirements = {
+    topic: userPrompt,
+    purpose: `${analysis.topicCategory} - ${analysis.approach.replace('_', ' ')} approach`,
+    audience: {
+      demographics: getAudienceFromComplexity(analysis.complexity),
+      expertiseLevel: getExpertiseLevelFromComplexity(analysis.complexity),
+      readingContext: analysis.topicCategory
+    },
+    author: {
+      name: "Author" // Will be filled from form
+    },
+    style: {
+      tone: getToneFromApproach(analysis.approach),
+      complexity: analysis.complexity,
+      approach: analysis.approach
+    },
+    scope: {
+      estimatedWordCount: analysis.estimatedWordCount,
+      chapterCount: analysis.chapterCount,
+      depth: `${analysis.researchIntensity} research depth`
+    },
+    contentOrientation: getContentOrientationFromStrategy(analysis.strategy, analysis.approach)
+  };
+
+  return {
+    content,
+    requirements,
+    sessionId: data.sessionId,
+    planningAnalysis: analysis
+  };
+}
+
+// Helper functions to convert Planning Agent output to UI format
+function getAudienceFromComplexity(complexity: string): string {
+  switch (complexity) {
+    case 'simple': return 'General audience';
+    case 'moderate': return 'Interested readers with some background';
+    case 'complex': return 'Advanced readers with domain knowledge';
+    case 'expert': return 'Professional and expert practitioners';
+    default: return 'General audience';
+  }
+}
+
+function getExpertiseLevelFromComplexity(complexity: string): string {
+  switch (complexity) {
+    case 'simple': return 'Beginner';
+    case 'moderate': return 'Beginner to intermediate';
+    case 'complex': return 'Intermediate to advanced';
+    case 'expert': return 'Advanced to expert';
+    default: return 'Beginner to intermediate';
+  }
+}
+
+function getToneFromApproach(approach: string): string {
+  switch (approach) {
+    case 'research_heavy': return 'Scholarly and authoritative';
+    case 'narrative_focused': return 'Engaging and story-driven';
+    case 'technical_deep': return 'Precise and technical';
+    case 'practical_guide': return 'Clear and instructional';
+    default: return 'Professional and accessible';
+  }
+}
+
+function getContentOrientationFromStrategy(strategy: string, approach: string): string[] {
+  const orientations = [];
+
+  if (strategy === 'parallel') orientations.push('Modular');
+  if (strategy === 'sequential') orientations.push('Progressive');
+  if (strategy === 'hybrid') orientations.push('Flexible');
+
+  if (approach === 'research_heavy') orientations.push('Evidence-based');
+  if (approach === 'narrative_focused') orientations.push('Story-driven');
+  if (approach === 'technical_deep') orientations.push('Technical');
+  if (approach === 'practical_guide') orientations.push('Step-by-step', 'Actionable');
+
+  return orientations.length > 0 ? orientations : ['Comprehensive'];
 }

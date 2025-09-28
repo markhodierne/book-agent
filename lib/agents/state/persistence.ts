@@ -3,7 +3,7 @@
 // Following CLAUDE.md standards and database architecture
 
 import { WorkflowState } from '@/types';
-import { supabase } from '@/lib/database/supabaseClient';
+import { createServiceClient } from '@/lib/database/supabaseClient';
 import {
   executeWithDatabaseContext,
   DatabaseError,
@@ -27,6 +27,7 @@ export async function saveCheckpoint(
       // Compress state data for storage
       const compressedState = compressStateForStorage(state);
 
+      const supabase = createServiceClient();
       const { error } = await withRetry(
         () =>
           supabase.from('workflow_states').upsert({
@@ -69,6 +70,7 @@ export async function recoverWorkflow(sessionId: string): Promise<WorkflowState>
     'recoverWorkflow',
     { sessionId },
     async () => {
+      const supabase = createServiceClient();
       const { data, error } = await withRetry(
         () =>
           supabase
@@ -122,6 +124,7 @@ export async function getSessionCheckpoints(sessionId: string): Promise<any[]> {
     'getSessionCheckpoints',
     { sessionId },
     async () => {
+      const supabase = createServiceClient();
       const { data, error } = await withRetry(
         () =>
           supabase
@@ -157,6 +160,7 @@ export async function clearSessionCheckpoints(sessionId: string): Promise<void> 
     'clearSessionCheckpoints',
     { sessionId },
     async () => {
+      const supabase = createServiceClient();
       const { error } = await withRetry(
         () =>
           supabase.from('workflow_states').delete().eq('session_id', sessionId),
@@ -201,6 +205,7 @@ export async function updateSessionStatus(
         updateData.current_stage = currentStage;
       }
 
+      const supabase = createServiceClient();
       const { error } = await withRetry(
         () => supabase.from('book_sessions').update(updateData).eq('id', sessionId),
         retryDatabase
