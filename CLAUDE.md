@@ -892,6 +892,25 @@ interface ExtendedStepProps extends WizardStepProps {
 // - Eliminate redundant descriptions
 // - Use descriptive placeholders that include guidance
 // - Keep security messages concise: "Your key is not stored and only used for this session."
+
+// ✅ Inline Editing Patterns - Click-to-edit with save/cancel
+<div className="flex items-center justify-between group">
+  <h3 className="text-lg font-semibold">{title}</h3>
+  <Button
+    size="sm"
+    variant="ghost"
+    onClick={() => setEditing(true)}
+    className="opacity-0 group-hover:opacity-100 transition-opacity"
+  >
+    <Edit2 className="w-4 h-4" />
+  </Button>
+</div>
+
+// ✅ Compact Statistics Boxes - Use minimal padding for tight layouts
+<CardContent className="px-3 py-1 text-center">
+  <div className="text-lg font-bold text-primary">{value}</div>
+  <p className="text-xs text-muted-foreground">{label}</p>
+</CardContent>
 ```
 
 ### API Key Integration Standards

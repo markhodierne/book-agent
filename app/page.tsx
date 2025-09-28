@@ -1,8 +1,9 @@
 "use client"
 
 import React from "react"
-import { BookWizard, UserPromptStep, validateUserPrompt } from "@/components/wizard"
+import { BookWizard, UserPromptStep, validateUserPrompt, validateOutline } from "@/components/wizard"
 import { DetailedRequirementsStep } from "@/components/wizard/steps/DetailedRequirementsStep"
+import { OutlineReviewStep } from "@/components/wizard/steps/OutlineReviewStep"
 import type { WizardStepConfig } from "@/components/wizard"
 
 // Demo step component for future steps
@@ -50,7 +51,8 @@ const wizardSteps: WizardStepConfig[] = [
     id: "outline",
     title: "Outline",
     description: "Review and customize your book structure",
-    component: DemoStep,
+    component: OutlineReviewStep,
+    validate: validateOutline,
     required: true
   },
   {
@@ -80,7 +82,8 @@ export default function Home() {
             pdfFile: undefined,
             chatMessages: [],
             requirementsGathered: false,
-            conversationComplete: false
+            conversationComplete: false,
+            outline: undefined
           }}
         />
       </div>

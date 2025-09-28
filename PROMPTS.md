@@ -64,7 +64,7 @@ Each to-do task should be numbered sequentially, and include:
 
 Then refresh your memory by checking `HISTORY.md`. Review the `ARCHITECTURE.md` and `FUNCTIONAL.md` to understand what we are building.
 
-We are working through `TO-DO.md` and are on task 22.
+We are working through `TO-DO.md` and are on task 23.
 
 **Before implementing anything:**
 
@@ -80,14 +80,14 @@ As you implement, explain:
 
 Now, here is the next task to complete:
 
-### 22. Outline Review UI (simple approve/reject outline step)
-**Description**: Create UI for outline review and approval as Step3 page in the UI. Follow all of the UI formats and conventions established so far. Make the new page totally consistent.
+### 23. PDF Download UI (link/button to fetch completed PDF; PDF preview available also)
+**Description**: Implement functionality to download PDF of the final book
 **Deliverables**:
-- Outline display and editing interface
-- Chapter structure visualization
-- Title selection and finalization
-**Dependencies**: Task 21
-**Definition of Done**: Users can review, modify, and approve book outlines intuitively
+- Download functionality
+- Basic completion notification
+- Error handling for failed generations
+**Dependencies**: Task 22
+**Definition of Done**: Users can download generated PDFs reliably
 
 ```
 
@@ -122,13 +122,3 @@ Only proceed when dependencies are satisfied and coordination is clear.
 
 
 
-
-STATUS
-
-I am currently changing the font sizes of header text on step 1 page - COMPLETE THIS
-Revise the side bar description for "Details" to be "Gather details about scope, audience and style"
-Update History and reset
-git commit -m 'feat: add requirements gathering UI'
-
-Then complete UI steps
-Then test first stage of backend with the UI!!!
