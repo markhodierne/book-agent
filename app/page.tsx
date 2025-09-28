@@ -1,33 +1,21 @@
 "use client"
 
 import React from "react"
-import { BookWizard, UserPromptStep, validateUserPrompt, validateOutline } from "@/components/wizard"
+import { BookWizard, UserPromptStep, validateUserPrompt, validateOutline, BookGenerationStep } from "@/components/wizard"
 import { DetailedRequirementsStep } from "@/components/wizard/steps/DetailedRequirementsStep"
 import { OutlineReviewStep } from "@/components/wizard/steps/OutlineReviewStep"
 import type { WizardStepConfig } from "@/components/wizard"
 
-// Demo step component for future steps
-const DemoStep: React.FC<any> = ({ data, setIsValid }) => {
-  React.useEffect(() => {
-    setIsValid(true) // Always valid for demo
-  }, [setIsValid])
-
-  return (
-    <div className="space-y-4 text-center">
-      <h3 className="text-lg font-semibold">Coming Soon</h3>
-      <p className="text-muted-foreground">
-        This step will be implemented in future tasks.
-      </p>
-      <div className="p-4 bg-muted rounded-lg">
-        <p className="text-sm">Current data: {JSON.stringify(data, null, 2)}</p>
-      </div>
-    </div>
-  )
-}
 
 // Validation for detailed requirements step
 const validateDetailedRequirements = (data: any): boolean => {
   return Boolean(data.conversationComplete && data.chatMessages?.length >= 2)
+}
+
+// Validation for book generation step
+const validateBookGeneration = (data: any): boolean => {
+  // Step is valid when PDF is ready for download
+  return Boolean(data.pdfReady === true)
 }
 
 const wizardSteps: WizardStepConfig[] = [
@@ -58,9 +46,10 @@ const wizardSteps: WizardStepConfig[] = [
   {
     id: "generation",
     title: "Book",
-    description: "We'll create your book",
-    component: DemoStep,
-    required: false
+    description: "Generate and download your book",
+    component: BookGenerationStep,
+    validate: validateBookGeneration,
+    required: true
   }
 ]
 
@@ -83,7 +72,8 @@ export default function Home() {
             chatMessages: [],
             requirementsGathered: false,
             conversationComplete: false,
-            outline: undefined
+            outline: undefined,
+            pdfReady: false
           }}
         />
       </div>

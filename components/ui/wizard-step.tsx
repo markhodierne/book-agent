@@ -27,11 +27,11 @@ const WizardStep = React.forwardRef<HTMLDivElement, WizardStepProps>(
         <div className={cn(
           "flex items-center justify-center rounded-full border-2 text-sm font-medium transition-colors flex-shrink-0",
           "w-8 h-8 min-w-[2rem] min-h-[2rem]",
-          isCompleted && "bg-primary text-primary-foreground border-primary",
-          isActive && !isCompleted && "bg-primary text-primary-foreground border-primary",
-          !isActive && !isCompleted && "border-muted-foreground/30 text-muted-foreground"
+          isCompleted && !isActive && "bg-black text-white border-black", // Completed: black circle with white check
+          isActive && "bg-black text-white border-black", // Current: black circle with white number
+          !isActive && !isCompleted && "bg-white text-black border-gray-300" // Not completed: white circle with black number
         )}>
-          {isCompleted ? (
+          {isCompleted && !isActive ? (
             <Check className="w-4 h-4" />
           ) : (
             stepNumber

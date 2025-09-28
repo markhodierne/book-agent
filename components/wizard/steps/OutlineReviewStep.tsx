@@ -21,8 +21,83 @@ export const OutlineReviewStep: React.FC<OutlineReviewStepProps> = ({
   updateData,
   setIsValid
 }) => {
+  // Transform validation format back to UI format if needed
+  const transformToUIFormat = (outlineData: any): BookOutline => {
+    if (!outlineData) return {
+      title: "Python Web Scraping Quick Start",
+      subtitle: "A Beginner's Guide to Extracting Data from the Web",
+      chapters: [
+        {
+          chapterNumber: 1,
+          title: "Introduction to Web Scraping",
+          contentOverview: "Overview of web scraping, its applications, and legal considerations.",
+          keyObjectives: ["Understand web scraping basics", "Learn about legal and ethical aspects", "Set up development environment"],
+          wordCount: 1500,
+          dependencies: [],
+          researchRequirements: ["Current web scraping laws", "Popular use cases"]
+        },
+        {
+          chapterNumber: 2,
+          title: "Python Fundamentals for Web Scraping",
+          contentOverview: "Essential Python concepts and libraries needed for web scraping projects.",
+          keyObjectives: ["Master HTTP requests", "Understand HTML structure", "Learn Python web libraries"],
+          wordCount: 2000,
+          dependencies: [1],
+          researchRequirements: ["Python requests library", "BeautifulSoup documentation"]
+        },
+        {
+          chapterNumber: 3,
+          title: "Building Your First Web Scraper",
+          contentOverview: "Step-by-step guide to creating a basic web scraper with practical examples.",
+          keyObjectives: ["Create a simple scraper", "Handle common challenges", "Parse and clean data"],
+          wordCount: 2500,
+          dependencies: [1, 2],
+          researchRequirements: ["Real website examples", "Common scraping patterns"]
+        },
+        {
+          chapterNumber: 4,
+          title: "Advanced Techniques and Best Practices",
+          contentOverview: "Professional techniques including rate limiting, user agents, and error handling.",
+          keyObjectives: ["Implement rate limiting", "Handle dynamic content", "Manage errors gracefully"],
+          wordCount: 2000,
+          dependencies: [3],
+          researchRequirements: ["Advanced scraping techniques", "Industry best practices"]
+        }
+      ],
+      totalWordCount: 8000,
+      estimatedPages: 32
+    }
+
+    // If the data is in validation format (has estimatedWordCount), transform it back to UI format
+    if (outlineData.chapters && outlineData.chapters[0] && 'estimatedWordCount' in outlineData.chapters[0]) {
+      const transformedChapters = outlineData.chapters.map((chapter: any, index: number) => ({
+        chapterNumber: index + 1,
+        title: chapter.title,
+        contentOverview: chapter.description || chapter.contentOverview || "",
+        wordCount: chapter.estimatedWordCount || chapter.wordCount || 1500,
+        keyObjectives: chapter.keyObjectives || [],
+        dependencies: chapter.dependencies || [],
+        researchRequirements: chapter.researchRequirements || []
+      }))
+
+      // Calculate totalWordCount from transformed chapters
+      const totalWordCount = transformedChapters.reduce((total, chapter) => total + chapter.wordCount, 0)
+      const estimatedPages = Math.ceil(totalWordCount / 250) // Assuming 250 words per page
+
+      return {
+        ...outlineData,
+        chapters: transformedChapters,
+        totalWordCount,
+        estimatedPages
+      }
+    }
+
+    // Otherwise return as-is (already in UI format)
+    return outlineData
+  }
+
   // Mock outline data for demonstration
-  const [outline, setOutline] = useState<BookOutline>(data.outline || {
+  const [outline, setOutline] = useState<BookOutline>(transformToUIFormat(data.outline) || {
     title: "Python Web Scraping Quick Start",
     subtitle: "A Beginner's Guide to Extracting Data from the Web",
     chapters: [
@@ -74,11 +149,24 @@ export const OutlineReviewStep: React.FC<OutlineReviewStepProps> = ({
   const [tempSubtitle, setTempSubtitle] = useState(outline.subtitle || "")
   const [tempChapter, setTempChapter] = useState<ChapterOutline | null>(null)
 
-  // Update wizard data when outline changes
+  // Update wizard data when outline changes - transform to match validation schema
   useEffect(() => {
-    updateData({ outline })
+    const validationFormattedOutline = {
+      title: outline.title,
+      subtitle: outline.subtitle,
+      chapters: outline.chapters.map(chapter => ({
+        title: chapter.title,
+        description: chapter.contentOverview, // Map contentOverview to description
+        estimatedWordCount: chapter.wordCount // Map wordCount to estimatedWordCount
+      }))
+    }
+    updateData({ outline: validationFormattedOutline })
+  }, [outline, updateData])
+
+  // Set validation separately to avoid dependency issues
+  useEffect(() => {
     setIsValid(true) // Outline is always valid for review
-  }, [outline, updateData, setIsValid])
+  }, [setIsValid])
 
   const handleTitleSave = () => {
     setOutline(prev => ({ ...prev, title: tempTitle }))

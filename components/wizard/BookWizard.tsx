@@ -44,6 +44,8 @@ export const BookWizard: React.FC<BookWizardProps> = ({
   const [stepValidation, setStepValidation] = useState<Record<string, boolean>>(
     steps.reduce((acc, step) => ({ ...acc, [step.id]: !step.required }), {})
   )
+  const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set())
+  const [highestReachedStep, setHighestReachedStep] = useState(0)
   const [isProcessing, setIsProcessing] = useState(false)
   const [openaiApiKey, setOpenaiApiKey] = useState("")
 
@@ -59,6 +61,11 @@ export const BookWizard: React.FC<BookWizardProps> = ({
   const setStepValid = useCallback((stepId: string, isValid: boolean) => {
     setStepValidation(prev => ({ ...prev, [stepId]: isValid }))
   }, [])
+
+  // Memoize the setIsValid function for the current step
+  const currentStepSetIsValid = useCallback((isValid: boolean) => {
+    setStepValid(currentStep.id, isValid)
+  }, [currentStep.id, setStepValid])
 
   const validateCurrentStep = async (): Promise<boolean> => {
     if (!currentStep.validate) {
@@ -89,6 +96,10 @@ export const BookWizard: React.FC<BookWizardProps> = ({
         return
       }
 
+      // Mark current step as completed
+      setCompletedSteps(prev => new Set([...prev, currentStepIndex]))
+      setHighestReachedStep(prev => Math.max(prev, currentStepIndex + 1))
+
       if (isLastStep) {
         console.log('Completing wizard')
         setIsProcessing(true)
@@ -100,6 +111,10 @@ export const BookWizard: React.FC<BookWizardProps> = ({
       } else {
         console.log('Moving to next step from', currentStepIndex, 'to', currentStepIndex + 1)
         setCurrentStepIndex(prev => Math.min(prev + 1, steps.length - 1))
+        // Scroll to top after state update
+        requestAnimationFrame(() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        })
       }
     } catch (error) {
       console.error('Error in handleNext:', error)
@@ -109,20 +124,43 @@ export const BookWizard: React.FC<BookWizardProps> = ({
   const handleBack = () => {
     if (isProcessing) return
     setCurrentStepIndex(prev => Math.max(prev - 1, 0))
+    // Scroll to top after state update
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    })
   }
 
   const jumpToStep = async (stepIndex: number) => {
     if (isProcessing || stepIndex < 0 || stepIndex >= steps.length) return
 
-    // Only allow jumping to previous steps or next step if current is valid
-    if (stepIndex < currentStepIndex) {
+    // If clicking on current step, do nothing
+    if (stepIndex === currentStepIndex) {
+      return
+    }
+
+    // Allow jumping to any completed step
+    if (completedSteps.has(stepIndex)) {
       setCurrentStepIndex(stepIndex)
-    } else if (stepIndex === currentStepIndex + 1) {
+      // Scroll to top after state update
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      })
+    } else if (stepIndex <= highestReachedStep) {
+      // Allow moving to the next available step if current step is valid
       const isValid = await validateCurrentStep()
       if (isValid) {
+        // Mark current step as completed before moving
+        setCompletedSteps(prev => new Set([...prev, currentStepIndex]))
+        setHighestReachedStep(prev => Math.max(prev, stepIndex))
+
         setCurrentStepIndex(stepIndex)
+        // Scroll to top after state update
+        requestAnimationFrame(() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        })
       }
     }
+    // Don't allow jumping forward beyond highest reached step
   }
 
   const CurrentStepComponent = currentStep.component
@@ -153,21 +191,29 @@ export const BookWizard: React.FC<BookWizardProps> = ({
               <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide mb-4">
                 Steps
               </h3>
-              {steps.map((step, index) => (
-                <WizardStep
-                  key={step.id}
-                  title={step.title}
-                  description={step.description}
-                  stepNumber={index + 1}
-                  isActive={index === currentStepIndex}
-                  isCompleted={index < currentStepIndex && stepValidation[step.id]}
-                  className={cn(
-                    "cursor-pointer transition-opacity hover:opacity-80",
-                    index > currentStepIndex + 1 && "opacity-50 cursor-not-allowed"
-                  )}
-                  onClick={() => jumpToStep(index)}
-                />
-              ))}
+              {steps.map((step, index) => {
+                const isCompleted = completedSteps.has(index)
+                const isCurrent = index === currentStepIndex
+                const isClickable = isCompleted || index <= highestReachedStep
+
+                return (
+                  <WizardStep
+                    key={step.id}
+                    title={step.title}
+                    description={step.description}
+                    stepNumber={index + 1}
+                    isActive={isCurrent}
+                    isCompleted={isCompleted}
+                    className={cn(
+                      "transition-opacity",
+                      isClickable && !isCurrent && "cursor-pointer hover:opacity-80",
+                      isCurrent && "cursor-default", // Current step is not clickable
+                      !isClickable && !isCurrent && "opacity-50 cursor-not-allowed"
+                    )}
+                    onClick={() => isClickable && !isCurrent && jumpToStep(index)}
+                  />
+                )
+              })}
             </CardContent>
           </Card>
         </div>
@@ -182,7 +228,7 @@ export const BookWizard: React.FC<BookWizardProps> = ({
               onNext={handleNext}
               onBack={handleBack}
               isValid={stepValidation[currentStep.id] || false}
-              setIsValid={(isValid) => setStepValid(currentStep.id, isValid)}
+              setIsValid={currentStepSetIsValid}
               {...(currentStep.id === 'user-prompt' && {
                 openaiApiKey,
                 setOpenaiApiKey

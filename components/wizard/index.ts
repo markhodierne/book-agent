@@ -5,6 +5,7 @@ export type { WizardStepConfig, WizardStepProps } from "./BookWizard"
 export { UserPromptStep } from "./steps/UserPromptStep"
 export { DetailedRequirementsStep } from "./steps/DetailedRequirementsStep"
 export { OutlineReviewStep } from "./steps/OutlineReviewStep"
+export { BookGenerationStep } from "./steps/BookGenerationStep"
 
 export { WizardProgress, CompactProgress } from "./WizardProgress"
 export type { ProgressStepInfo } from "./WizardProgress"

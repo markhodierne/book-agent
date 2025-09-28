@@ -1,7 +1,7 @@
 "use client"
 
-import React, { useState, useCallback } from "react"
-import { CheckCircle, AlertCircle } from "lucide-react"
+import React, { useState, useCallback, useMemo } from "react"
+import { CheckCircle, AlertCircle, MessageSquare } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { ChatInterface, type ChatMessage } from "@/components/chat/ChatInterface"
 import type { WizardStepProps } from "../BookWizard"
@@ -19,19 +19,19 @@ export const DetailedRequirementsStep: React.FC<WizardStepProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false)
 
-  // Initialize step data
-  const stepData: DetailedRequirementsData = {
+  // Initialize step data with useMemo to prevent infinite re-renders
+  const stepData: DetailedRequirementsData = useMemo(() => ({
     chatMessages: data.chatMessages || [],
     requirementsGathered: data.requirementsGathered || false,
     conversationComplete: data.conversationComplete || false,
     ...data
-  }
+  }), [data])
 
   // Validate step - requires some conversation and completion flag
   React.useEffect(() => {
     const isValid = stepData.conversationComplete && stepData.chatMessages.length >= 2
     setIsValid(isValid)
-  }, [stepData, setIsValid])
+  }, [stepData.conversationComplete, stepData.chatMessages.length, setIsValid])
 
   // Handle chat message sending
   const handleSendMessage = useCallback(async (message: string) => {
@@ -78,6 +78,17 @@ export const DetailedRequirementsStep: React.FC<WizardStepProps> = ({
 
   return (
     <div className="space-y-6">
+      {/* Header */}
+      <div className="text-center space-y-2">
+        <div className="flex items-center justify-center gap-2">
+          <MessageSquare className="w-6 h-6 text-primary" />
+          <h2 className="text-2xl font-bold">Let's Plan Your Book Together</h2>
+        </div>
+        <p className="text-muted-foreground">
+          Chat with our AI to refine your concept and gather detailed requirements
+        </p>
+      </div>
+
       {/* Direct ChatInterface without extra card wrapper */}
       <div className="h-[500px]">
         <ChatInterface

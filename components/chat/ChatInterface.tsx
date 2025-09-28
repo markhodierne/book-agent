@@ -50,6 +50,20 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }
   }, [inputValue])
 
+  // Auto-focus textarea when component mounts and after sending messages
+  useEffect(() => {
+    if (textareaRef.current && !disabled) {
+      textareaRef.current.focus({ preventScroll: true })
+    }
+  }, [disabled])
+
+  // Re-focus after sending a message
+  useEffect(() => {
+    if (textareaRef.current && !isLoading && !disabled) {
+      textareaRef.current.focus({ preventScroll: true })
+    }
+  }, [isLoading, disabled])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 

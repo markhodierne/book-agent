@@ -1,9 +1,9 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Upload, FileText, X, AlertCircle, Key } from "lucide-react"
+import { Upload, FileText, X, AlertCircle, Key, PenTool } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -53,20 +53,23 @@ export const UserPromptStep: React.FC<UserPromptStepProps> = ({
   const { watch, formState: { isValid, errors } } = form
   const watchedValues = watch()
 
+  // Memoize step data to prevent infinite re-renders
+  const stepData = useMemo(() => ({
+    prompt: watchedValues.prompt,
+    author: watchedValues.author,
+    pdfFile: uploadedFile
+  }), [watchedValues.prompt, watchedValues.author, uploadedFile])
+
   // Update wizard data when form changes
   useEffect(() => {
-    const stepData = {
-      prompt: watchedValues.prompt,
-      author: watchedValues.author,
-      pdfFile: uploadedFile
-    }
-
     updateData(stepData)
+  }, [stepData, updateData])
 
-    // Set step validity based on required fields only (not the full form validation)
+  // Set step validity
+  useEffect(() => {
     const stepIsValid = Boolean(watchedValues.prompt?.trim() && watchedValues.author?.trim())
     setIsValid(stepIsValid)
-  }, [watchedValues, uploadedFile, updateData, setIsValid])
+  }, [watchedValues.prompt, watchedValues.author, setIsValid])
 
   const handleFileUpload = (file: File) => {
     if (file.type === "application/pdf" || file.name.endsWith('.pdf')) {
@@ -111,6 +114,17 @@ export const UserPromptStep: React.FC<UserPromptStepProps> = ({
 
   return (
     <div className="space-y-6">
+      {/* Header */}
+      <div className="text-center space-y-2">
+        <div className="flex items-center justify-center gap-2">
+          <PenTool className="w-6 h-6 text-primary" />
+          <h2 className="text-2xl font-bold">Tell Us About Your Book</h2>
+        </div>
+        <p className="text-muted-foreground">
+          Describe what you want to write about and we'll help you create it
+        </p>
+      </div>
+
       <Card>
         <CardContent className="px-6 py-6">
           <Form {...form}>
