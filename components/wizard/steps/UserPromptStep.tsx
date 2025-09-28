@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Upload, FileText, X, AlertCircle } from "lucide-react"
+import { Upload, FileText, X, AlertCircle, Key } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -23,10 +23,17 @@ import {
 import { userPromptSchema, type UserPromptData } from "../validation"
 import type { WizardStepProps } from "../BookWizard"
 
-export const UserPromptStep: React.FC<WizardStepProps> = ({
+interface UserPromptStepProps extends WizardStepProps {
+  openaiApiKey?: string
+  setOpenaiApiKey?: (key: string) => void
+}
+
+export const UserPromptStep: React.FC<UserPromptStepProps> = ({
   data,
   updateData,
-  setIsValid
+  setIsValid,
+  openaiApiKey = "",
+  setOpenaiApiKey
 }) => {
   const [dragOver, setDragOver] = useState(false)
   const [uploadedFile, setUploadedFile] = useState<File | null>(
@@ -112,14 +119,11 @@ export const UserPromptStep: React.FC<WizardStepProps> = ({
                 <FormLabel>What book would you like to create?</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Describe your book idea in a few words or sentences... (e.g., 'A beginner's guide to machine learning', 'History of ancient Rome', 'Python programming tutorial')"
+                    placeholder="Describe your book in a few sentences or paragraphs. The more detail you provide, the better your book will be."
                     className="min-h-[120px] resize-none"
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>
-                  Provide at least 3 characters. The more detail you provide, the better your book will be.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -138,9 +142,6 @@ export const UserPromptStep: React.FC<WizardStepProps> = ({
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>
-                  This will appear as the author of your book.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -189,7 +190,7 @@ export const UserPromptStep: React.FC<WizardStepProps> = ({
                     <Upload className="w-12 h-12 text-muted-foreground mx-auto" />
                     <div className="space-y-2">
                       <p className="text-lg font-medium">
-                        Upload a PDF for reference (Optional)
+                        Upload a PDF as reference material to enhance your book content
                       </p>
                       <p className="text-muted-foreground">
                         Drag and drop a PDF file here, or click to browse
@@ -225,11 +226,32 @@ export const UserPromptStep: React.FC<WizardStepProps> = ({
                 </AlertDescription>
               </Alert>
             )}
-
-            <p className="text-sm text-muted-foreground">
-              If you upload a PDF, we&apos;ll use it as reference material to enhance your book content.
-            </p>
           </div>
+
+          {/* OpenAI API Key Section */}
+          {setOpenaiApiKey && (
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <Key className="w-5 h-5 text-muted-foreground" />
+                <div className="flex-1">
+                  <Label htmlFor="openai-key" className="text-sm font-medium">
+                    OpenAI API Key
+                  </Label>
+                  <Input
+                    id="openai-key"
+                    type="password"
+                    placeholder="sk-..."
+                    value={openaiApiKey}
+                    onChange={(e) => setOpenaiApiKey(e.target.value)}
+                    className="mt-1"
+                  />
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Your key is not stored and only used for this session.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </form>
       </Form>
 

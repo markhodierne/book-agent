@@ -369,3 +369,40 @@ This enhanced architectural evolution transforms the Book Agent from a reliable 
 - `app/wizard/demo/page.tsx` - Demo page for testing
 
 **Current State**: Wizard framework complete and functional at `http://localhost:3003` with professional UI, validation, and navigation ready for backend integration.
+
+## Task 20 UI Refinements: Enhanced Wizard Interface ✅
+
+### **Session 2: UI/UX Improvements (September 27, 2025)**
+
+**Status**: ✅ Complete - Professional wizard interface with enhanced user experience and API key integration
+
+**Key UI/UX Improvements**:
+- **OpenAI API Key Integration**: Moved from separate card to integrated form field in UserPromptStep
+- **Improved Text Content**: Cleaner, more descriptive text throughout the interface
+- **Optimized Spacing**: Reduced vertical margins for more compact, efficient layout
+- **Streamlined Copy**: Removed redundant explanatory text while maintaining clarity
+
+**Technical Implementation**:
+- **API Key Data Flow**: User input overrides .env, passed via `onComplete({ ...wizardData, openaiApiKey })`
+- **Component Architecture**: Extended UserPromptStepProps with API key support
+- **Smart Prop Spreading**: Conditional API key props only for 'user-prompt' step
+- **Clean Interface**: Removed collapsible card, integrated into main form
+
+**UI Text Refinements**:
+- **Book Description**: "Describe your book in a few sentences or paragraphs. The more detail you provide, the better your book will be."
+- **PDF Upload**: "Upload a PDF as reference material to enhance your book content"
+- **Removed Redundancy**: Eliminated duplicate explanatory text throughout form
+- **Compact Layout**: Reduced card padding from `p-4/p-6` to `px-4 py-3/px-6 py-4`
+
+**API Key Functionality**:
+- **Priority Logic**: User input → .env fallback → error if neither available
+- **Clean UI**: No "(Optional)" qualifier, integrated into main form flow
+- **Security**: Password field with session-only usage message
+- **Backend Ready**: Data structure supports immediate backend integration
+
+**Files Modified**:
+- `components/wizard/BookWizard.tsx` - API key state management and prop passing
+- `components/wizard/steps/UserPromptStep.tsx` - Integrated API key input and text improvements
+- `app/page.tsx` - Updated main page to showcase wizard
+
+**Current State**: Enhanced wizard with integrated API key input, optimized spacing, improved copy, and clean user experience ready for backend workflow integration.

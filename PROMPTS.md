@@ -119,3 +119,13 @@ Only proceed when dependencies are satisfied and coordination is clear.
 
     DO NOT CREATE ANY NEW .md FILES FOR DOCUMENTATION - UPDATE THE EXISTING .md FILES.
     After creating/updating these files, I'll reset the context window and we'll continue with a fresh session.
+
+
+
+    BEFORE RESET!!!!!!
+
+    remove sticky header
+    move api key into main section at bottom
+    check padding looks OK
+    Keep it simple
+    

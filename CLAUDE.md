@@ -853,6 +853,90 @@ describe('Agent Learning System', () => {
 });
 ```
 
+## UI/UX Design Standards
+
+### Professional Interface Guidelines
+```typescript
+// ✅ Standard Spacing - Balanced for professional appearance
+<CardContent className="px-6 py-6">  // Main content cards
+<CardContent className="px-6 py-6">  // Sidebar and secondary cards
+<div className="space-y-6">          // Section spacing
+<div className="gap-6">              // Grid gaps
+
+// ✅ Clean Text Patterns - Remove redundant explanatory text
+// Prefer descriptive placeholders over separate descriptions
+<Textarea placeholder="Describe your book in a few sentences or paragraphs. The more detail you provide, the better your book will be." />
+// Instead of placeholder + FormDescription
+
+// ✅ Integrated Field Design - Avoid separate cards for related inputs
+interface ExtendedStepProps extends WizardStepProps {
+  additionalField?: string
+  setAdditionalField?: (value: string) => void
+}
+// Extend existing components rather than create separate cards
+```
+
+### Form Enhancement Patterns
+```typescript
+// ✅ Smart Prop Spreading for Optional Fields
+<CurrentStepComponent
+  {...commonProps}
+  {...(stepId === 'specific-step' && {
+    specialField,
+    setSpecialField
+  })}
+/>
+
+// ✅ Text Content Best Practices
+// - Remove "(Optional)" qualifiers from UI text
+// - Eliminate redundant descriptions
+// - Use descriptive placeholders that include guidance
+// - Keep security messages concise: "Your key is not stored and only used for this session."
+```
+
+### API Key Integration Standards
+```typescript
+// ✅ Priority Logic Implementation
+// 1. User-provided API key (overrides all)
+// 2. Environment variable (.env)
+// 3. Error state (no key available)
+
+// Backend validation required:
+// - Check key availability before workflow execution
+// - Graceful error handling for invalid keys
+// - Security: Never log or expose API keys
+
+interface ApiKeyProps {
+  openaiApiKey?: string
+  setOpenaiApiKey?: (key: string) => void
+}
+
+// Conditional rendering pattern
+{setOpenaiApiKey && (
+  <div className="space-y-4">
+    <div className="flex items-center gap-3">
+      <Key className="w-5 h-5 text-muted-foreground" />
+      <div className="flex-1">
+        <Label htmlFor="openai-key" className="text-sm font-medium">
+          OpenAI API Key
+        </Label>
+        <Input
+          id="openai-key"
+          type="password"
+          placeholder="sk-..."
+          value={openaiApiKey}
+          onChange={(e) => setOpenaiApiKey(e.target.value)}
+          className="mt-1"
+        />
+        <p className="text-xs text-muted-foreground mt-2">
+          Your key is not stored and only used for this session.
+        </p>
+      </div>
+    </div>
+  </div>
+)}
+```
+
 ## Security Requirements
 
 ### Enhanced Input Validation with Intelligence

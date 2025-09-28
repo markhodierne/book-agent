@@ -14,8 +14,9 @@ The Book Agent application generates comprehensive books (30,000+ words) from mi
 
 ### Initial Input
 - **User Prompt**: 3-word minimum to full paragraph describing desired book topic
-- **PDF Upload** (Optional): Text files or PDFs as base content (50MB limit) with drag-and-drop support
+- **PDF Upload**: Text files or PDFs as base content (50MB limit) with drag-and-drop support
 - **Author Information**: Author name field for book attribution
+- **OpenAI API Key**: User-provided key overrides .env configuration; backend validates availability
 - **File Processing**: Extract text only from PDFs using pdf-parse library
 
 ### Stage 0: Dynamic Planning & Task Decomposition
